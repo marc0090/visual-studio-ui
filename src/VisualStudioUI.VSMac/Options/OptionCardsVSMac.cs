@@ -7,7 +7,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 	{
 		NSStackView _cardsStack;
 
-		public OptionCardsVSMac(OptionCards optionCards)  : base(optionCards)
+		public OptionCardsVSMac(VisualStudioUI.Options.OptionCards optionCards)  : base(optionCards)
 		{
 		}
 

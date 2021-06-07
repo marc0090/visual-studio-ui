@@ -17,7 +17,7 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
                 new TextOption(StringProp("text1"))
                 {
                     Label = "Text 1",
-                    Hint = "This is the hint to show!!"
+                    Hint = "This is the hint to show!"
                 }
             );
             card1.AddOption(
@@ -26,10 +26,25 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
                     Label = "Text 2"
                 }
             );
+            card1.AddOption(new SeparatorOption());
             card1.AddOption(
                 new TextOption(StringProp("text3"))
                 {
-                    Label = "Text "
+                    Label = "Text"
+                }
+            );
+            card1.AddOption(
+                new ComboBoxOption(StringProp("option1"), StringArrayProp(new[] { "option1", "option2", "option3" }))
+                {
+                    Label = "Choices",
+                    Hint = "This is the hint for the combo box"
+                }
+            );
+            card1.AddOption(
+                new EditableComboBoxOption(StringProp("option1"), StringArrayProp(new[] { "option1", "option2", "option3" }))
+                {
+                    Label = "Editable choices",
+                    Hint = "This is the hint for the editable combo box"
                 }
             );
 
@@ -42,8 +57,12 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             card2.AddOption(new TextOption(StringProp("text3")));
             card2.AddOption(new TextOption(StringProp("text4")));
             card2.AddOption(new TextOption(StringProp("text4")));
-            card2.AddOption(new TextOption(StringProp("text4")));
-            card2.AddOption(new TextOption(StringProp("text4")));
+            card2.AddOption(
+                new DocButtonOption(StringProp("https://www.microsoft.com"), "Launch Browser for Doc")
+                {
+                    Label = "Learn more"
+                }
+            );
 
             OptionCards cards = new OptionCards();
             cards.AddCard(card1);
@@ -52,6 +71,8 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             return cards;
         }
 
-        public static ViewModelProperty<string> StringProp(string name) => new ViewModelProperty<string>(name);
+        public static ViewModelProperty<string> StringProp(string defaultValue) => new ViewModelProperty<string>("stringProp", defaultValue);
+        public static ViewModelProperty<string[]> StringArrayProp(string[] defaultValue) =>
+            new ViewModelProperty<string[]>("stringArrayProp", defaultValue);
     }
 }

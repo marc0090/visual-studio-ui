@@ -1,4 +1,5 @@
-﻿using AppKit;
+﻿using System;
+using AppKit;
 using Microsoft.VisualStudioUI.Options;
 
 namespace Microsoft.VisualStudioUI.VSMac.Options
@@ -6,6 +7,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 	public abstract class OptionWithLeftLabelVSMac : OptionVSMac
 	{
 		private NSView _optionView;
+		private NSButton _helpButton;
+		private HintPopover _hintPopover;
 
 		public OptionWithLeftLabelVSMac(Option option) : base(option) { }
 
@@ -15,7 +18,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 			{
 				if (_optionView == null)
 				{
-					_optionView = CreateView();
+					CreateView();
 				}
 
 				return _optionView;
@@ -24,74 +27,86 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
 		protected abstract NSView Control { get; }
 
-		private NSView CreateView()
+		private void CreateView()
 		{
 			// View:     optionView
-			var optionView = new AppKit.NSView();
-			optionView.WantsLayer = true;
-			optionView.TranslatesAutoresizingMaskIntoConstraints = false;
+			_optionView = new AppKit.NSView();
+			_optionView.WantsLayer = true;
+			_optionView.TranslatesAutoresizingMaskIntoConstraints = false;
 
-			var optionWidthConstraint = optionView.WidthAnchor.ConstraintEqualToConstant (600f);
+			var optionWidthConstraint = _optionView.WidthAnchor.ConstraintEqualToConstant (600f);
 			optionWidthConstraint.Active = true;
-			var optionHeightConstraint = optionView.HeightAnchor.ConstraintEqualToConstant (32f);
+			var optionHeightConstraint = _optionView.HeightAnchor.ConstraintEqualToConstant (32f);
 			optionHeightConstraint.Active = true;
 
-			// View:     label
-			var label = new AppKit.NSTextField();
-			label.Editable = false;
-			label.Bordered = false;
-			label.DrawsBackground = false;
-			label.PreferredMaxLayoutWidth = 1;
-			label.StringValue = Option.Label ?? string.Empty;
-			label.Alignment = NSTextAlignment.Right;
-			label.Font = AppKit.NSFont.SystemFontOfSize(AppKit.NSFont.SystemFontSize);
-			label.TextColor = NSColor.LabelColor;
-			label.TranslatesAutoresizingMaskIntoConstraints = false;
+			if (!string.IsNullOrEmpty(Option.Label))
+			{
+				// View:     label
+				var label = new AppKit.NSTextField();
+				label.Editable = false;
+				label.Bordered = false;
+				label.DrawsBackground = false;
+				label.PreferredMaxLayoutWidth = 1;
+				// TODO: Make the colon be localization friendly
+				label.StringValue = Option.Label + ":";
 
-			optionView.AddSubview (label);
-			var preferenceLabel1WidthConstraint = label.WidthAnchor.ConstraintEqualToConstant (205f);
-			preferenceLabel1WidthConstraint.Active = true;
-			var preferenceLabel1HeightConstraint = label.HeightAnchor.ConstraintEqualToConstant (16f);
-			preferenceLabel1HeightConstraint.Active = true;
+				label.Alignment = NSTextAlignment.Right;
+				label.Font = AppKit.NSFont.SystemFontOfSize(AppKit.NSFont.SystemFontSize);
+				label.TextColor = NSColor.LabelColor;
+				label.TranslatesAutoresizingMaskIntoConstraints = false;
 
-			label.LeftAnchor.ConstraintEqualToAnchor (optionView.LeftAnchor, 6f).Active = true;
-			label.TopAnchor.ConstraintEqualToAnchor (optionView.TopAnchor, 7f).Active = true;
+				_optionView.AddSubview(label);
+				label.WidthAnchor.ConstraintEqualToConstant(205f).Active = true;
+				label.HeightAnchor.ConstraintEqualToConstant(16f).Active = true;
+
+				label.LeftAnchor.ConstraintEqualToAnchor(_optionView.LeftAnchor, 6f).Active = true;
+				label.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 7f).Active = true;
+			}
 
 			if (!string.IsNullOrEmpty(Option.Hint))
 			{
 				// View:     helpButton
-				var helpButton = new AppKit.NSButton();
-				helpButton.BezelStyle = NSBezelStyle.HelpButton;
-				helpButton.Title = "";
-				helpButton.ControlSize = NSControlSize.Regular;
-				helpButton.Font = AppKit.NSFont.SystemFontOfSize(AppKit.NSFont.SystemFontSize);
-				helpButton.TranslatesAutoresizingMaskIntoConstraints = false;
+				_helpButton = new AppKit.NSButton();
+				_helpButton.BezelStyle = NSBezelStyle.HelpButton;
+				_helpButton.Title = "";
+				_helpButton.ControlSize = NSControlSize.Regular;
+				_helpButton.Font = AppKit.NSFont.SystemFontOfSize(AppKit.NSFont.SystemFontSize);
+				_helpButton.TranslatesAutoresizingMaskIntoConstraints = false;
 
-				optionView.AddSubview(helpButton);
-				var helpButton1WidthConstraint = helpButton.WidthAnchor.ConstraintEqualToConstant(21f);
-				helpButton1WidthConstraint.Priority = (System.Int32) AppKit.NSLayoutPriority.DefaultLow;
-				helpButton1WidthConstraint.Active = true;
+				_optionView.AddSubview(_helpButton);
+				var helpButtonWidthConstraint = _helpButton.WidthAnchor.ConstraintEqualToConstant(21f);
+				helpButtonWidthConstraint.Priority = (System.Int32) AppKit.NSLayoutPriority.DefaultLow;
+				helpButtonWidthConstraint.Active = true;
 
-				helpButton.RightAnchor.ConstraintEqualToAnchor(optionView.RightAnchor, -6f).Active = true;
-				helpButton.TopAnchor.ConstraintEqualToAnchor(optionView.TopAnchor, 5f).Active = true;
+				_helpButton.RightAnchor.ConstraintEqualToAnchor(_optionView.RightAnchor, -6f).Active = true;
+				_helpButton.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 5f).Active = true;
+
+				_helpButton.Activated += (o, args) => ShowHintPopover (Option.Hint, _helpButton);
 			}
 
 			// View:     control
-			var control = new AppKit.NSTextField();
-			control.Font = AppKit.NSFont.SystemFontOfSize(AppKit.NSFont.SystemFontSize);
-			control.StringValue = "1.0";
-			control.TranslatesAutoresizingMaskIntoConstraints = false;
+			var control = Control;
+			// TODO: Set a11y info properly
 			control.AccessibilityLabel = "Control";
 			control.AccessibilityHelp = "Provides a control";
 
-			optionView.AddSubview (control);
-			var controlWidthConstraint = control.WidthAnchor.ConstraintEqualToConstant (196f);
-			controlWidthConstraint.Active = true;
+			_optionView.AddSubview(control);
 
-			control.LeftAnchor.ConstraintEqualToAnchor (optionView.LeftAnchor, 220f).Active = true;
-			control.TopAnchor.ConstraintEqualToAnchor (optionView.TopAnchor, 5f).Active = true;
+			control.LeftAnchor.ConstraintEqualToAnchor(_optionView.LeftAnchor, 220f).Active = true;
+			control.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 5f).Active = true;
+		}
 
-			return optionView;
+		void ShowHintPopover (string message, NSButton button)
+		{
+			_hintPopover?.Close ();
+			_hintPopover?.Dispose ();
+			_hintPopover = new HintPopover (message, null);
+			_hintPopover.MaxWidth = 256;
+			//TODO:
+			//popover.SetAppearance (Appearance);
+
+			var bounds = button.Bounds;
+			_hintPopover.Show (bounds, button, NSRectEdge.MaxYEdge);
 		}
 	}
 }

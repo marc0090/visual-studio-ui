@@ -28,12 +28,12 @@ namespace Microsoft.VisualStudioUI.StandaloneApp.VSMacUI
 			ClickMeButton = new NSButton(new CGRect(10, Frame.Height - 70, 100, 30))
 			{
 				AutoresizingMask = NSViewResizingMask.MinYMargin
-			};
+			;}
 			ContentView.AddSubview(ClickMeButton);
 #endif
 
 			OptionCards optionCards = Main.CreateOptionCards();
-			OptionsPanelVSMac optionsPanel = new OptionsPanelVSMac(optionCards, Frame);
+			OptionsPanelVSMac optionsPanel = new OptionsPanelVSMac(optionCards);
 			//ContentView.AddSubview(optionsPanel);
 			ContentView = optionsPanel;
 
