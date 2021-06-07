@@ -11,6 +11,8 @@
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <TargetFrameworkIdentifier>Xamarin.Mac</TargetFrameworkIdentifier>
     <MonoMacResourcePrefix>Resources</MonoMacResourcePrefix>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -50,24 +52,25 @@
     <Reference Include="Xamarin.Mac" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Options\DocButtonOptionVSMac.cs" />
+    <Compile Include="Options\EditableComboBoxOptionVSMac.cs" />
     <Compile Include="Options\OptionCardsVSMac.cs" />
     <Compile Include="Options\OptionWithLeftLabelVSMac.cs" />
     <Compile Include="Options\OptionVSMac.cs" />
+    <Compile Include="Options\SeparatorOptionVSMac.cs" />
+    <Compile Include="Options\WarningOrErrorSeverity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ComboBoxOptionPlatform.cs" Condition=" '$(EnableDefaultCompileItems)' == 'true' " />
     <Compile Include="Options\HintPopover.cs" />
-    <Compile Include="Options\HStack.cs" />
     <Compile Include="Options\OptionCardVSMac.cs" />
     <Compile Include="Options\TextOptionVSMac.cs" />
     <Compile Include="Options\OptionsPanelVSMac.cs" />
     <Compile Include="Options\OptionFactoryVSMac.cs" />
     <Compile Include="Options\ComboBoxOptionVSMac.cs" />
-    <Compile Include="Options\Stack.cs" />
-    <Compile Include="Options\VStack.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\VisualStudioUI\VisualStudioUI.csproj">
-      <Project>{F08A99F8-D704-40F4-8B59-73B54D16AA7C}</Project>
+      <Project>{ED97F735-178E-4CA1-8B9A-EE5B09B7080B}</Project>
       <Name>VisualStudioUI</Name>
     </ProjectReference>
   </ItemGroup>

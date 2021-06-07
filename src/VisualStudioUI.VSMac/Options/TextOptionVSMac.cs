@@ -13,18 +13,22 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 		{
 		}
 
+		public TextOption TextOption => ((TextOption)Option);
+
 		protected override NSView Control
 		{
 			get
 			{
 				if (_textField == null)
 				{
-                    ViewModelProperty<string> property = ((TextOption) Option).Property;
+                    ViewModelProperty<string> property = TextOption.Property;
 
 					_textField = new AppKit.NSTextField();
 					_textField.Font = AppKit.NSFont.SystemFontOfSize(AppKit.NSFont.SystemFontSize);
-					_textField.StringValue = property.Value;
+					_textField.StringValue = property.Value ?? string.Empty;
 					_textField.TranslatesAutoresizingMaskIntoConstraints = false;
+
+					_textField.WidthAnchor.ConstraintEqualToConstant(196f).Active = true;
 
 					property.PropertyChanged += delegate(object o, ViewModelPropertyChangedEventArgs args)
 					{

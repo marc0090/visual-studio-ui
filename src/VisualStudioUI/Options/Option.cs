@@ -6,7 +6,7 @@
 
 		public string Name { get; set; } = null;
 
-		public string Label { get; set; } = null;
+		public string? Label { get; set; } = null;
 
 		public string? Hint { get; set; } = null;
 	}

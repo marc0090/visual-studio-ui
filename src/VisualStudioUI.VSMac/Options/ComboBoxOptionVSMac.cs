@@ -5,58 +5,60 @@ using Microsoft.VisualStudioUI.Options.Models;
 
 namespace Microsoft.VisualStudioUI.VSMac.Options
 {
-#if LATER
 	public class ComboBoxOptionVSMac : OptionWithLeftLabelVSMac
 	{
-		private HStack _hstack;
-		private NSPopUpButton _popUpBtn;
-		/*
-		private HintPopover popover;
-		private NSButton tipButton;
-		*/
+		NSPopUpButton _popUpButton;
 
-		public ViewModelProperty<string> Property { get; set; } = null;
-		public ViewModelProperty<string[]> ItemsProperty { get; set; } = null;
+		public ViewModelProperty<string> SdkWarning { get; set; } = null;
 		public bool NullIsDefault { get; set; } = false;
 
-		public ComboBoxOptionVSMac (ComboBoxOption comboBoxOption) : base(comboBoxOption)
+		public ComboBoxOptionVSMac(ComboBoxOption option) : base(option)
 		{
 		}
 
-		internal override NSView GetDataUIElement(NSView labelUIElement)
+		public ComboBoxOption ComboBoxOption => ((ComboBoxOption)Option);
+
+		protected override NSView Control
 		{
-			if (_hstack == null)
+			get
 			{
-				_hstack = new HStack ();
-				_popUpBtn = new NSPopUpButton ();
+				if (_popUpButton == null)
+				{
+					ViewModelProperty<string> property = ComboBoxOption.Property;
+					ViewModelProperty<string[]> itemsProperty = ComboBoxOption.ItemsProperty;
+					
+					// View:     popUpButton
+					_popUpButton = new AppKit.NSPopUpButton();
+					_popUpButton.BezelStyle = NSBezelStyle.Rounded;
+					_popUpButton.ControlSize = NSControlSize.Regular;
+					_popUpButton.Font = AppKit.NSFont.SystemFontOfSize(AppKit.NSFont.SystemFontSize);
+					//_popUpButton.AddItem ("Default");
+					_popUpButton.TranslatesAutoresizingMaskIntoConstraints = false;
+
+					_popUpButton.WidthAnchor.ConstraintEqualToConstant(198f).Active = true;
+
+					_popUpButton.Activated += UpdatePropertyFromUI;
+					property.PropertyChanged += UpdateUIFromProperty;
+					itemsProperty.PropertyChanged += delegate { UpdateItemChoices(); };
+					
+					UpdateItemChoices();
+
+					// TODO: Handle this
+					/*
+					if (SdkWarning != null) {
+						SdkWarning.PropertyChanged += UpdateSdkWarning;
+					}
+					*/
+				}
+
+				return _popUpButton;
 			}
-
-			_popUpBtn.Activated += UpdatePropertyValue;
-
-			if (Property != null) {
-				Property.PropertyChanged += UpdatePopUpBtnValue;
-			}
-
-			if (ItemsProperty != null) {
-				ItemsProperty.PropertyChanged += LoadPopUpBtnDataModel;
-			}
-
-			_hstack.Add (_popUpBtn);
-
-			#if LATER
-            if (!string.IsNullOrWhiteSpace(Option.Hint))
-			{
-				CreateHintIcon ();
-            }
-			#endif
-
-			return _hstack;
 		}
 
 		/*
 		public override void Dispose ()
 		{
-			popUpBtn.Activated -= UpdatePropertyValue;
+			_popUpButton.Activated -= UpdatePropertyValue;
 			Property.PropertyChanged -= UpdatePopUpBtnValue;
 			ItemsProperty.PropertyChanged -= LoadPopUpBtnDataModel;
 			tipButton.Activated -= TipButtonActivated;
@@ -65,92 +67,71 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 		}
 		*/
 
-		void UpdatePropertyValue (object sender, EventArgs e)
+		void UpdatePropertyFromUI (object sender, EventArgs e)
 		{
-			Property.Value = _popUpBtn.TitleOfSelectedItem;
+			ComboBoxOption.Property.Value = _popUpButton.TitleOfSelectedItem;
 		}
 
-		void UpdatePopUpBtnValue (object sender, ViewModelPropertyChangedEventArgs e)
+		void UpdateUIFromProperty (object sender, ViewModelPropertyChangedEventArgs e)
 		{
-			if (string.IsNullOrWhiteSpace (Property.Value))
+            string value = ComboBoxOption.Property.Value;
+
+			if (string.IsNullOrWhiteSpace (value))
 				return;
 
-            if (_popUpBtn.SelectedItem == null)
+            if (_popUpButton.SelectedItem == null)
 			{
-				_popUpBtn.Title = Property.Value;
+				_popUpButton.Title = value;
 			}
 			else
 			{
-				_popUpBtn.SelectedItem.Title = Property.Value;
+				_popUpButton.SelectedItem.Title = value;
 			}
 		}
 
-		void LoadPopUpBtnDataModel (object sender, EventArgs e)
+		void UpdateItemChoices ()
 		{
-			_popUpBtn.RemoveAllItems ();
+			_popUpButton.RemoveAllItems ();
 
-			// TODO: Handle
 			/*
 			if (NullIsDefault)
 			{
-				_popUpBtn.AddItem (TranslationCatalog.GetString("Default"));
+				_popUpButton.AddItem (TranslationCatalog.GetString("Default"));
 			}
 			*/
 
-			_popUpBtn.AddItems (ItemsProperty.Value);
-
-            if (!string.IsNullOrWhiteSpace(Property.Value))
+			string[] items = ComboBoxOption.ItemsProperty.Value;
+			if (items != null)
 			{
-				_popUpBtn.SelectItem (Property.Value);
+				_popUpButton.AddItems (items);
+			}
+
+			var value = ComboBoxOption.Property.Value;
+			if (!string.IsNullOrWhiteSpace(value))
+			{
+				_popUpButton.SelectItem(value);
 			}
 		}
-#endif
 
-#if false
-		void CreateHintIcon ()
+		// TODO: Handle this
+		/*
+		void UpdateSdkWarning (object sender, ViewModelPropertyChangedEventArgs e)
 		{
-			var targetPopUpWidthConstraint = _popUpBtn.WidthAnchor.ConstraintEqualToConstant (3000);
-			targetPopUpWidthConstraint.Priority = (System.Int32) AppKit.NSLayoutPriority.DefaultLow;
-			targetPopUpWidthConstraint.Active = true;
+			if (e.NewValue != null) {
+				// update error icon
+				UpdateHintIcon (NSBezelStyle.Circular);
+			}
+			else {
+				// update image hit icon
+				UpdateHintIcon (NSBezelStyle.HelpButton);
 
-			_popUpBtn.RightAnchor.ConstraintEqualToAnchor (_hstack.RightAnchor, 100).Active = true;
-			_popUpBtn.TopAnchor.ConstraintEqualToAnchor (_hstack.TopAnchor, 0).Active = true;
+			}
+		}
 
-			tipButton = new NSButton ();
-			tipButton.BezelStyle = NSBezelStyle.HelpButton;
-			tipButton.Title = "";
-			tipButton.ControlSize = NSControlSize.Small;
-			tipButton.Font = AppKit.NSFont.SystemFontOfSize (AppKit.NSFont.SmallSystemFontSize);
-			tipButton.TranslatesAutoresizingMaskIntoConstraints = false;
-
-			_hstack.Add (tipButton);
-
-			var organizationIDHelpButtonWidthConstraint = tipButton.WidthAnchor.ConstraintEqualToConstant (18f);
-			organizationIDHelpButtonWidthConstraint.Priority = (System.Int32) AppKit.NSLayoutPriority.DefaultLow;
-			organizationIDHelpButtonWidthConstraint.Active = true;
-
-			tipButton.RightAnchor.ConstraintEqualToAnchor (_popUpBtn.RightAnchor, 50f).Active = true;
-			tipButton.TopAnchor.ConstraintEqualToAnchor (_popUpBtn.TopAnchor, 3f).Active = true;
-			tipButton.Activated += TipButtonActivated;
+		void UpdateHintIcon (NSBezelStyle styple )
+		{
+			tipButton.BezelStyle = styple;
         }
-
-		void TipButtonActivated (object sender, EventArgs e)
-		{
-			ShowInfoPopover (Hint, tipButton);
-		}
-
-		void ShowInfoPopover (string message, NSButton button)
-		{
-			popover?.Close ();
-			popover?.Dispose ();
-			popover = new HintPopover (message, TaskSeverity.Information);
-			popover.MaxWidth = 256;
-			//TODO:
-			//popover.SetAppearance (Appearance);
-
-			var bounds = button.Bounds;
-			popover.Show (bounds, button, NSRectEdge.MaxYEdge);
-		}
+		*/
     }
-#endif
 }

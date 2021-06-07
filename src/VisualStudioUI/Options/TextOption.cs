@@ -7,9 +7,9 @@ namespace Microsoft.VisualStudioUI.Options
 		public TextOption(ViewModelProperty<string> property)
 		{
 			Property = property;
-			Platform = OptionFactoryPlatform.Instance.CreateTextBoxOptionPlatform(this);
+			Platform = OptionFactoryPlatform.Instance.CreateTextOptionPlatform(this);
 		}
 	
-		public ViewModelProperty<string> Property { get; set; }
+		public ViewModelProperty<string> Property { get; }
 	}
 }

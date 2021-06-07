@@ -44,7 +44,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 			// View:     background
 			var background = new AppKit.NSBox();
 			background.BoxType = NSBoxType.NSBoxCustom;
-			background.FillColor = NSColor.Blue; // TODO NSColor.AlternatingContentBackgroundColors[1];
+			background.FillColor = NSColor.AlternatingContentBackgroundColors[1];
 			background.BorderColor = NSColor.SeparatorColor;
 			background.BorderWidth = 1;
 			background.CornerRadius = 8;
@@ -90,7 +90,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 				titleLabel.LeftAnchor.ConstraintEqualToAnchor(cardView.LeftAnchor, 24f).Active = true;
 				titleLabel.TopAnchor.ConstraintEqualToAnchor(cardView.TopAnchor, 17f).Active = true;
 			}
-
 
 			// View:     optionsStackView
 			var optionsStackView = new AppKit.NSStackView();

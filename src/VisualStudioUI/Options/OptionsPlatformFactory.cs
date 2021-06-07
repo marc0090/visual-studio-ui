@@ -11,6 +11,8 @@ namespace Microsoft.VisualStudioUI.Options
 			_instance = factory;
         }
 
+		public static bool IsInitialized => _instance != null;
+
 		public static OptionFactoryPlatform Instance
         {
 			get
@@ -23,7 +25,10 @@ namespace Microsoft.VisualStudioUI.Options
 
 		public abstract OptionCardsPlatform CreateOptionCardsPlatform(OptionCards optionCards);
 		public abstract OptionCardPlatform CreateOptionCardPlatform(OptionCard optionCard);
+		public abstract OptionPlatform CreateTextOptionPlatform(TextOption textOption);
 		public abstract OptionPlatform CreateComboBoxOptionPlatform(ComboBoxOption comboBoxOption);
-		public abstract OptionPlatform CreateTextBoxOptionPlatform(TextOption textOption);
+		public abstract OptionPlatform CreateEditableComboBoxOptionPlatform(EditableComboBoxOption editableComboBoxOption);
+		public abstract OptionPlatform CreateDocButtonOptionPlatform(DocButtonOption docButtonOption);
+		public abstract OptionPlatform CreateSeparatorOptionPlatform(SeparatorOption separatorOption);
 	}
 }

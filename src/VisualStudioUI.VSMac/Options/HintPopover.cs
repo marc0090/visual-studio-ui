@@ -1,46 +1,42 @@
-﻿#if LATER
-using System;
+﻿using System;
 using Foundation;
 using AppKit;
 using CoreGraphics;
 
-namespace Microsoft.VisualStudioUI.Options
+namespace Microsoft.VisualStudioUI.VSMac.Options
 {
-	public class HintPopover:NSPopover
+	public class HintPopover : NSPopover
 	{
         const float DefaultMaxWidth = 330;
         const float PopOverVerticalMargin = 13;
         const float PopOverHorizontalMargin = 14;
 
-        readonly NSTextField _textField;
-        readonly NSStackView _container;
+        readonly NSTextField textField;
+        readonly NSStackView container;
 
-        public static HintPopover FromNodeInfo (NodeInfo nodeInfo)
-            => new HintPopover (nodeInfo.StatusMessage, nodeInfo.StatusSeverity);
-
-        public HintPopover (string text, Ide.Tasks.TaskSeverity? severity)
+        public HintPopover (string text, WarningOrErrorSeverity? severity)
         {
             ContentViewController = new NSViewController (null, null);
             Animates = false;
             Behavior = NSPopoverBehavior.Transient;
 
-            _container = new NSStackView () {
+            container = new NSStackView () {
                 Orientation = NSUserInterfaceLayoutOrientation.Horizontal,
                 Alignment = NSLayoutAttribute.CenterY,
                 Spacing = 10,
                 Distribution = NSStackViewDistribution.Fill,
                 EdgeInsets = new NSEdgeInsets (0, PopOverHorizontalMargin, 0, PopOverHorizontalMargin)
             };
-            ContentViewController.View = _container;
+            ContentViewController.View = container;
 
-            _textField = new NSTextField {
+            textField = new NSTextField {
                 DrawsBackground = false,
                 Bezeled = true,
                 Editable = false,
                 Cell = new VerticallyCenteredTextFieldCell (yOffset: -1),
                 LineBreakMode = NSLineBreakMode.ByWordWrapping
             };
-            _container.AddArrangedSubview (_textField);
+            container.AddArrangedSubview (textField);
 
             var fontColor = GetFontColor (severity);
             var attrString = new NSAttributedString (text, new NSStringAttributes {
@@ -48,34 +44,37 @@ namespace Microsoft.VisualStudioUI.Options
                 Font = NSFont.SystemFontOfSize (NSFont.SystemFontSize - 1),
             });
 
-            _textField.AttributedStringValue = attrString;
+            textField.AttributedStringValue = attrString;
             MaxWidth = DefaultMaxWidth;
         }
 
         public nfloat MaxWidth {
-            get { return _textField.PreferredMaxLayoutWidth; }
+            get { return textField.PreferredMaxLayoutWidth; }
             set {
-                _textField.PreferredMaxLayoutWidth = value;
+                textField.PreferredMaxLayoutWidth = value;
 
-                var expectedHeight = _textField.IntrinsicContentSize.Height;
+                var expectedHeight = textField.IntrinsicContentSize.Height;
 
                 var expectedSize = new CGSize (0, expectedHeight);
                 expectedSize.Width += PopOverHorizontalMargin * 2;
                 expectedSize.Height += PopOverVerticalMargin * 2;
-                _container.SetFrameSize (expectedSize);
+                container.SetFrameSize (expectedSize);
             }
         }
 
-        NSColor GetFontColor (Ide.Tasks.TaskSeverity? severity)
+        NSColor GetFontColor (WarningOrErrorSeverity? severity)
         {
+            //TODO: Handle this
+            /*
             if (severity.HasValue) {
                 switch (severity) {
-                case Ide.Tasks.TaskSeverity.Error:
+                case WarningOrErrorSeverity.Error:
                     return MonoDevelop.Ide.Gui.Styles.PopoverWindow.ErrorBackgroundColor.ToNSColor ();
-                case Ide.Tasks.TaskSeverity.Warning:
+                case WarningOrErrorSeverity.Warning:
                     return MonoDevelop.Ide.Gui.Styles.PopoverWindow.WarningBackgroundColor.ToNSColor ();
                 }
             }
+            */
             return NSColor.LabelColor;
         }
     }
@@ -131,4 +130,3 @@ namespace Microsoft.VisualStudioUI.Options
         }
     }
 }
-#endif

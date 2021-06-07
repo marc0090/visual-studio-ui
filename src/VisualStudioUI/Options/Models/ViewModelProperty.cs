@@ -61,7 +61,7 @@ namespace Microsoft.VisualStudioUI.Options.Models
 
 		event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged {
 			add { inpcPropertyChanged += value; }
-			remove { inpcPropertyChanged -= value; }
+			remove { inpcPropertyChanged -= value;} 
 		}
 
 		/// <summary>

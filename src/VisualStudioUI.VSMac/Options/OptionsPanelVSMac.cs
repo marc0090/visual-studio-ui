@@ -2,14 +2,12 @@ using AppKit;
 using CoreGraphics;
 using Microsoft.VisualStudioUI.Options;
 
-//using Microsoft.VisualStudioUI.Options;
-
 namespace Microsoft.VisualStudioUI.VSMac.Options
 {
     public class OptionsPanelVSMac : NSScrollView {
         NSView _documentView;
 
-        public OptionsPanelVSMac (OptionCards optionCards, CGRect frameRect) : base()
+        public OptionsPanelVSMac (OptionCards optionCards) : base()
         {
             DrawsBackground = false;
 
@@ -18,12 +16,12 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
             NSView optionsView = ((OptionCardsVSMac) optionCards.Platform).View;
             _documentView.AddSubview(optionsView);
-            optionsView.TopAnchor.ConstraintEqualToAnchor(_documentView.TopAnchor, 10f).Active = true;
-            optionsView.LeftAnchor.ConstraintEqualToAnchor(_documentView.LeftAnchor, 10f).Active = true;
-            optionsView.RightAnchor.ConstraintEqualToAnchor(_documentView.RightAnchor, 10f).Active = true;
-            optionsView.BottomAnchor.ConstraintEqualToAnchor(_documentView.BottomAnchor, 10f).Active = true;
+            optionsView.TopAnchor.ConstraintEqualToAnchor(_documentView.TopAnchor, 24f).Active = true;
+            optionsView.LeftAnchor.ConstraintEqualToAnchor(_documentView.LeftAnchor, 24f).Active = true;
+            optionsView.RightAnchor.ConstraintEqualToAnchor(_documentView.RightAnchor, 24f).Active = true;
+            optionsView.BottomAnchor.ConstraintEqualToAnchor(_documentView.BottomAnchor, 24f).Active = true;
         }
-        
+
         public override void SetFrameSize (CGSize newSize)
         {
             base.SetFrameSize (newSize);
