@@ -67,6 +67,7 @@
     <Compile Include="Options\OptionsPanelVSMac.cs" />
     <Compile Include="Options\OptionFactoryVSMac.cs" />
     <Compile Include="Options\ComboBoxOptionVSMac.cs" />
+    <Compile Include="Options\SwitchableGroupeOptionVSMac.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\VisualStudioUI\VisualStudioUI.csproj">
