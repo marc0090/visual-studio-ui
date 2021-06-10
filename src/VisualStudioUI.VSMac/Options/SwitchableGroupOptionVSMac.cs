@@ -18,6 +18,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options {
 		private NSTextField _title;
 		private NSTextField _description;
 		private NSButton _helpButton;
+		private NSView _childrenView;
 
 		public SwitchableGroupOptionVSMac (SwitchableGroupOption option) : base (option)
 		{
@@ -38,7 +39,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options {
 
 		private void CreateView ()
 		{
-
 			_optionView = new AppKit.NSView ();
 			_optionView.WantsLayer = true;
 			_optionView.TranslatesAutoresizingMaskIntoConstraints = false;
@@ -125,7 +125,23 @@ namespace Microsoft.VisualStudioUI.VSMac.Options {
 			_helpButton.RightAnchor.ConstraintEqualToAnchor (_optionView.RightAnchor, -6f).Active = true;
 			_helpButton.TopAnchor.ConstraintEqualToAnchor (_optionView.TopAnchor, 30f).Active = true;
 
+			_childrenView = new NSView ();
 
+			foreach (Option option in ((SwitchableGroupOption) Option).ChildOptions) {
+				var optionVSMac = (OptionVSMac) option.Platform;
+				_optionView.AddSubview (optionVSMac.View);
+			}
+
+			UpdateChildOptions ();
+		}
+
+		private void UpdateChildOptions ()
+		{
+			if (_switchButton.IsFlipped) {
+				_optionView.AddSubview (_childrenView);
+			} else {
+				_childrenView.RemoveFromSuperview ();
+			}
 		}
 	}
 
