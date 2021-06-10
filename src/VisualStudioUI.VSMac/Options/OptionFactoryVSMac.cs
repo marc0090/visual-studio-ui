@@ -29,5 +29,9 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         public override OptionPlatform CreateSeparatorOptionPlatform(SeparatorOption separatorOption) =>
             new SeparatorOptionVSMac(separatorOption);
+
+        public override OptionPlatform CreateRadioButtonOptionPlatform (RadioButtonOption radioBtnOption) =>
+            new RadioButtonOptionVSMac (radioBtnOption);
+
     }
 }
