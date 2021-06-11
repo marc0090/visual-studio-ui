@@ -64,13 +64,30 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
                 }
             );
 
+            var card3 = new OptionCard()
+            {
+
+            };
+
+            card3.AddOption(
+                new SwitchableGroupOption(BoolProp(true))
+                {
+                    Label = "Siri",
+                    Name = "Allows your application to handle Siri requests.",
+                    Hint = "Hint: Allows your application to handle Siri requests.",
+                }
+                );
+
             OptionCards cards = new OptionCards();
+
+            cards.AddCard(card3);
             cards.AddCard(card1);
             cards.AddCard(card2);
 
             return cards;
         }
 
+        public static ViewModelProperty<bool> BoolProp(bool defaultValue) => new ViewModelProperty<bool>("boolProp", defaultValue);
         public static ViewModelProperty<string> StringProp(string defaultValue) => new ViewModelProperty<string>("stringProp", defaultValue);
         public static ViewModelProperty<string[]> StringArrayProp(string[] defaultValue) =>
             new ViewModelProperty<string[]>("stringArrayProp", defaultValue);
