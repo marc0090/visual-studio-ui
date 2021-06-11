@@ -30,6 +30,6 @@ namespace Microsoft.VisualStudioUI.Options
 		public abstract OptionPlatform CreateEditableComboBoxOptionPlatform(EditableComboBoxOption editableComboBoxOption);
 		public abstract OptionPlatform CreateDocButtonOptionPlatform(DocButtonOption docButtonOption);
 		public abstract OptionPlatform CreateSeparatorOptionPlatform(SeparatorOption separatorOption);
-		public abstract OptionPlatform CreateRadioButtonOptionPlatform (RadioButtonOption radioBtnOption);
+		public abstract OptionPlatform CreateRadioButtonOptionPlatform (ButtonOption radioBtnOption);
 	}
 }
