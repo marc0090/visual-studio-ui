@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudioUI.Options;
 using Microsoft.VisualStudioUI.Options.Models;
 
@@ -64,11 +65,7 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
                 }
             );
 
-            var card3 = new OptionCard()
-            {
-
-            };
-
+            var card3 = new OptionCard();
             card3.AddOption(
                 new SwitchableGroupOption(BoolProp(true))
                 {
@@ -76,11 +73,30 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
                     Name = "Allows your application to handle Siri requests.",
                     Hint = "Hint: Allows your application to handle Siri requests.",
                 }
-                );
+             );
+
+
+            var card4 = new OptionCard();
+            card4.AddOption(
+                new SwitchableGroupOption(BoolProp(true))
+                {
+                    Label = "iCloud",
+                    Name = "Allows your application to store data in the cloud and lets users share their data across devices.",
+                    Hint = "Hint: Allows your application to store data in the cloud and lets users share their data across devices.",
+                }
+            );
+
+            List<string> list = new List<string>();
+            list.Add("testStringList1");
+            list.Add("testStringList1");
+            list.Add("testStringList3");
+
+            card4.AddOption(new StringListOption(ListProp(list)) { Label = "List" });
 
             OptionCards cards = new OptionCards();
 
             cards.AddCard(card3);
+            cards.AddCard(card4);
             cards.AddCard(card1);
             cards.AddCard(card2);
 
@@ -91,5 +107,7 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
         public static ViewModelProperty<string> StringProp(string defaultValue) => new ViewModelProperty<string>("stringProp", defaultValue);
         public static ViewModelProperty<string[]> StringArrayProp(string[] defaultValue) =>
             new ViewModelProperty<string[]>("stringArrayProp", defaultValue);
+        public static ViewModelProperty<List<string>> ListProp(List<string> defaultValue) => new ViewModelProperty<List<string>>("listProp", defaultValue);
+
     }
 }

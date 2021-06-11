@@ -68,10 +68,11 @@
     <Compile Include="Options\OptionFactoryVSMac.cs" />
     <Compile Include="Options\ComboBoxOptionVSMac.cs" />
     <Compile Include="Options\SwitchableGroupOptionVSMac.cs" />
+    <Compile Include="Options\StringListOptionVSMac.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\VisualStudioUI\VisualStudioUI.csproj">
-      <Project>{ED97F735-178E-4CA1-8B9A-EE5B09B7080B}</Project>
+      <Project>{F08A99F8-D704-40F4-8B59-73B54D16AA7C}</Project>
       <Name>VisualStudioUI</Name>
     </ProjectReference>
   </ItemGroup>
