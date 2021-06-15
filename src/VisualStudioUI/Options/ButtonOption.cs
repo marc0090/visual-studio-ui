@@ -10,12 +10,12 @@ namespace Microsoft.VisualStudioUI.Options
 			CheckBox = 3, // NSButtonType.Switch
 			Radio = 4, // NSButtonType.Radio
 		}
-		public string Title { get; }
+		public string Describetion { get; set; }
 		public ButtonType Type { get; }
+		//public string Describetion { get; set; }
 
-		public ButtonOption (string title, ButtonType btnType = ButtonType.Normal)
+		public ButtonOption (ButtonType btnType = ButtonType.Normal)
 		{
-			Title = title;
 			Type = btnType;
 			Platform = OptionFactoryPlatform.Instance.CreateRadioButtonOptionPlatform (this);
 		}

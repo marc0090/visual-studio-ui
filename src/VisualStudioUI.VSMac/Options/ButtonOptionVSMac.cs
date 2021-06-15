@@ -5,9 +5,13 @@ using Microsoft.VisualStudioUI.Options.Models;
 
 namespace Microsoft.VisualStudioUI.VSMac.Options
 {
-	public class ButtonOptionVSMac : OptionWithLeftLabelVSMac
+	public class ButtonOptionVSMac : OptionVSMac
 	{
-		NSButton _radioBtn;
+		NSView _optionView;
+		NSButton _button;
+		NSTextField _description;
+		NSButton _helpButton;
+		HintPopover _hintPopover;
 
 		public ButtonOptionVSMac (ButtonOption option) : base (option)
 		{
@@ -15,31 +19,136 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
 		public ButtonOption ButtonOption => ((ButtonOption) Option);
 
-		protected override NSView Control
+		public override NSView View
 		{
 			get {
-				if (_radioBtn == null)
+				if (_optionView == null)
 				{
-					_radioBtn = new AppKit.NSButton ();
-                    if (ButtonOption.Type != 0) // 0 means noraml button
-                    {
-						_radioBtn.SetButtonType((NSButtonType)ButtonOption.Type);
-					}
-					_radioBtn.ControlSize = NSControlSize.Regular;
-					_radioBtn.Font = AppKit.NSFont.SystemFontOfSize (AppKit.NSFont.SystemFontSize);
-					_radioBtn.Title = ButtonOption.Title ?? string.Empty;
-					_radioBtn.State = NSCellStateValue.On;
-					_radioBtn.TranslatesAutoresizingMaskIntoConstraints = false;
-					//_radioBtn.AccessibilityTitle = "Control";
-					//_radioBtn.AccessibilityHelp = "Provides a control";
-
-					var radioViewWidthConstraint = _radioBtn.WidthAnchor.ConstraintEqualToConstant (374f);
-					radioViewWidthConstraint.Priority = (System.Int32) AppKit.NSLayoutPriority.DefaultLow;
-					radioViewWidthConstraint.Active = true;
+					CreateView();
 				}
 
-				return _radioBtn;
+				return _optionView;
 			}
+		}
+
+		private void CreateView()
+		{
+			// View:     optionView
+			_optionView = new AppKit.NSView();
+			_optionView.WantsLayer = true;
+			_optionView.TranslatesAutoresizingMaskIntoConstraints = false;
+
+			var optionWidthConstraint = _optionView.WidthAnchor.ConstraintEqualToConstant(600f);
+			optionWidthConstraint.Active = true;
+
+			var viewHeight = 32f;
+			if (!string.IsNullOrWhiteSpace(ButtonOption.Describetion))
+			{
+				viewHeight = 65f;
+			}
+			var optionHeightConstraint = _optionView.HeightAnchor.ConstraintEqualToConstant(viewHeight);
+			optionHeightConstraint.Active = true;
+
+			if (!string.IsNullOrEmpty(Option.Label))
+			{
+				// View:     label
+				var label = new AppKit.NSTextField();
+				label.Editable = false;
+				label.Bordered = false;
+				label.DrawsBackground = false;
+				label.PreferredMaxLayoutWidth = 1;
+				// TODO: Make the colon be localization friendly
+				label.StringValue = Option.Label + ":";
+
+				label.Alignment = NSTextAlignment.Right;
+				label.Font = AppKit.NSFont.SystemFontOfSize(AppKit.NSFont.SystemFontSize);
+				label.TextColor = NSColor.LabelColor;
+				label.TranslatesAutoresizingMaskIntoConstraints = false;
+
+				_optionView.AddSubview(label);
+				label.WidthAnchor.ConstraintEqualToConstant(205f).Active = true;
+				label.HeightAnchor.ConstraintEqualToConstant(16f).Active = true;
+
+				label.LeftAnchor.ConstraintEqualToAnchor(_optionView.LeftAnchor, 6f).Active = true;
+				label.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 7f).Active = true;
+			}
+
+			if (!string.IsNullOrEmpty(Option.Hint))
+			{
+				// View:     helpButton
+				_helpButton = new AppKit.NSButton();
+				_helpButton.BezelStyle = NSBezelStyle.HelpButton;
+				_helpButton.Title = "";
+				_helpButton.ControlSize = NSControlSize.Regular;
+				_helpButton.Font = AppKit.NSFont.SystemFontOfSize(AppKit.NSFont.SystemFontSize);
+				_helpButton.TranslatesAutoresizingMaskIntoConstraints = false;
+
+				_optionView.AddSubview(_helpButton);
+				var helpButtonWidthConstraint = _helpButton.WidthAnchor.ConstraintEqualToConstant(21f);
+				helpButtonWidthConstraint.Priority = (System.Int32)AppKit.NSLayoutPriority.DefaultLow;
+				helpButtonWidthConstraint.Active = true;
+
+				_helpButton.RightAnchor.ConstraintEqualToAnchor(_optionView.RightAnchor, -6f).Active = true;
+				_helpButton.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 5f).Active = true;
+
+				_helpButton.Activated += (o, args) => ShowHintPopover(Option.Hint, _helpButton);
+			}
+
+			// View:     control
+			_button = new AppKit.NSButton();
+			if (ButtonOption.Type != 0) // 0 means noraml button
+			{
+				_button.SetButtonType((NSButtonType)ButtonOption.Type);
+				_button.Bordered = false;
+			}
+			_button.ControlSize = NSControlSize.Regular;
+			_button.Font = AppKit.NSFont.SystemFontOfSize(AppKit.NSFont.SystemFontSize);
+			_button.Title = ButtonOption.Name ?? string.Empty;
+			_button.State = NSCellStateValue.On;
+			_button.TranslatesAutoresizingMaskIntoConstraints = false;
+			_button.AccessibilityTitle = "Control";
+			_button.AccessibilityHelp = "Provides a control";
+
+			_optionView.AddSubview(_button);
+
+			_button.LeftAnchor.ConstraintEqualToAnchor(_optionView.LeftAnchor, 220f).Active = true;
+			_button.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 5f).Active = true;
+
+			if (!string.IsNullOrWhiteSpace(ButtonOption.Describetion))
+			{
+				_description = new AppKit.NSTextField();
+				_description.Editable = false;
+				_description.Bordered = false;
+				_description.DrawsBackground = false;
+				_description.PreferredMaxLayoutWidth = 1;
+				_description.StringValue = ButtonOption.Describetion ?? string.Empty;
+				_description.Alignment = NSTextAlignment.Left;
+				_description.Font = AppKit.NSFont.SystemFontOfSize(AppKit.NSFont.SmallSystemFontSize);
+				_description.TextColor = NSColor.SecondaryLabelColor;
+				_description.TranslatesAutoresizingMaskIntoConstraints = false;
+
+				_optionView.AddSubview(_description);
+				var _descriptionWidthConstraint = _description.WidthAnchor.ConstraintEqualToConstant(354f);
+				_descriptionWidthConstraint.Active = true;
+				var _descriptionHeightConstraint = _description.HeightAnchor.ConstraintEqualToConstant(354f);
+				_descriptionHeightConstraint.Active = true;
+
+				_description.LeftAnchor.ConstraintEqualToAnchor(_button.LeftAnchor, 0f).Active = true;
+				_description.TopAnchor.ConstraintEqualToAnchor(_button.BottomAnchor, 0f).Active = true;
+			}
+		}
+
+		void ShowHintPopover(string message, NSButton button)
+		{
+			_hintPopover?.Close();
+			_hintPopover?.Dispose();
+			_hintPopover = new HintPopover(message, null);
+			_hintPopover.MaxWidth = 256;
+			//TODO:
+			//popover.SetAppearance (Appearance);
+
+			var bounds = button.Bounds;
+			_hintPopover.Show(bounds, button, NSRectEdge.MaxYEdge);
 		}
 	}
 }

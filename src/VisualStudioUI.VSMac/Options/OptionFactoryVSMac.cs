@@ -37,6 +37,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         public override OptionPlatform CreateRadioButtonOptionPlatform(ButtonOption radioBtnOption) =>
             new ButtonOptionVSMac(radioBtnOption);
-
+        
+        public override OptionPlatform CreateImageViewOptionPlatform(ImageViewOption imageViewOption) =>
+            new ImageViewOptionVSMac(imageViewOption);
     }
 }
