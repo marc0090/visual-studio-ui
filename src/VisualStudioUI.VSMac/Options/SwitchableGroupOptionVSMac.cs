@@ -54,10 +54,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             var _optionViewHeightConstraint = _optionView.HeightAnchor.ConstraintEqualToConstant(81f);
             _optionViewHeightConstraint.Active = true;
 
-            _optionView.LeftAnchor.ConstraintEqualToAnchor(_optionView.LeftAnchor, 20f).Active = true;
-            _optionView.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 0f).Active = true;
-
-
 
             _switchButton = new AppKit.NSSwitch();
             _switchButton.ControlSize = NSControlSize.Regular;

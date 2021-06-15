@@ -87,18 +87,18 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             );
 
             List<string> list = new List<string>();
-            list.Add("testStringList1");
-            list.Add("testStringList1");
-            list.Add("testStringList3");
 
-            card4.AddOption(new StringListOption(ListProp(list)) { Label = "List" });
+            list.Add("testStringList1");
+            list.Add("testStringList1");
+
+            card4.AddOption(new StringListOption(ListProp(list), "default string") { Label = "list" });
 
             OptionCards cards = new OptionCards();
 
             cards.AddCard(card3);
             cards.AddCard(card4);
-            cards.AddCard(card1);
-            cards.AddCard(card2);
+            //cards.AddCard(card1);
+            //cards.AddCard(card2);
 
             return cards;
         }
