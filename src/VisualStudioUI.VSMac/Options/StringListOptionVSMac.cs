@@ -20,16 +20,16 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         public override NSView GetViewForItem(NSTableView tableView, NSTableColumn tableColumn, nint row)
         {
             var view = (NSTableCellView)tableView.MakeView("cell", this);
-
             if (view == null)
             {
                 view = new NSTableCellView
                 {
                     TextField = new NSTextField
                     {
-                        Frame = new CoreGraphics.CGRect(0, 0, tableColumn.Width, 18),
+                        Frame = new CoreGraphics.CGRect(0, 6, tableColumn.Width, 18),
                         Hidden = false,
                         Bordered = false,
+                        DrawsBackground = false
                     },
                     Identifier = "cell"
                 };
@@ -95,7 +95,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             };
 
             _tableView = new NSTableView() { HeaderView = null, Source = new ListSource(this) };
-            _tableView.SelectionHighlightStyle = NSTableViewSelectionHighlightStyle.Regular;
             _tableView.AddColumn(new NSTableColumn());
 
             var scrolledView = new NSScrollView()
