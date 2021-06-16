@@ -27,6 +27,9 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 					_textField.Font = AppKit.NSFont.SystemFontOfSize(AppKit.NSFont.SystemFontSize);
 					_textField.StringValue = property.Value ?? string.Empty;
 					_textField.TranslatesAutoresizingMaskIntoConstraints = false;
+					_textField.Editable = TextOption.Editable;
+					_textField.Bordered = TextOption.Bordered;
+					_textField.DrawsBackground = TextOption.DrawsBackground;
 
 					_textField.WidthAnchor.ConstraintEqualToConstant(196f).Active = true;
 

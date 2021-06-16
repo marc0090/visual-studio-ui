@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudioUI.Options;
 using Microsoft.VisualStudioUI.Options.Models;
 
@@ -8,6 +9,7 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
     {
         public static OptionCards CreateOptionCards()
         {
+            //return CreateInfoPlistUI();
             var card1 = new OptionCard()
             {
                 Label = "My Card"
@@ -64,15 +66,61 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
                 }
             );
 
+            var card3 = new OptionCard();
+            card3.AddOption(
+                new SwitchableGroupOption(BoolProp(true))
+                {
+                    Label = "Siri",
+                    Name = "Allows your application to handle Siri requests.",
+                    Hint = "Hint: Allows your application to handle Siri requests.",
+                }
+             );
+
+
+            var card4 = new OptionCard();
+            card4.AddOption(
+                new SwitchableGroupOption(BoolProp(true))
+                {
+                    Label = "iCloud",
+                    Name = "Allows your application to store data in the cloud and lets users share their data across devices.",
+                    Hint = "Hint: Allows your application to store data in the cloud and lets users share their data across devices.",
+                }
+            );
+
+            List<string> list = new List<string>();
+
+            list.Add("testStringList1");
+            list.Add("testStringList1");
+
+            card4.AddOption(new StringListOption(ListProp(list), "default string") { Label = "list" });
+
+            //Signing 
+            var signing = new OptionCard() {Label = "Signing" };
+            signing.AddOption(new ButtonOption(ButtonOption.ButtonType.Radio)
+            {
+                IsSelected = BoolProp(true),
+                Label = "Scheme",
+                Name = "Manual Provisioning",
+                Description = "Set provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioning"
+            });
+            signing.AddOption(new ButtonOption(ButtonOption.ButtonType.CheckBox) { Label = "Orientations", Name = "Portrait" });
+
             OptionCards cards = new OptionCards();
-            cards.AddCard(card1);
-            cards.AddCard(card2);
+
+            cards.AddCard(signing);
+            cards.AddCard(card3);
+            cards.AddCard(card4);
+            //cards.AddCard(card1);
+            //cards.AddCard(card2);
 
             return cards;
         }
 
+        public static ViewModelProperty<bool> BoolProp(bool defaultValue) => new ViewModelProperty<bool>("boolProp", defaultValue);
         public static ViewModelProperty<string> StringProp(string defaultValue) => new ViewModelProperty<string>("stringProp", defaultValue);
         public static ViewModelProperty<string[]> StringArrayProp(string[] defaultValue) =>
             new ViewModelProperty<string[]>("stringArrayProp", defaultValue);
+        public static ViewModelProperty<List<string>> ListProp(List<string> defaultValue) => new ViewModelProperty<List<string>>("listProp", defaultValue);
+
     }
 }

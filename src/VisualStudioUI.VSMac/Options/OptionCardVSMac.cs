@@ -29,7 +29,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 			cardView.WantsLayer = true;
 			cardView.TranslatesAutoresizingMaskIntoConstraints = false;
 
-			var cardWidthConstraint = cardView.WidthAnchor.ConstraintEqualToConstant (640f);
+			var cardWidthConstraint = cardView.WidthAnchor.ConstraintEqualToConstant(640f);
 			cardWidthConstraint.Active = true;
 			//var cardHeightConstraint = cardView.HeightAnchor.ConstraintEqualToConstant (367f);
 			//cardHeightConstraint.Active = true;
@@ -51,7 +51,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 			background.Title = "";
 			background.TranslatesAutoresizingMaskIntoConstraints = false;
 
-			cardView.AddSubview (background);
+			cardView.AddSubview(background);
 			/*
 			var backgroundWidthConstraint = background.WidthAnchor.ConstraintEqualToConstant (640f);
 			backgroundWidthConstraint.Priority = (System.Int32)AppKit.NSLayoutPriority.DefaultLow;
@@ -61,12 +61,13 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 			backgroundHeightConstraint.Active = true;
 			*/
 
-			background.RightAnchor.ConstraintEqualToAnchor (cardView.RightAnchor, 0f).Active = true;
-			background.LeftAnchor.ConstraintEqualToAnchor (cardView.LeftAnchor, 0f).Active = true;
-			background.BottomAnchor.ConstraintEqualToAnchor (cardView.BottomAnchor, 0f).Active = true;
-			background.TopAnchor.ConstraintEqualToAnchor (cardView.TopAnchor, 0f).Active = true;
+			background.RightAnchor.ConstraintEqualToAnchor(cardView.RightAnchor, 0f).Active = true;
+			background.LeftAnchor.ConstraintEqualToAnchor(cardView.LeftAnchor, 0f).Active = true;
+			background.BottomAnchor.ConstraintEqualToAnchor(cardView.BottomAnchor, 0f).Active = true;
+			background.TopAnchor.ConstraintEqualToAnchor(cardView.TopAnchor, 0f).Active = true;
 
 			// View:     titleLabel
+			var titleOffset = 0;
 			if (!string.IsNullOrEmpty(OptionCard.Label))
 			{
 				var titleLabel = new AppKit.NSTextField();
@@ -89,27 +90,30 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
 				titleLabel.LeftAnchor.ConstraintEqualToAnchor(cardView.LeftAnchor, 24f).Active = true;
 				titleLabel.TopAnchor.ConstraintEqualToAnchor(cardView.TopAnchor, 17f).Active = true;
+
+				//top position offset for card with a title
+				titleOffset = 33;
 			}
 
 			// View:     optionsStackView
 			var optionsStackView = new AppKit.NSStackView();
 			optionsStackView.TranslatesAutoresizingMaskIntoConstraints = false;
-			optionsStackView.EdgeInsets = new AppKit.NSEdgeInsets (0, 0, 0, 0);
+			optionsStackView.EdgeInsets = new AppKit.NSEdgeInsets(0, 0, 0, 0);
 			optionsStackView.Spacing = 0f;
 			optionsStackView.Orientation = NSUserInterfaceLayoutOrientation.Vertical;
 			optionsStackView.Distribution = NSStackViewDistribution.EqualSpacing;
 
-			cardView.AddSubview (optionsStackView);
-			var optionsStackWidthConstraint = optionsStackView.WidthAnchor.ConstraintEqualToConstant (600f);
+			cardView.AddSubview(optionsStackView);
+			var optionsStackWidthConstraint = optionsStackView.WidthAnchor.ConstraintEqualToConstant(600f);
 			optionsStackWidthConstraint.Active = true;
 
-			optionsStackView.LeftAnchor.ConstraintEqualToAnchor (cardView.LeftAnchor, 20f).Active = true;
-			optionsStackView.TopAnchor.ConstraintEqualToAnchor (cardView.TopAnchor, 54f).Active = true;
+			optionsStackView.LeftAnchor.ConstraintEqualToAnchor(cardView.LeftAnchor, 20f).Active = true;
+			optionsStackView.TopAnchor.ConstraintEqualToAnchor(cardView.TopAnchor, 20f + titleOffset).Active = true;
 			optionsStackView.BottomAnchor.ConstraintEqualToAnchor(cardView.BottomAnchor, -20f).Active = true;
 
 			foreach (Option option in OptionCard.Options)
 			{
-				var optionVSMac = (OptionVSMac) option.Platform;
+				var optionVSMac = (OptionVSMac)option.Platform;
 				optionsStackView.AddArrangedSubview(optionVSMac.View);
 			}
 
