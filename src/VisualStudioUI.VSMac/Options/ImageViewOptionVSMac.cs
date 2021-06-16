@@ -14,7 +14,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         {
         }
 
-        public ImageViewOption TextOption => ((ImageViewOption)Option);
+        public ImageViewOption TextOption => ((ImageViewOption) Option);
 
         protected override NSView Control
         {
@@ -30,7 +30,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     _imageView.Layer.BorderWidth = 1;
 
                     var imageViewWidthConstraint = _imageView.WidthAnchor.ConstraintEqualToConstant(80f);
-                    imageViewWidthConstraint.Priority = (System.Int32)AppKit.NSLayoutPriority.DefaultLow;
+                    imageViewWidthConstraint.Priority = (System.Int32) AppKit.NSLayoutPriority.DefaultLow;
                     imageViewWidthConstraint.Active = true;
                     var imageViewHeightConstraint = _imageView.HeightAnchor.ConstraintEqualToConstant(50f);
                     imageViewHeightConstraint.Active = true;

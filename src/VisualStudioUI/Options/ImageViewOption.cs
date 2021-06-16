@@ -2,12 +2,11 @@
 
 namespace Microsoft.VisualStudioUI.Options
 {
-	public class ImageViewOption : Option
-	{
-		public ImageViewOption()
-		{
-			Platform = OptionFactoryPlatform.Instance.CreateImageViewOptionPlatform(this);
-		}
-
-	}
+    public class ImageViewOption : Option
+    {
+        public ImageViewOption()
+        {
+            Platform = OptionFactoryPlatform.Instance.CreateImageViewOptionPlatform(this);
+        }
+    }
 }

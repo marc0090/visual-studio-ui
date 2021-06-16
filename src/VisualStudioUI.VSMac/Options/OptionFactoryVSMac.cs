@@ -21,7 +21,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         public override OptionPlatform CreateComboBoxOptionPlatform(ComboBoxOption comboBoxOption) =>
             new ComboBoxOptionVSMac(comboBoxOption);
 
-        public override OptionPlatform CreateEditableComboBoxOptionPlatform(EditableComboBoxOption editableComboBoxOption) =>
+        public override OptionPlatform CreateEditableComboBoxOptionPlatform(
+            EditableComboBoxOption editableComboBoxOption) =>
             new EditableComboBoxOptionVSMac(editableComboBoxOption);
 
         public override OptionPlatform CreateDocButtonOptionPlatform(DocButtonOption docButtonOption) =>
@@ -29,7 +30,9 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         public override OptionPlatform CreateSeparatorOptionPlatform(SeparatorOption separatorOption) =>
             new SeparatorOptionVSMac(separatorOption);
-        public override OptionPlatform CreateSwitchableGroupOptionPlatform(SwitchableGroupOption switchableGroupOption) =>
+
+        public override OptionPlatform
+            CreateSwitchableGroupOptionPlatform(SwitchableGroupOption switchableGroupOption) =>
             new SwitchableGroupOptionVSMac(switchableGroupOption);
 
         public override OptionPlatform CreateStringListOptionPlatform(StringListOption stringListOption) =>
@@ -37,7 +40,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         public override OptionPlatform CreateRadioButtonOptionPlatform(ButtonOption radioBtnOption) =>
             new ButtonOptionVSMac(radioBtnOption);
-        
+
         public override OptionPlatform CreateImageViewOptionPlatform(ImageViewOption imageViewOption) =>
             new ImageViewOptionVSMac(imageViewOption);
     }

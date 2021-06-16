@@ -12,8 +12,9 @@ using System.ComponentModel;
 
 namespace Microsoft.VisualStudioUI.Options.Models
 {
-	public enum MessageSeverity
-	{
-		Warning, Error
-	}
+    public enum MessageSeverity
+    {
+        Warning,
+        Error
+    }
 }

@@ -7,7 +7,6 @@ using Microsoft.VisualStudioUI.Options.Models;
 
 namespace Microsoft.VisualStudioUI.VSMac.Options
 {
-
     class ListSource : NSTableViewSource
     {
         StringListOptionVSMac Option;
@@ -35,7 +34,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         public override NSView GetViewForItem(NSTableView tableView, NSTableColumn tableColumn, nint row)
         {
-            var view = (NSTableCellView)tableView.MakeView("cell", this);
+            var view = (NSTableCellView) tableView.MakeView("cell", this);
             if (view == null)
             {
                 view = new NSTableCellView
@@ -56,7 +55,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             }
 
             view.TextField.Tag = row;
-            view.TextField.StringValue = Option.StringList[(int)row];
+            view.TextField.StringValue = Option.StringList[(int) row];
 
             return view;
         }
@@ -110,7 +109,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 Alignment = NSLayoutAttribute.Left
             };
 
-            _tableView = new NSTableView() { HeaderView = null, Source = new ListSource(this) };
+            _tableView = new NSTableView() {HeaderView = null, Source = new ListSource(this)};
             _tableView.AddColumn(new NSTableColumn());
 
             var scrolledView = new NSScrollView()
@@ -165,16 +164,12 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             _optionView.AddArrangedSubview(h);
         }
 
-        public string ValuePrefix
-        {
-            get; set;
-        }
+        public string ValuePrefix { get; set; }
 
         public bool ShowDescriptions
         {
             get { return false; }
         }
-
 
 
         //public void SetPListContainer(PObjectContainer container)
@@ -193,7 +188,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         void OnSelectionChanged(object sender, EventArgs e)
         {
             _removeButton.Enabled = (_tableView.SelectedCell != null);
-
         }
 
         void OnStringListChanged(object sender, EventArgs e)
@@ -204,8 +198,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         public void OnValueEdited(object sender, EventArgs e)
         {
-            var textField = ((NSTextField)(((NSNotification)sender).Object));
-            int row = (int)textField.Tag;
+            var textField = ((NSTextField) (((NSNotification) sender).Object));
+            int row = (int) textField.Tag;
             var newText = textField.StringValue;
             if (newText == null)
                 return;
@@ -236,7 +230,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         void OnRemoveClicked(object sender, EventArgs e)
         {
-            int selectedRow = (int)_tableView.SelectedRow;
+            int selectedRow = (int) _tableView.SelectedRow;
 
             if (selectedRow < 0 || selectedRow >= StringList.Count)
             {
@@ -270,6 +264,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             {
                 return;
             }
+
             int selectRow = StringList.Count - 1;
             _tableView.SelectRow(selectRow, false);
             _tableView.ScrollRowToVisible(selectRow);
@@ -281,6 +276,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             {
                 return;
             }
+
             _tableView.SelectRow(0, false);
         }
 
@@ -290,9 +286,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             TableSelectLastItem();
 
             _removeButton.Enabled = StringList.Count > 0;
-
         }
-
     }
-
 }
