@@ -23,15 +23,17 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
             if (view == null)
             {
-                view = new NSTableCellView();
+                view = new NSTableCellView
+                {
+                    TextField = new NSTextField
+                    {
+                        Frame = new CoreGraphics.CGRect(0, 0, tableColumn.Width, 18),
+                        Hidden = false,
+                        Bordered = false,
+                    },
+                    Identifier = "cell"
+                };
 
-                // view.Frame = new CoreGraphics.CGRect(0, 0, tableColumn.Width, tableView.RowHeight);
-                view.TextField = new NSTextField();
-                view.TextField.Frame = new CoreGraphics.CGRect(0, 0, tableColumn.Width, 18);
-                //view.TextField.BackgroundColor = NSColor.Red;
-                view.TextField.Hidden = false;
-                view.TextField.Bordered = false;
-                view.Identifier = "cell";
                 view.AddSubview(view.TextField);
 
                 view.TextField.EditingEnded += Option.OnValueEdited;
@@ -86,13 +88,15 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         public void CreateView()
         {
-            _optionView = new NSStackView();
-            _optionView.Orientation = NSUserInterfaceLayoutOrientation.Vertical;
-            _optionView.Alignment = NSLayoutAttribute.Left;
+            _optionView = new NSStackView
+            {
+                Orientation = NSUserInterfaceLayoutOrientation.Vertical,
+                Alignment = NSLayoutAttribute.Left
+            };
 
-            _tableView = new NSTableView() { HeaderView = null };
+            _tableView = new NSTableView() { HeaderView = null, Source = new ListSource(this) };
+            _tableView.SelectionHighlightStyle = NSTableViewSelectionHighlightStyle.Regular;
             _tableView.AddColumn(new NSTableColumn());
-            _tableView.Source = new ListSource(this);
 
             var scrolledView = new NSScrollView()
             {
@@ -107,31 +111,38 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
             _optionView.AddArrangedSubview(scrolledView);
 
-            _addButton = new NSButton();
-            _addButton.BezelStyle = NSBezelStyle.TexturedRounded;
-            _addButton.Title = "+";
-            _addButton.Image = NSImage.GetSystemSymbol("NSAddTemplate", addToolTip);
-            _addButton.ControlSize = NSControlSize.Large;
-            _addButton.Font = AppKit.NSFont.SystemFontOfSize(NSFont.SystemFontSize);
-            _addButton.TranslatesAutoresizingMaskIntoConstraints = false;
+            _addButton = new NSButton
+            {
+                BezelStyle = NSBezelStyle.TexturedRounded,
+                Bordered = false,
+                Title = "",
+                WantsLayer = true,
+                Image = NSImage.GetSystemSymbol("plus.circle", addToolTip),
+                ContentTintColor = NSColor.SystemGreenColor,
+                TranslatesAutoresizingMaskIntoConstraints = false
+            };
 
-            var addButtonWidthConstraint = _addButton.WidthAnchor.ConstraintEqualToConstant(21f);
-            addButtonWidthConstraint.Priority = (System.Int32)NSLayoutPriority.DefaultLow;
-            addButtonWidthConstraint.Active = true;
+            _addButton.WidthAnchor.ConstraintEqualToConstant(25).Active = true;
+            _addButton.HeightAnchor.ConstraintEqualToConstant(21).Active = true;
+            _addButton.Layer.BackgroundColor = NSColor.TextBackground.CGColor;
+            _addButton.Layer.CornerRadius = 5;
             _addButton.Activated += OnAddClicked;
 
-            _removeButton = new NSButton();
-            _removeButton.BezelStyle = NSBezelStyle.TexturedRounded;
-            _removeButton.Title = "x";
-            _removeButton.Image = NSImage.GetSystemSymbol("NSStopProgressTemplate", removeToolTip);
-            _removeButton.ControlSize = NSControlSize.Large;
-            _removeButton.Font = NSFont.SystemFontOfSize(AppKit.NSFont.SystemFontSize);
-            _removeButton.TranslatesAutoresizingMaskIntoConstraints = false;
-
-            var removeButtonWidthConstraint = _removeButton.WidthAnchor.ConstraintEqualToConstant(21f);
-            removeButtonWidthConstraint.Priority = (System.Int32)AppKit.NSLayoutPriority.DefaultLow;
-            removeButtonWidthConstraint.Active = true;
+            _removeButton = new NSButton
+            {
+                BezelStyle = NSBezelStyle.Rounded,
+                Bordered = false,
+                WantsLayer = true,
+                Title = "",
+                Image = NSImage.GetSystemSymbol("xmark.circle", removeToolTip),
+                ContentTintColor = NSColor.SystemPinkColor,
+                TranslatesAutoresizingMaskIntoConstraints = false
+            };
+            _removeButton.WidthAnchor.ConstraintEqualToConstant(25).Active = true;
+            _removeButton.HeightAnchor.ConstraintEqualToConstant(21).Active = true;
             _removeButton.Activated += OnRemoveClicked;
+            _removeButton.Layer.BackgroundColor = NSColor.TextBackground.CGColor;
+            _removeButton.Layer.CornerRadius = 5;
 
             var h = new NSStackView();
             h.AddArrangedSubview(_addButton);
