@@ -14,7 +14,6 @@ namespace Microsoft.VisualStudioUI.Options
             DefaultValue = defaultListValue;
             Property = property;
             Platform = OptionFactoryPlatform.Instance.CreateStringListOptionPlatform(this);
-
         }
     }
 }

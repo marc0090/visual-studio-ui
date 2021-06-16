@@ -12,15 +12,15 @@ using System.ComponentModel;
 
 namespace Microsoft.VisualStudioUI.Options.Models
 {
-	public class Message
-	{
-		public string Text { get; }
-		public MessageSeverity Severity { get; }
+    public class Message
+    {
+        public string Text { get; }
+        public MessageSeverity Severity { get; }
 
-		public Message(string text, MessageSeverity severity)
-		{
-			Text = text;
-			Severity = severity;
-		}
-	}
+        public Message(string text, MessageSeverity severity)
+        {
+            Text = text;
+            Severity = severity;
+        }
+    }
 }

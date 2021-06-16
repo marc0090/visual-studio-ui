@@ -9,10 +9,9 @@ namespace Microsoft.VisualStudioUI.StandaloneApp.VSMacUI
         static void Main(string[] args)
         {
             OptionFactoryPlatform.Initialize(new OptionFactoryVSMac());
-            
+
             NSApplication.Init();
             NSApplication.Main(args);
         }
     }
 }
-    

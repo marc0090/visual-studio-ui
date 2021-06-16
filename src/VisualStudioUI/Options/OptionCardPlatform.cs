@@ -1,12 +1,12 @@
 ﻿namespace Microsoft.VisualStudioUI.Options
 {
     public class OptionCardPlatform
-	{
-		public OptionCard OptionCard { get; }
+    {
+        public OptionCard OptionCard { get; }
 
-		public OptionCardPlatform(OptionCard optionCard)
-		{
-			OptionCard = optionCard;
-		}
-	}
+        public OptionCardPlatform(OptionCard optionCard)
+        {
+            OptionCard = optionCard;
+        }
+    }
 }

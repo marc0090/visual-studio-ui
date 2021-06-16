@@ -6,6 +6,7 @@
 //
 // Copyright (c) 2021 
 //
+
 using System;
 using AppKit;
 using Microsoft.VisualStudioUI.Options;
@@ -14,7 +15,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 {
     public class SwitchableGroupOptionVSMac : OptionVSMac
     {
-
         private NSView _optionView;
         private NSSwitch _switchButton;
         private NSTextField _title;
@@ -27,7 +27,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         {
         }
 
-        public SwitchableGroupOption SwitchableGroupOption => ((SwitchableGroupOption)Option);
+        public SwitchableGroupOption SwitchableGroupOption => ((SwitchableGroupOption) Option);
 
 
         public override NSView View
@@ -82,7 +82,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
             _optionView.AddSubview(_title);
             var _titleWidthConstraint = _title.WidthAnchor.ConstraintEqualToConstant(467f);
-            _titleWidthConstraint.Priority = (System.Int32)AppKit.NSLayoutPriority.DefaultLow;
+            _titleWidthConstraint.Priority = (System.Int32) AppKit.NSLayoutPriority.DefaultLow;
             _titleWidthConstraint.Active = true;
             var _titleHeightConstraint = _title.HeightAnchor.ConstraintEqualToConstant(16f);
             _titleHeightConstraint.Active = true;
@@ -122,20 +122,19 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                 _optionView.AddSubview(_helpButton);
                 var _helpButtonWidthConstraint = _helpButton.WidthAnchor.ConstraintEqualToConstant(21f);
-                _helpButtonWidthConstraint.Priority = (System.Int32)AppKit.NSLayoutPriority.DefaultLow;
+                _helpButtonWidthConstraint.Priority = (System.Int32) AppKit.NSLayoutPriority.DefaultLow;
                 _helpButtonWidthConstraint.Active = true;
 
                 _helpButton.RightAnchor.ConstraintEqualToAnchor(_optionView.RightAnchor, -6f).Active = true;
                 _helpButton.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 30f).Active = true;
                 _helpButton.Activated += (o, args) => ShowHintPopover(Option.Hint, _helpButton);
-
             }
 
             _childrenView = new NSView();
 
-            foreach (Option option in ((SwitchableGroupOption)Option).ChildOptions)
+            foreach (Option option in ((SwitchableGroupOption) Option).ChildOptions)
             {
-                var optionVSMac = (OptionVSMac)option.Platform;
+                var optionVSMac = (OptionVSMac) option.Platform;
                 _optionView.AddSubview(optionVSMac.View);
             }
 
@@ -157,7 +156,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         private void UpdateChildOptions()
         {
-
             _optionView.AddSubview(_childrenView);
 
             //if (_switchButton)
@@ -170,5 +168,4 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             //}
         }
     }
-
 }

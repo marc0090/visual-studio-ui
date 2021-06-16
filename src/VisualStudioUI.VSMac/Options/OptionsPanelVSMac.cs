@@ -4,10 +4,11 @@ using Microsoft.VisualStudioUI.Options;
 
 namespace Microsoft.VisualStudioUI.VSMac.Options
 {
-    public class OptionsPanelVSMac : NSScrollView {
+    public class OptionsPanelVSMac : NSScrollView
+    {
         NSView _documentView;
 
-        public OptionsPanelVSMac (OptionCards optionCards) : base()
+        public OptionsPanelVSMac(OptionCards optionCards) : base()
         {
             DrawsBackground = false;
 
@@ -22,10 +23,10 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             optionsView.BottomAnchor.ConstraintEqualToAnchor(_documentView.BottomAnchor, 24f).Active = true;
         }
 
-        public override void SetFrameSize (CGSize newSize)
+        public override void SetFrameSize(CGSize newSize)
         {
-            base.SetFrameSize (newSize);
-            _documentView.Frame = new CGRect (0, 0, newSize.Width, newSize.Height);
+            base.SetFrameSize(newSize);
+            _documentView.Frame = new CGRect(0, 0, newSize.Width, newSize.Height);
         }
     }
 }
