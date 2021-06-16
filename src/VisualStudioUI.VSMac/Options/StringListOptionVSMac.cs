@@ -17,21 +17,21 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             Option = option;
         }
 
-        public override void SelectionDidChange(NSNotification notification)
-        {
-            var tableView = ((NSTableView)(notification.Object));
-            int row = (int)tableView.SelectedRow;
-            NSTableRowView rowView = tableView.GetRowView(row, false);
-            rowView.Emphasized = false;
-        }
+        //public override void SelectionDidChange(NSNotification notification)
+        //{
+        //    var tableView = ((NSTableView)(notification.Object));
+        //    int row = (int)tableView.SelectedRow;
+        //    NSTableRowView rowView = tableView.GetRowView(row, false);
+        //    rowView.Emphasized = false;
+        //}
 
-        public override void SelectionIsChanging(NSNotification notification)
-        {
-            var tableView = ((NSTableView)(notification.Object));
-            int row = (int)tableView.SelectedRow;
-            NSTableRowView rowView = tableView.GetRowView(row, false);
-            rowView.Emphasized = false;
-        }
+        //public override void SelectionIsChanging(NSNotification notification)
+        //{
+        //    var tableView = ((NSTableView)(notification.Object));
+        //    int row = (int)tableView.SelectedRow;
+        //    NSTableRowView rowView = tableView.GetRowView(row, false);
+        //    rowView.Emphasized = false;
+        //}
 
         public override NSView GetViewForItem(NSTableView tableView, NSTableColumn tableColumn, nint row)
         {
