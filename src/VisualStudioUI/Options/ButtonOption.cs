@@ -6,13 +6,15 @@ namespace Microsoft.VisualStudioUI.Options
 	{
 		public enum ButtonType
         {
-			Normal = 0,
+			Normal = -1,
 			CheckBox = 3, // NSButtonType.Switch
 			Radio = 4, // NSButtonType.Radio
 		}
-		public string Describetion { get; set; }
+
+		public string Description { get; set; }
 		public ButtonType Type { get; }
-		//public string Describetion { get; set; }
+
+		public ViewModelProperty<bool> IsSelected { get; set; } = null;
 
 		public ButtonOption (ButtonType btnType = ButtonType.Normal)
 		{

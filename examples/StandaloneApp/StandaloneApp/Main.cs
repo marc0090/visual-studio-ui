@@ -9,6 +9,7 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
     {
         public static OptionCards CreateOptionCards()
         {
+            //return CreateInfoPlistUI();
             var card1 = new OptionCard()
             {
                 Label = "My Card"
@@ -93,8 +94,20 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
 
             card4.AddOption(new StringListOption(ListProp(list), "default string") { Label = "list" });
 
+            //Signing 
+            var signing = new OptionCard() {Label = "Signing" };
+            signing.AddOption(new ButtonOption(ButtonOption.ButtonType.Radio)
+            {
+                IsSelected = BoolProp(true),
+                Label = "Scheme",
+                Name = "Manual Provisioning",
+                Description = "Set provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioning"
+            });
+            signing.AddOption(new ButtonOption(ButtonOption.ButtonType.CheckBox) { Label = "Orientations", Name = "Portrait" });
+
             OptionCards cards = new OptionCards();
 
+            cards.AddCard(signing);
             cards.AddCard(card3);
             cards.AddCard(card4);
             //cards.AddCard(card1);

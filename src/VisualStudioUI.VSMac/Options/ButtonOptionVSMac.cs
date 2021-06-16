@@ -42,7 +42,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 			optionWidthConstraint.Active = true;
 
 			var viewHeight = 32f;
-			if (!string.IsNullOrWhiteSpace(ButtonOption.Describetion))
+			if (!string.IsNullOrWhiteSpace(ButtonOption.Description))
 			{
 				viewHeight = 65f;
 			}
@@ -96,15 +96,24 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
 			// View:     control
 			_button = new AppKit.NSButton();
-			if (ButtonOption.Type != 0) // 0 means noraml button
+			if (ButtonOption.Type == ButtonOption.ButtonType.Normal)
+			{
+				_button.BezelStyle = NSBezelStyle.RegularSquare;
+			}
+			else
 			{
 				_button.SetButtonType((NSButtonType)ButtonOption.Type);
-				_button.Bordered = false;
+				SetSatus();
 			}
+            if (ButtonOption.IsSelected != null)
+            {
+				_button.Activated += UpdatePropertyFromUI;
+				ButtonOption.IsSelected.PropertyChanged += UpdateUIFromProperty;
+			}
+
 			_button.ControlSize = NSControlSize.Regular;
 			_button.Font = AppKit.NSFont.SystemFontOfSize(AppKit.NSFont.SystemFontSize);
 			_button.Title = ButtonOption.Name ?? string.Empty;
-			_button.State = NSCellStateValue.On;
 			_button.TranslatesAutoresizingMaskIntoConstraints = false;
 			_button.AccessibilityTitle = "Control";
 			_button.AccessibilityHelp = "Provides a control";
@@ -114,14 +123,14 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 			_button.LeftAnchor.ConstraintEqualToAnchor(_optionView.LeftAnchor, 220f).Active = true;
 			_button.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 5f).Active = true;
 
-			if (!string.IsNullOrWhiteSpace(ButtonOption.Describetion))
+			if (!string.IsNullOrWhiteSpace(ButtonOption.Description))
 			{
 				_description = new AppKit.NSTextField();
 				_description.Editable = false;
 				_description.Bordered = false;
 				_description.DrawsBackground = false;
 				_description.PreferredMaxLayoutWidth = 1;
-				_description.StringValue = ButtonOption.Describetion ?? string.Empty;
+				_description.StringValue = ButtonOption.Description ?? string.Empty;
 				_description.Alignment = NSTextAlignment.Left;
 				_description.Font = AppKit.NSFont.SystemFontOfSize(AppKit.NSFont.SmallSystemFontSize);
 				_description.TextColor = NSColor.SecondaryLabelColor;
@@ -136,6 +145,24 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 				_description.LeftAnchor.ConstraintEqualToAnchor(_button.LeftAnchor, 0f).Active = true;
 				_description.TopAnchor.ConstraintEqualToAnchor(_button.BottomAnchor, 0f).Active = true;
 			}
+		}
+
+		void SetSatus()
+        {
+			if (ButtonOption.IsSelected == null)
+				return;
+
+			_button.State = ButtonOption.IsSelected.Value ? NSCellStateValue.On : NSCellStateValue.Off;
+        }
+
+		void UpdatePropertyFromUI(object sender, EventArgs e)
+		{
+			ButtonOption.IsSelected.Value = (_button.State == NSCellStateValue.On) ? true : false;
+		}
+
+		void UpdateUIFromProperty(object sender, ViewModelPropertyChangedEventArgs e)
+		{
+			SetSatus();
 		}
 
 		void ShowHintPopover(string message, NSButton button)
