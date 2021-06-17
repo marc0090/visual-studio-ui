@@ -148,16 +148,30 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 		}
 
 		void SetSatus()
-        {
+		{
 			if (ButtonOption.IsSelected == null)
 				return;
 
-			_button.State = ButtonOption.IsSelected.Value ? NSCellStateValue.On : NSCellStateValue.Off;
+			var state = ButtonOption.IsSelected.Value ? NSCellStateValue.On : NSCellStateValue.Off;
+
+			if (_button.State == state)
+				return;
+
+			_button.State = state;
         }
 
 		void UpdatePropertyFromUI(object sender, EventArgs e)
 		{
-			ButtonOption.IsSelected.Value = (_button.State == NSCellStateValue.On) ? true : false;
+			var isSelected = (_button.State == NSCellStateValue.On) ? true : false;
+
+			if (ButtonOption.IsSelected.Value == isSelected)
+            {
+				return;
+            }
+
+			ButtonOption.IsSelected.Value = isSelected;
+
+			ButtonOption.UpdateStatus(_button, e);
 		}
 
 		void UpdateUIFromProperty(object sender, ViewModelPropertyChangedEventArgs e)

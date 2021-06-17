@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudioUI.Options.Models;
+﻿using System;
+using Microsoft.VisualStudioUI.Options.Models;
 
 namespace Microsoft.VisualStudioUI.Options
 {
@@ -15,6 +16,13 @@ namespace Microsoft.VisualStudioUI.Options
 		public ButtonType Type { get; }
 
 		public ViewModelProperty<bool> IsSelected { get; set; } = null;
+
+		public event EventHandler SelectionChanged;
+
+		public void UpdateStatus(object sender, EventArgs e)
+		{
+			SelectionChanged?.Invoke(sender, e);
+		}
 
 		public ButtonOption (ButtonType btnType = ButtonType.Normal)
 		{

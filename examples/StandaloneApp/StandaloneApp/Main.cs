@@ -95,15 +95,46 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             card4.AddOption(new StringListOption(ListProp(list), "default string") { Label = "list" });
 
             //Signing 
-            var signing = new OptionCard() {Label = "Signing" };
-            signing.AddOption(new ButtonOption(ButtonOption.ButtonType.Radio)
+            var signing = new OptionCard() { Label = "Signing" };
+            bool isSelected = false;
+            var manual = new ButtonOption(ButtonOption.ButtonType.Radio)
             {
-                IsSelected = BoolProp(true),
+                IsSelected = BoolProp(isSelected),
                 Label = "Scheme",
                 Name = "Manual Provisioning",
                 Description = "Set provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioning"
-            });
-            signing.AddOption(new ButtonOption(ButtonOption.ButtonType.CheckBox) { Label = "Orientations", Name = "Portrait" });
+            };
+            manual.IsSelected.Bind();
+
+            var auto = new ButtonOption(ButtonOption.ButtonType.Radio)
+            {
+                IsSelected = BoolProp(!isSelected),
+                Name = "Automatic Provisioning",
+                Description = "Set provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioning"
+            };
+            auto.IsSelected.Bind();
+
+            manual.SelectionChanged += (sbye, e) => {
+                if (manual.IsSelected.Value == true)
+                {
+                    isSelected = !isSelected;
+                    manual.IsSelected.Value = isSelected;
+                    auto.IsSelected.Value = !isSelected;
+                }
+            };
+
+            auto.SelectionChanged += (sbye, e) => {
+                if (auto.IsSelected.Value == true)
+                {
+                    isSelected = !isSelected;
+                    manual.IsSelected.Value = isSelected;
+                    auto.IsSelected.Value = !isSelected;
+                }
+            };
+
+            signing.AddOption(manual);
+            signing.AddOption(auto);
+            signing.AddOption(new ButtonOption(ButtonOption.ButtonType.CheckBox) { Label = "Orientations:", Name = "Portrait" });
 
             OptionCards cards = new OptionCards();
 
