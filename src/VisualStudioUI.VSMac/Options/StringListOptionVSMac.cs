@@ -22,7 +22,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             option.Property.PropertyChanged += OnStringListChanged;
             defaultValue = option.DefaultValue;
             addToolTip = option.AddToolTip;
-            removeToolTip = option.RemoveTollTip;
+            removeToolTip = option.RemoveToolTip;
         }
 
         public override NSView View
@@ -49,6 +49,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             };
 
             _tableView = new NSTableView() { HeaderView = null, Source = new ListSource(this) };
+            _tableView.GridStyleMask = NSTableViewGridStyle.DashedHorizontalGridLine;
             _tableView.AddColumn(new NSTableColumn());
 
             var scrolledView = new NSScrollView()
