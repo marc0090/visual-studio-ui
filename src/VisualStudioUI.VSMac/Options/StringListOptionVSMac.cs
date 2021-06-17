@@ -8,70 +8,6 @@ using Microsoft.VisualStudioUI.Options.Models;
 namespace Microsoft.VisualStudioUI.VSMac.Options
 {
 
-    class ListSource : NSTableViewSource
-    {
-        StringListOptionVSMac Option;
-
-        public ListSource(StringListOptionVSMac option)
-        {
-            Option = option;
-        }
-
-        //public override void SelectionDidChange(NSNotification notification)
-        //{
-        //    var tableView = ((NSTableView)(notification.Object));
-        //    int row = (int)tableView.SelectedRow;
-        //    NSTableRowView rowView = tableView.GetRowView(row, false);
-        //    rowView.Emphasized = false;
-        //}
-
-        //public override void SelectionIsChanging(NSNotification notification)
-        //{
-        //    var tableView = ((NSTableView)(notification.Object));
-        //    int row = (int)tableView.SelectedRow;
-        //    NSTableRowView rowView = tableView.GetRowView(row, false);
-        //    rowView.Emphasized = false;
-        //}
-
-        public override NSView GetViewForItem(NSTableView tableView, NSTableColumn tableColumn, nint row)
-        {
-            var view = (NSTableCellView)tableView.MakeView("cell", this);
-            if (view == null)
-            {
-                view = new NSTableCellView
-                {
-                    TextField = new NSTextField
-                    {
-                        Frame = new CoreGraphics.CGRect(0, 6, tableColumn.Width, 18),
-                        Hidden = false,
-                        Bordered = false,
-                        DrawsBackground = false
-                    },
-                    Identifier = "cell"
-                };
-
-                view.AddSubview(view.TextField);
-
-                view.TextField.EditingEnded += Option.OnValueEdited;
-            }
-
-            view.TextField.Tag = row;
-            view.TextField.StringValue = Option.StringList[(int)row];
-
-            return view;
-        }
-
-        public override nint GetRowCount(NSTableView tableView)
-        {
-            return Option.StringList.Count;
-        }
-
-        public override nfloat GetRowHeight(NSTableView tableView, nint row)
-        {
-            return 30;
-        }
-    }
-
     public class StringListOptionVSMac : OptionVSMac
     {
         NSStackView _optionView;
@@ -85,6 +21,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             StringList = option.Property.Value;
             option.Property.PropertyChanged += OnStringListChanged;
             defaultValue = option.DefaultValue;
+            addToolTip = option.AddToolTip;
+            removeToolTip = option.RemoveTollTip;
         }
 
         public override NSView View
@@ -132,9 +70,10 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 Bordered = false,
                 Title = "",
                 WantsLayer = true,
-                Image = NSImage.GetSystemSymbol("plus.circle", addToolTip),
+                Image = NSImage.GetSystemSymbol("plus.circle", null),
                 ContentTintColor = NSColor.SystemGreenColor,
-                TranslatesAutoresizingMaskIntoConstraints = false
+                TranslatesAutoresizingMaskIntoConstraints = false,
+                ToolTip = addToolTip
             };
 
             _addButton.WidthAnchor.ConstraintEqualToConstant(25).Active = true;
@@ -149,9 +88,10 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 Bordered = false,
                 WantsLayer = true,
                 Title = "",
-                Image = NSImage.GetSystemSymbol("xmark.circle", removeToolTip),
+                Image = NSImage.GetSystemSymbol("xmark.circle", null),
                 ContentTintColor = NSColor.SystemPinkColor,
-                TranslatesAutoresizingMaskIntoConstraints = false
+                TranslatesAutoresizingMaskIntoConstraints = false,
+                ToolTip = removeToolTip
             };
             _removeButton.WidthAnchor.ConstraintEqualToConstant(25).Active = true;
             _removeButton.HeightAnchor.ConstraintEqualToConstant(21).Active = true;
@@ -293,6 +233,70 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         }
 
+    }
+
+    class ListSource : NSTableViewSource
+    {
+        StringListOptionVSMac Option;
+
+        public ListSource(StringListOptionVSMac option)
+        {
+            Option = option;
+        }
+
+        //public override void SelectionDidChange(NSNotification notification)
+        //{
+        //    var tableView = ((NSTableView)(notification.Object));
+        //    int row = (int)tableView.SelectedRow;
+        //    NSTableRowView rowView = tableView.GetRowView(row, false);
+        //    rowView.Emphasized = false;
+        //}
+
+        //public override void SelectionIsChanging(NSNotification notification)
+        //{
+        //    var tableView = ((NSTableView)(notification.Object));
+        //    int row = (int)tableView.SelectedRow;
+        //    NSTableRowView rowView = tableView.GetRowView(row, false);
+        //    rowView.Emphasized = false;
+        //}
+
+        public override NSView GetViewForItem(NSTableView tableView, NSTableColumn tableColumn, nint row)
+        {
+            var view = (NSTableCellView)tableView.MakeView("cell", this);
+            if (view == null)
+            {
+                view = new NSTableCellView
+                {
+                    TextField = new NSTextField
+                    {
+                        Frame = new CoreGraphics.CGRect(0, 6, tableColumn.Width, 18),
+                        Hidden = false,
+                        Bordered = false,
+                        DrawsBackground = false
+                    },
+                    Identifier = "cell"
+                };
+
+                view.AddSubview(view.TextField);
+
+                view.TextField.EditingEnded += Option.OnValueEdited;
+            }
+
+            view.TextField.Tag = row;
+            view.TextField.StringValue = Option.StringList[(int)row];
+
+            return view;
+        }
+
+        public override nint GetRowCount(NSTableView tableView)
+        {
+            return Option.StringList.Count;
+        }
+
+        public override nfloat GetRowHeight(NSTableView tableView, nint row)
+        {
+            return 30;
+        }
     }
 
 }
