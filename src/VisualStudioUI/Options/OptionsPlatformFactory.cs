@@ -36,6 +36,6 @@ namespace Microsoft.VisualStudioUI.Options
         public abstract OptionPlatform CreateSwitchableGroupOptionPlatform(SwitchableGroupOption switchableGroupOption);
         public abstract OptionPlatform CreateStringListOptionPlatform(StringListOption stringListOption);
         public abstract OptionPlatform CreateRadioButtonOptionPlatform(ButtonOption radioBtnOption);
-        public abstract OptionPlatform CreateImageViewOptionPlatform(ImageViewOption imageViewOption);
+        public abstract OptionPlatform CreateImageViewOptionPlatform(ImageFileOption imageFileOption);
     }
 }

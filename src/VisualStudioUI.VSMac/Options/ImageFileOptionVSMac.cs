@@ -5,16 +5,16 @@ using Microsoft.VisualStudioUI.Options.Models;
 
 namespace Microsoft.VisualStudioUI.VSMac.Options
 {
-    public class ImageViewOptionVSMac : OptionWithLeftLabelVSMac
+    public class ImageFileOptionVSMac : OptionWithLeftLabelVSMac
     {
-        NSView frameView;
+        NSView _frameView;
         NSImageView _imageView;
 
-        public ImageViewOptionVSMac(ImageViewOption option) : base(option)
+        public ImageFileOptionVSMac(ImageFileOption option) : base(option)
         {
         }
 
-        public ImageViewOption TextOption => ((ImageViewOption) Option);
+        public ImageFileOption TextOption => ((ImageFileOption) Option);
 
         protected override NSView Control
         {

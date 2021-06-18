@@ -110,8 +110,8 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             cards.AddCard(signing);
             cards.AddCard(card3);
             cards.AddCard(card4);
-            //cards.AddCard(card1);
-            //cards.AddCard(card2);
+            cards.AddCard(card1);
+            cards.AddCard(card2);
 
             return cards;
         }

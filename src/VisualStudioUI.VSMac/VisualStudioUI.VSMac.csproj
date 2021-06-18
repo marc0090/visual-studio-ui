@@ -72,7 +72,7 @@
     <Compile Include="Options\SwitchableGroupOptionVSMac.cs" />
     <Compile Include="Options\StringListOptionVSMac.cs" />
     <Compile Include="Options\ButtonOptionVSMac.cs" />
-    <Compile Include="Options\ImageViewOptionVSMac.cs" />
+    <Compile Include="Options\ImageFileOptionVSMac.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\VisualStudioUI\VisualStudioUI.csproj">
