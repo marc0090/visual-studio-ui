@@ -16,6 +16,13 @@ namespace Microsoft.VisualStudioUI.Options
 		public IReadOnlyList<Option> Options => _options;
 
 		public void AddOption(Option option) => _options.Add(option);
+		public void RemoveOption(Option option)
+		{
+            if (_options.Count <= 0)
+				return;
+
+			_options.Remove(option);
+		}
 
 		/// <summary>
 		/// This is the label for the category (used for grouping settings). If null, it's not shown.

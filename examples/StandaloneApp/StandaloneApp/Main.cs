@@ -134,7 +134,12 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
 
             signing.AddOption(manual);
             signing.AddOption(auto);
-            signing.AddOption(new ButtonOption(ButtonOption.ButtonType.CheckBox) { Label = "Orientations:", Name = "Portrait" });
+            signing.AddOption(new ButtonOption(ButtonOption.ButtonType.CheckBox)
+            {
+                Label = "Orientations:",
+                Name = "Portrait",
+                Description = "Set provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioning"
+            });
 
             OptionCards cards = new OptionCards();
 

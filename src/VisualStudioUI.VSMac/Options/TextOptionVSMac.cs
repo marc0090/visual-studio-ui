@@ -25,7 +25,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
 					_textField = new AppKit.NSTextField();
 					_textField.Font = AppKit.NSFont.SystemFontOfSize(AppKit.NSFont.SystemFontSize);
-					_textField.StringValue = property.Value ?? string.Empty;
+					_textField.StringValue = property?.Value ?? string.Empty;
 					_textField.TranslatesAutoresizingMaskIntoConstraints = false;
 					_textField.Editable = TextOption.Editable;
 					_textField.Bordered = TextOption.Bordered;
@@ -33,14 +33,20 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
 					_textField.WidthAnchor.ConstraintEqualToConstant(196f).Active = true;
 
-					property.PropertyChanged += delegate(object o, ViewModelPropertyChangedEventArgs args)
+                    if (property != null)
 					{
-						_textField.StringValue = ((string) args.NewValue) ?? string.Empty;
-					};
+						property.PropertyChanged += delegate (object o, ViewModelPropertyChangedEventArgs args)
+						{
+							_textField.StringValue = ((string)args.NewValue) ?? string.Empty;
+						};
+					}
 
 					_textField.Changed += delegate
 					{
-						property.Value = _textField.StringValue;
+                        if (property != null)
+                        {
+							property.Value = _textField.StringValue;
+						}
 					};
 				}
 
