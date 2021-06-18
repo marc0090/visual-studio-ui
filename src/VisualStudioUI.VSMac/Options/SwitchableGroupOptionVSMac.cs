@@ -29,7 +29,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         public SwitchableGroupOption SwitchableGroupOption => ((SwitchableGroupOption) Option);
 
-
         public override NSView View
         {
             get
@@ -121,9 +120,9 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 _helpButton.TranslatesAutoresizingMaskIntoConstraints = false;
 
                 _optionView.AddSubview(_helpButton);
-                var _helpButtonWidthConstraint = _helpButton.WidthAnchor.ConstraintEqualToConstant(21f);
-                _helpButtonWidthConstraint.Priority = (System.Int32) AppKit.NSLayoutPriority.DefaultLow;
-                _helpButtonWidthConstraint.Active = true;
+                var helpButtonWidthConstraint = _helpButton.WidthAnchor.ConstraintEqualToConstant(21f);
+                helpButtonWidthConstraint.Priority = (System.Int32) AppKit.NSLayoutPriority.DefaultLow;
+                helpButtonWidthConstraint.Active = true;
 
                 _helpButton.RightAnchor.ConstraintEqualToAnchor(_optionView.RightAnchor, -6f).Active = true;
                 _helpButton.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 30f).Active = true;
