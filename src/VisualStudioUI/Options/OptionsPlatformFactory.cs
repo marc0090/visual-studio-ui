@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.VisualStudioUI.Options.Models;
 
 namespace Microsoft.VisualStudioUI.Options
 {
@@ -25,12 +26,12 @@ namespace Microsoft.VisualStudioUI.Options
 
         public abstract OptionCardsPlatform CreateOptionCardsPlatform(OptionCards optionCards);
         public abstract OptionCardPlatform CreateOptionCardPlatform(OptionCard optionCard);
+        
         public abstract OptionPlatform CreateTextOptionPlatform(TextOption textOption);
-        public abstract OptionPlatform CreateComboBoxOptionPlatform(ComboBoxOption comboBoxOption);
-
-        public abstract OptionPlatform CreateEditableComboBoxOptionPlatform(
-            EditableComboBoxOption editableComboBoxOption);
-
+        public abstract OptionPlatform CreateComboBoxOptionPlatform<TItem>(ComboBoxOption<TItem> comboBoxOption)
+            where TItem : class, IDisplayable;
+        public abstract OptionPlatform CreateEditableComboBoxOptionPlatform<TItem>(EditableComboBoxOption<TItem> editableComboBoxOption)
+            where TItem : class, IDisplayable;
         public abstract OptionPlatform CreateDocButtonOptionPlatform(DocButtonOption docButtonOption);
         public abstract OptionPlatform CreateSeparatorOptionPlatform(SeparatorOption separatorOption);
         public abstract OptionPlatform CreateSwitchableGroupOptionPlatform(SwitchableGroupOption switchableGroupOption);

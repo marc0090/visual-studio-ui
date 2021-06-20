@@ -5,18 +5,18 @@ using Microsoft.VisualStudioUI.Options.Models;
 
 namespace Microsoft.VisualStudioUI.VSMac.Options
 {
-    public class ComboBoxOptionVSMac : OptionWithLeftLabelVSMac
+    public class ComboBoxOptionVSMac<TItem> : OptionWithLeftLabelVSMac  where TItem : class, IDisplayable
     {
         NSPopUpButton _popUpButton;
 
         public ViewModelProperty<string> SdkWarning { get; set; } = null;
         public bool NullIsDefault { get; set; } = false;
 
-        public ComboBoxOptionVSMac(ComboBoxOption option) : base(option)
+        public ComboBoxOptionVSMac(ComboBoxOption<TItem> option) : base(option)
         {
         }
 
-        public ComboBoxOption ComboBoxOption => ((ComboBoxOption) Option);
+        public ComboBoxOption<TItem> ComboBoxOption => ((ComboBoxOption<TItem>) Option);
 
         protected override NSView Control
         {
@@ -24,8 +24,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             {
                 if (_popUpButton == null)
                 {
-                    ViewModelProperty<string> property = ComboBoxOption.Property;
-                    ViewModelProperty<string[]> itemsProperty = ComboBoxOption.ItemsProperty;
+                    ViewModelProperty<TItem> property = ComboBoxOption.Property;
+                    ViewModelProperty<TItem[]> itemsProperty = ComboBoxOption.ItemsProperty;
 
                     // View:     popUpButton
                     _popUpButton = new AppKit.NSPopUpButton();
@@ -69,23 +69,23 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         void UpdatePropertyFromUI(object sender, EventArgs e)
         {
-            ComboBoxOption.Property.Value = _popUpButton.TitleOfSelectedItem;
+            TItem? match = DisplayableUtil.FindMatch(ComboBoxOption.ItemsProperty.Value, _popUpButton.TitleOfSelectedItem);
+            ComboBoxOption.Property.Value = match;
         }
 
         void UpdateUIFromProperty(object sender, ViewModelPropertyChangedEventArgs e)
         {
-            string value = ComboBoxOption.Property.Value;
-
-            if (string.IsNullOrWhiteSpace(value))
+            IDisplayable? value = ComboBoxOption.Property.Value;
+            if (value == null)
                 return;
 
             if (_popUpButton.SelectedItem == null)
             {
-                _popUpButton.Title = value;
+                _popUpButton.Title = value.ToDisplayString();
             }
             else
             {
-                _popUpButton.SelectedItem.Title = value;
+                _popUpButton.SelectedItem.Title = value.ToDisplayString();
             }
         }
 
@@ -100,16 +100,16 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             }
             */
 
-            string[] items = ComboBoxOption.ItemsProperty.Value;
-            if (items != null)
+            IDisplayable[] items = ComboBoxOption.ItemsProperty.Value;
+            foreach (IDisplayable item in items)
             {
-                _popUpButton.AddItems(items);
+                _popUpButton.AddItem(item.ToDisplayString());
             }
 
-            var value = ComboBoxOption.Property.Value;
-            if (!string.IsNullOrWhiteSpace(value))
+            IDisplayable? value = ComboBoxOption.Property.Value;
+            if (value != null)
             {
-                _popUpButton.SelectItem(value);
+                _popUpButton.SelectItem(value.ToDisplayString());
             }
         }
 

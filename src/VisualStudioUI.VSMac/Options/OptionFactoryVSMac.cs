@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudioUI.Options;
+using Microsoft.VisualStudioUI.Options.Models;
 
 namespace Microsoft.VisualStudioUI.VSMac.Options
 {
@@ -18,12 +19,12 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         public override OptionPlatform CreateTextOptionPlatform(TextOption textOption) =>
             new TextOptionVSMac(textOption);
 
-        public override OptionPlatform CreateComboBoxOptionPlatform(ComboBoxOption comboBoxOption) =>
-            new ComboBoxOptionVSMac(comboBoxOption);
+        public override OptionPlatform CreateComboBoxOptionPlatform<TItem>(ComboBoxOption<TItem> comboBoxOption) =>
+            new ComboBoxOptionVSMac<TItem>(comboBoxOption);
 
-        public override OptionPlatform CreateEditableComboBoxOptionPlatform(
-            EditableComboBoxOption editableComboBoxOption) =>
-            new EditableComboBoxOptionVSMac(editableComboBoxOption);
+        public override OptionPlatform CreateEditableComboBoxOptionPlatform<TItem>(
+            EditableComboBoxOption<TItem> editableComboBoxOption) =>
+            new EditableComboBoxOptionVSMac<TItem>(editableComboBoxOption);
 
         public override OptionPlatform CreateDocButtonOptionPlatform(DocButtonOption docButtonOption) =>
             new DocButtonOptionVSMac(docButtonOption);

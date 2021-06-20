@@ -36,14 +36,14 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
                 }
             );
             card1.AddOption(
-                new ComboBoxOption(StringProp("option1"), StringArrayProp(new[] { "option1", "option2", "option3" }))
+                new ComboBoxOption<DisplayableString>(DisplayableStringProp("option1"), DisplayableStringArrayProp(new[] { "option1", "option2", "option3" }))
                 {
                     Label = "Choices",
                     Hint = "This is the hint for the combo box"
                 }
             );
             card1.AddOption(
-                new EditableComboBoxOption(StringProp("option1"), StringArrayProp(new[] { "option1", "option2", "option3" }))
+                new EditableComboBoxOption<DisplayableString>(DisplayableProp("option1"), DisplayableStringArrayProp(new[] { "option1", "option2", "option3" }))
                 {
                     Label = "Editable choices",
                     Hint = "This is the hint for the editable combo box"
@@ -116,11 +116,18 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             return cards;
         }
 
-        public static ViewModelProperty<bool> BoolProp(bool defaultValue) => new ViewModelProperty<bool>("boolProp", defaultValue);
-        public static ViewModelProperty<string> StringProp(string defaultValue) => new ViewModelProperty<string>("stringProp", defaultValue);
-        public static ViewModelProperty<string[]> StringArrayProp(string[] defaultValue) =>
-            new ViewModelProperty<string[]>("stringArrayProp", defaultValue);
-        public static ViewModelProperty<List<string>> ListProp(List<string> defaultValue) => new ViewModelProperty<List<string>>("listProp", defaultValue);
+        public static ViewModelProperty<bool> BoolProp(bool defaultValue) =>
+            new ViewModelProperty<bool>("boolProp", defaultValue);
+        public static ViewModelProperty<string> StringProp(string defaultValue) =>
+            new ViewModelProperty<string>("stringProp", defaultValue);
+        public static ViewModelProperty<IDisplayable?> DisplayableProp(string defaultValue) =>
+            new ViewModelProperty<IDisplayable?>("displayableStringProp", new DisplayableString(defaultValue));
+        public static ViewModelProperty<DisplayableString?> DisplayableStringProp(string defaultValue) =>
+            new ViewModelProperty<DisplayableString?>("displayableStringProp", new DisplayableString(defaultValue));
+        public static ViewModelProperty<DisplayableString[]> DisplayableStringArrayProp(string[] defaultValue) =>
+            new ViewModelProperty<DisplayableString[]>("stringArrayProp",
+                DisplayableUtil.DisplayableStrings(defaultValue));
 
+        public static ViewModelProperty<List<string>> ListProp(List<string> defaultValue) => new ViewModelProperty<List<string>>("listProp", defaultValue);
     }
 }

@@ -6,15 +6,15 @@ using Microsoft.VisualStudioUI.Options.Models;
 
 namespace Microsoft.VisualStudioUI.VSMac.Options
 {
-    public class EditableComboBoxOptionVSMac : OptionWithLeftLabelVSMac
+    public class EditableComboBoxOptionVSMac<TItem> : OptionWithLeftLabelVSMac where TItem : class, IDisplayable
     {
         NSComboBox _comboBox;
 
-        public EditableComboBoxOptionVSMac(EditableComboBoxOption option) : base(option)
+        public EditableComboBoxOptionVSMac(EditableComboBoxOption<TItem> option) : base(option)
         {
         }
 
-        public EditableComboBoxOption EditableComboBoxOption => ((EditableComboBoxOption) Option);
+        public EditableComboBoxOption<TItem> EditableComboBoxOption => ((EditableComboBoxOption<TItem>) Option);
 
         protected override NSView Control
         {
@@ -22,8 +22,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             {
                 if (_comboBox == null)
                 {
-                    ViewModelProperty<string> property = EditableComboBoxOption.Property;
-                    ViewModelProperty<string[]> itemsProperty = EditableComboBoxOption.ItemsProperty;
+                    ViewModelProperty<IDisplayable> property = EditableComboBoxOption.Property;
+                    ViewModelProperty<TItem[]> itemsProperty = EditableComboBoxOption.ItemsProperty;
 
                     _comboBox = new AppKit.NSComboBox();
                     _comboBox.ControlSize = NSControlSize.Regular;
@@ -59,37 +59,44 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         void UpdatePropertyFromSelection(object sender, EventArgs e)
         {
-            EditableComboBoxOption.Property.Value = _comboBox.SelectedValue.ToString();
+            TItem? match = DisplayableUtil.FindMatch(EditableComboBoxOption.ItemsProperty.Value, _comboBox.SelectedValue.ToString());
+            EditableComboBoxOption.Property.Value = match;
         }
 
         void UpdatePropertyFromUIEdit(object sender, EventArgs e)
         {
-            EditableComboBoxOption.Property.Value = _comboBox.StringValue;
+            string newValue = _comboBox.StringValue;
+
+            IDisplayable? newPropertyValue;
+            TItem? match = DisplayableUtil.FindMatch(EditableComboBoxOption.ItemsProperty.Value, newValue);
+            if (match != null)
+                newPropertyValue = match;
+            else if (!string.IsNullOrWhiteSpace(newValue))
+                newPropertyValue = new DisplayableString(newValue);
+            else newPropertyValue = null;
+
+            EditableComboBoxOption.Property.Value = newPropertyValue;
         }
 
         void UpdateUIFromProperty(object sender, ViewModelPropertyChangedEventArgs e)
         {
-            string value = EditableComboBoxOption.Property.Value;
+            string? value = EditableComboBoxOption.Property.Value?.ToDisplayString();
             if (string.IsNullOrWhiteSpace(value))
-                return;
-
-            _comboBox.StringValue = value;
+                _comboBox.StringValue = string.Empty;
+            else _comboBox.StringValue = value;
         }
 
         void UpdateItemChoices()
         {
             _comboBox.RemoveAll();
 
-            string[] items = EditableComboBoxOption.ItemsProperty.Value;
-            if (items != null)
+            TItem[] items = EditableComboBoxOption.ItemsProperty.Value;
+            foreach (TItem item in EditableComboBoxOption.ItemsProperty.Value)
             {
-                foreach (string item in EditableComboBoxOption.ItemsProperty.Value)
-                {
-                    _comboBox.Add(new NSString(item));
-                }
+                _comboBox.Add(new NSString(item.ToDisplayString()));
             }
 
-            string value = EditableComboBoxOption.Property.Value;
+            string? value = EditableComboBoxOption.Property.Value?.ToDisplayString();
             if (!string.IsNullOrWhiteSpace(value) &&
                 Array.IndexOf(EditableComboBoxOption.ItemsProperty.Value, value) != -1)
             {
