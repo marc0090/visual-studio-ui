@@ -78,21 +78,22 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
 
 
             var card4 = new OptionCard();
-            card4.AddOption(
-                new SwitchableGroupOption(BoolProp(true))
-                {
-                    Label = "iCloud",
-                    Name = "Allows your application to store data in the cloud and lets users share their data across devices.",
-                    Hint = "Hint: Allows your application to store data in the cloud and lets users share their data across devices.",
-                }
-            );
+            var switchableView = new SwitchableGroupOption(BoolProp(true))
+            {
+                Label = "iCloud",
+                Name = "Allows your application to store data in the cloud and lets users share their data across devices.",
+                Hint = "Hint: Allows your application to store data in the cloud and lets users share their data across devices.",
+            };
+
+            card4.AddOption(switchableView);
+
 
             List<string> list = new List<string>();
 
             list.Add("testStringList1");
             list.Add("testStringList1");
 
-            card4.AddOption(new StringListOption(ListProp(list), "default string") { Label = "list" });
+            card4.AddOption(new StringListOption(ListProp(list), "default string") { Label = "Containers" });
 
             //Signing 
             var signing = new OptionCard() { Label = "Signing" };
@@ -114,7 +115,8 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             };
             auto.IsSelected.Bind();
 
-            manual.SelectionChanged += (sbye, e) => {
+            manual.SelectionChanged += (sbye, e) =>
+            {
                 if (manual.IsSelected.Value == true)
                 {
                     isSelected = !isSelected;
@@ -123,7 +125,8 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
                 }
             };
 
-            auto.SelectionChanged += (sbye, e) => {
+            auto.SelectionChanged += (sbye, e) =>
+            {
                 if (auto.IsSelected.Value == true)
                 {
                     isSelected = !isSelected;
