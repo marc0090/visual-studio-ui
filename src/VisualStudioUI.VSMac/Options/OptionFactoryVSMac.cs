@@ -22,9 +22,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         public override OptionPlatform CreateComboBoxOptionPlatform<TItem>(ComboBoxOption<TItem> comboBoxOption) =>
             new ComboBoxOptionVSMac<TItem>(comboBoxOption);
 
-        public override OptionPlatform CreateEditableComboBoxOptionPlatform<TItem>(
-            EditableComboBoxOption<TItem> editableComboBoxOption) =>
-            new EditableComboBoxOptionVSMac<TItem>(editableComboBoxOption);
+        public override OptionPlatform CreateEditableComboBoxOptionPlatform(EditableComboBoxOption editableComboBoxOption) =>
+            new EditableComboBoxOptionVSMac(editableComboBoxOption);
 
         public override OptionPlatform CreateDocButtonOptionPlatform(DocButtonOption docButtonOption) =>
             new DocButtonOptionVSMac(docButtonOption);

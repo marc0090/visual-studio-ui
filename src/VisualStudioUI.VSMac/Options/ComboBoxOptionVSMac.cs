@@ -5,9 +5,9 @@ using Microsoft.VisualStudioUI.Options.Models;
 
 namespace Microsoft.VisualStudioUI.VSMac.Options
 {
-    public class ComboBoxOptionVSMac<TItem> : OptionWithLeftLabelVSMac  where TItem : class, IDisplayable
+    public class ComboBoxOptionVSMac<TItem> : OptionWithLeftLabelVSMac where TItem : class
     {
-        NSPopUpButton _popUpButton;
+        private NSPopUpButton _popUpButton;
 
         public ViewModelProperty<string> SdkWarning { get; set; } = null;
         public bool NullIsDefault { get; set; } = false;
@@ -69,23 +69,24 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         void UpdatePropertyFromUI(object sender, EventArgs e)
         {
-            TItem? match = DisplayableUtil.FindMatch(ComboBoxOption.ItemsProperty.Value, _popUpButton.TitleOfSelectedItem);
-            ComboBoxOption.Property.Value = match;
+            TItem? match = DisplayableItemsUtil.FindMatch(ComboBoxOption.ItemsProperty.Value,
+                _popUpButton.TitleOfSelectedItem,
+                ComboBoxOption.ItemDisplayStringFunc);
+            ComboBoxOption.Property.Value = match!;
         }
 
         void UpdateUIFromProperty(object sender, ViewModelPropertyChangedEventArgs e)
         {
-            IDisplayable? value = ComboBoxOption.Property.Value;
-            if (value == null)
-                return;
+            TItem value = ComboBoxOption.Property.Value;
 
+            string displayString = ComboBoxOption.ItemDisplayStringFunc(value);
             if (_popUpButton.SelectedItem == null)
             {
-                _popUpButton.Title = value.ToDisplayString();
+                _popUpButton.Title = displayString;
             }
             else
             {
-                _popUpButton.SelectedItem.Title = value.ToDisplayString();
+                _popUpButton.SelectedItem.Title = displayString;
             }
         }
 
@@ -100,17 +101,15 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             }
             */
 
-            IDisplayable[] items = ComboBoxOption.ItemsProperty.Value;
-            foreach (IDisplayable item in items)
+            TItem[] items = ComboBoxOption.ItemsProperty.Value;
+            foreach (TItem item in items)
             {
-                _popUpButton.AddItem(item.ToDisplayString());
+                string itemDisplayString = ComboBoxOption.ItemDisplayStringFunc(item);
+                _popUpButton.AddItem(itemDisplayString);
             }
 
-            IDisplayable? value = ComboBoxOption.Property.Value;
-            if (value != null)
-            {
-                _popUpButton.SelectItem(value.ToDisplayString());
-            }
+            string currentItemDisplayString = ComboBoxOption.ItemDisplayStringFunc(ComboBoxOption.Property.Value);
+            _popUpButton.SelectItem(currentItemDisplayString);
         }
 
         // TODO: Handle this

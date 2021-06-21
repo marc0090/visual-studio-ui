@@ -11,12 +11,12 @@ using Microsoft.VisualStudioUI.Options.Models;
 
 namespace Microsoft.VisualStudioUI.Options
 {
-    public class EditableComboBoxOption<TItem> : Option where TItem : class, IDisplayable
+    public class EditableComboBoxOption : Option
     {
-        public ViewModelProperty<IDisplayable?> Property { get; }
-        public ViewModelProperty<TItem[]> ItemsProperty { get; }
+        public ViewModelProperty<string> Property { get; }
+        public ViewModelProperty<string[]> ItemsProperty { get; }
 
-        public EditableComboBoxOption(ViewModelProperty<IDisplayable?> property, ViewModelProperty<TItem[]> itemsProperty)
+        public EditableComboBoxOption(ViewModelProperty<string> property, ViewModelProperty<string[]> itemsProperty)
         {
             Property = property;
             ItemsProperty = itemsProperty;

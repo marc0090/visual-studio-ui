@@ -29,9 +29,8 @@ namespace Microsoft.VisualStudioUI.Options
         
         public abstract OptionPlatform CreateTextOptionPlatform(TextOption textOption);
         public abstract OptionPlatform CreateComboBoxOptionPlatform<TItem>(ComboBoxOption<TItem> comboBoxOption)
-            where TItem : class, IDisplayable;
-        public abstract OptionPlatform CreateEditableComboBoxOptionPlatform<TItem>(EditableComboBoxOption<TItem> editableComboBoxOption)
-            where TItem : class, IDisplayable;
+            where TItem : class;
+        public abstract OptionPlatform CreateEditableComboBoxOptionPlatform(EditableComboBoxOption editableComboBoxOption);
         public abstract OptionPlatform CreateDocButtonOptionPlatform(DocButtonOption docButtonOption);
         public abstract OptionPlatform CreateSeparatorOptionPlatform(SeparatorOption separatorOption);
         public abstract OptionPlatform CreateSwitchableGroupOptionPlatform(SwitchableGroupOption switchableGroupOption);
