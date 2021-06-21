@@ -21,11 +21,11 @@ namespace Microsoft.VisualStudioUI.VSMac.Options {
 		private NSView _childrenView;
 		private HintPopover _hintPopover;
 
-		public SwitchableGroupOptionVSMac (switchableGroupOption option) : base (option)
+		public SwitchableGroupOptionVSMac (SwitchableGroupOption option) : base (option)
 		{
 		}
 
-		public switchableGroupOption SwitchableGroupOption => ((switchableGroupOption) Option);
+		public SwitchableGroupOption SwitchableGroupOption => ((SwitchableGroupOption) Option);
 
 
 		public override NSView View {
@@ -57,7 +57,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options {
 			_switchButton.AccessibilityHelp = "Provides a control";
 
 			_switchButton.Activated += (object sender, EventArgs e) => {
-				((switchableGroupOption) Option).SwitchState.Value = (_switchButton.IsFlipped);
+				((SwitchableGroupOption) Option).SwitchState.Value = (_switchButton.IsFlipped);
 			};
 
 			_optionView.AddSubview (_switchButton);
@@ -130,7 +130,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options {
 
 			_childrenView = new NSView ();
 
-			foreach (Option option in ((switchableGroupOption) Option).ChildOptions) {
+			foreach (Option option in ((SwitchableGroupOption) Option).ChildOptions) {
 				var optionVSMac = (OptionVSMac) option.Platform;
 				_optionView.AddSubview (optionVSMac.View);
 			}

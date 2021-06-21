@@ -56,7 +56,20 @@ namespace Microsoft.VisualStudioUI.VSMac.Options {
 			scrolledView.HeightAnchor.ConstraintEqualToConstant (72).Active = true;
 			scrolledView.WidthAnchor.ConstraintEqualToConstant (450).Active = true;
 
-			_optionView.AddArrangedSubview (scrolledView);
+			if (!string.IsNullOrEmpty (Option.Label)) {
+				NSStackView hStack = new NSStackView {
+					Orientation = NSUserInterfaceLayoutOrientation.Horizontal,
+					Alignment = NSLayoutAttribute.Right
+				};
+				NSTextField leftLabel = new NSTextField {
+					StringValue = Option.Label
+				};
+				hStack.AddArrangedSubview (leftLabel);
+				hStack.AddArrangedSubview (scrolledView);
+			} else {
+				_optionView.AddArrangedSubview (scrolledView);
+
+			}
 
 			_addButton = new NSButton {
 				BezelStyle = NSBezelStyle.TexturedRounded,

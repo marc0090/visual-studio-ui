@@ -27,7 +27,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options {
 
 		public override OptionPlatform CreateSeparatorOptionPlatform (SeparatorOption separatorOption) =>
 			new SeparatorOptionVSMac (separatorOption);
-		public override OptionPlatform CreateSwitchableGroupOptionPlatform (switchableGroupOption switchableGroupOption) =>
+		public override OptionPlatform CreateSwitchableGroupOptionPlatform (SwitchableGroupOption switchableGroupOption) =>
 			new SwitchableGroupOptionVSMac (switchableGroupOption);
 
 		public override OptionPlatform CreateStringListOptionPlatform (StringListOption stringListOption) =>
