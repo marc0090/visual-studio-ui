@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using AppKit;
 using Microsoft.VisualStudioUI.Options;
 using Microsoft.VisualStudioUI.Options.Models;
@@ -7,7 +8,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 {
     public class ComboBoxOptionVSMac<TItem> : OptionWithLeftLabelVSMac where TItem : class
     {
-        private NSPopUpButton _popUpButton;
+        private NSPopUpButton? _popUpButton;
 
         public ViewModelProperty<string> SdkWarning { get; set; } = null;
         public bool NullIsDefault { get; set; } = false;
@@ -24,7 +25,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             {
                 if (_popUpButton == null)
                 {
-                    ViewModelProperty<TItem> property = ComboBoxOption.Property;
+                    ViewModelProperty<TItem?> property = ComboBoxOption.Property;
                     ViewModelProperty<TItem[]> itemsProperty = ComboBoxOption.ItemsProperty;
 
                     // View:     popUpButton
@@ -38,7 +39,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     _popUpButton.WidthAnchor.ConstraintEqualToConstant(198f).Active = true;
 
                     _popUpButton.Activated += UpdatePropertyFromUI;
-                    property.PropertyChanged += UpdateUIFromProperty;
+                    property.PropertyChanged += delegate { UpdateSelectedItemUIFromProperty(); };
                     itemsProperty.PropertyChanged += delegate { UpdateItemChoices(); };
 
                     UpdateItemChoices();
@@ -70,29 +71,14 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         void UpdatePropertyFromUI(object sender, EventArgs e)
         {
             TItem? match = DisplayableItemsUtil.FindMatch(ComboBoxOption.ItemsProperty.Value,
-                _popUpButton.TitleOfSelectedItem,
+                _popUpButton!.TitleOfSelectedItem,
                 ComboBoxOption.ItemDisplayStringFunc);
-            ComboBoxOption.Property.Value = match!;
-        }
-
-        void UpdateUIFromProperty(object sender, ViewModelPropertyChangedEventArgs e)
-        {
-            TItem value = ComboBoxOption.Property.Value;
-
-            string displayString = ComboBoxOption.ItemDisplayStringFunc(value);
-            if (_popUpButton.SelectedItem == null)
-            {
-                _popUpButton.Title = displayString;
-            }
-            else
-            {
-                _popUpButton.SelectedItem.Title = displayString;
-            }
+            ComboBoxOption.Property.Value = match;
         }
 
         void UpdateItemChoices()
         {
-            _popUpButton.RemoveAllItems();
+            _popUpButton!.RemoveAllItems();
 
             /*
             if (NullIsDefault)
@@ -100,19 +86,36 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 _popUpButton.AddItem (TranslationCatalog.GetString("Default"));
             }
             */
-
+            
             TItem[] items = ComboBoxOption.ItemsProperty.Value;
+
+            // The intention is that null items aren't allowed - no items should be an empty list.
+            // But handle this case just in case, to be safe.
+            if ((TItem[]?) items == null)
+                return;
+
             foreach (TItem item in items)
             {
                 string itemDisplayString = ComboBoxOption.ItemDisplayStringFunc(item);
                 _popUpButton.AddItem(itemDisplayString);
             }
 
-            string currentItemDisplayString = ComboBoxOption.ItemDisplayStringFunc(ComboBoxOption.Property.Value);
-            _popUpButton.SelectItem(currentItemDisplayString);
+            UpdateSelectedItemUIFromProperty();
+
         }
 
-        // TODO: Handle this
+        void UpdateSelectedItemUIFromProperty()
+        {
+            TItem? currentValue = ComboBoxOption.Property.Value;
+            if (currentValue == null)
+                _popUpButton!.SelectItem ((NSMenuItem?) null);
+            else {
+                string currenValueDisplayString = ComboBoxOption.ItemDisplayStringFunc (currentValue);
+                _popUpButton!.SelectItem (currenValueDisplayString);
+            }
+        }
+
+        // TODO: Handle this    
         /*
         void UpdateSdkWarning (object sender, ViewModelPropertyChangedEventArgs e)
         {

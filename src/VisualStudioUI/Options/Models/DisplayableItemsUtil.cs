@@ -1,11 +1,14 @@
 namespace Microsoft.VisualStudioUI.Options.Models
 {
-    public delegate string ItemDisplayStringFunc<in TItem>(TItem item) where TItem : class;
+    public delegate string ItemDisplayStringFunc<in TItem>(TItem? item) where TItem : class;
     
     public static class DisplayableItemsUtil
     {
-        public static string ItemDisplayStringFromToString<TItem>(TItem item) where TItem : class
+        public static string ItemDisplayStringFromToString<TItem>(TItem? item) where TItem : class
         {
+            if (item == null)
+                return "";
+
             return item.ToString();
         }
         

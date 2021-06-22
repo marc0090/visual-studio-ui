@@ -87,7 +87,14 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         {
             _comboBox.RemoveAll();
 
-            foreach (string item in EditableComboBoxOption.ItemsProperty.Value)
+            string[] items = EditableComboBoxOption.ItemsProperty.Value;
+
+            // The intention is that null items aren't allowed - no items should be an empty list.
+            // But handle this case just in case, to be safe.
+            if ((string[]?) items == null)
+                return;
+
+            foreach (string item in items)
             {
                 _comboBox.Add(new NSString(item));
             }

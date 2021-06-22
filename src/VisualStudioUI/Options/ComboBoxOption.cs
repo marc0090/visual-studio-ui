@@ -13,11 +13,11 @@ namespace Microsoft.VisualStudioUI.Options
 {
     public class ComboBoxOption<TItem> : Option where TItem : class
     {
-        public ViewModelProperty<TItem> Property { get; }
+        public ViewModelProperty<TItem?> Property { get; }
         public ViewModelProperty<TItem[]> ItemsProperty { get; }
         public ItemDisplayStringFunc<TItem> ItemDisplayStringFunc { get; } 
 
-        public ComboBoxOption(ViewModelProperty<TItem> property, ViewModelProperty<TItem[]> itemsProperty,
+        public ComboBoxOption(ViewModelProperty<TItem?> property, ViewModelProperty<TItem[]> itemsProperty,
             ItemDisplayStringFunc<TItem>? itemDisplayStringFunc = null)
         {
             Property = property;
@@ -25,7 +25,7 @@ namespace Microsoft.VisualStudioUI.Options
             Platform = OptionFactoryPlatform.Instance.CreateComboBoxOptionPlatform(this);
 
             if (itemDisplayStringFunc == null)
-                ItemDisplayStringFunc = DisplayableItemsUtil.ItemDisplayStringFromToString<TItem>;
+                ItemDisplayStringFunc = DisplayableItemsUtil.ItemDisplayStringFromToString;
             else ItemDisplayStringFunc = itemDisplayStringFunc;
         }
     }

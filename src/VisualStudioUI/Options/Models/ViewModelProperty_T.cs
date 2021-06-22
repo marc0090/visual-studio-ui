@@ -14,7 +14,7 @@ namespace Microsoft.VisualStudioUI.Options.Models
     /// <summary>
     /// Generic view model property
     /// </summary>
-    public sealed class ViewModelProperty<T> : ViewModelProperty
+    public class ViewModelProperty<T> : ViewModelProperty
     {
         public ViewModelProperty(string name, T defaultValue) : base(name)
         {
