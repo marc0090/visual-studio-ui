@@ -30,6 +30,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         void UpdateStringListFromModel()
         {
+            StringList.Clear();
             foreach (string item in StringListOption.Model.Value)
             {
                 StringList.Add(item);
