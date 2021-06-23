@@ -87,15 +87,12 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
                 }
             );
 
-            List<string> list = new List<string>();
-
-            list.Add("testStringList1");
-            list.Add("testStringList1");
+            ImmutableArray<string> list = ImmutableArray.Create("test1", "test2", "test3");
 
             card4.AddOption(new StringListOption(ListProp(list), "default string") { Label = "list" });
 
             //Signing 
-            var signing = new OptionCard() {Label = "Signing" };
+            var signing = new OptionCard() { Label = "Signing" };
             signing.AddOption(new ButtonOption(ButtonOption.ButtonType.Radio)
             {
                 IsSelected = BoolProp(true),
@@ -123,6 +120,6 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
         public static ViewModelProperty<ImmutableArray<string>> StringArrayProp(string[] defaultValue) =>
             new ViewModelProperty<ImmutableArray<string>>("stringArrayProp", ImmutableArray.Create(defaultValue));
 
-        public static ViewModelProperty<List<string>> ListProp(List<string> defaultValue) => new ViewModelProperty<List<string>>("listProp", defaultValue);
+        public static ViewModelProperty<ImmutableArray<string>> ListProp(ImmutableArray<string> defaultValue) => new ViewModelProperty<ImmutableArray<string>>("listProp", defaultValue);
     }
 }
