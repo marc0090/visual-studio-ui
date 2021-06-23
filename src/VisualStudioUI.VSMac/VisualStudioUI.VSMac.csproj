@@ -52,6 +52,9 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.Mac" />
+    <Reference Include="System.Collections.Immutable">
+      <HintPath>..\..\..\..\packages\System.Collections.Immutable.5.0.0\lib\netstandard2.0\System.Collections.Immutable.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Options\DocButtonOptionVSMac.cs" />
@@ -79,6 +82,9 @@
       <Project>{F08A99F8-D704-40F4-8B59-73B54D16AA7C}</Project>
       <Name>VisualStudioUI</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
 </Project>

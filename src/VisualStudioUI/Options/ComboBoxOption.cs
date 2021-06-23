@@ -8,16 +8,17 @@
 //
 
 using Microsoft.VisualStudioUI.Options.Models;
+using System.Collections.Immutable;
 
 namespace Microsoft.VisualStudioUI.Options
 {
     public class ComboBoxOption<TItem> : Option where TItem : class
     {
         public ViewModelProperty<TItem?> Property { get; }
-        public ViewModelProperty<TItem[]> ItemsProperty { get; }
+        public ViewModelProperty<ImmutableArray<TItem>> ItemsProperty { get; }
         public ItemDisplayStringFunc<TItem> ItemDisplayStringFunc { get; } 
 
-        public ComboBoxOption(ViewModelProperty<TItem?> property, ViewModelProperty<TItem[]> itemsProperty,
+        public ComboBoxOption(ViewModelProperty<TItem?> property, ViewModelProperty<ImmutableArray<TItem>> itemsProperty,
             ItemDisplayStringFunc<TItem>? itemDisplayStringFunc = null)
         {
             Property = property;

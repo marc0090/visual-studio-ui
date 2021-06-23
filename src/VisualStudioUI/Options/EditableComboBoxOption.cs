@@ -7,6 +7,7 @@
 // Copyright (c) 2021 ${CopyrightHolder}
 //
 
+using System.Collections.Immutable;
 using Microsoft.VisualStudioUI.Options.Models;
 
 namespace Microsoft.VisualStudioUI.Options
@@ -14,9 +15,9 @@ namespace Microsoft.VisualStudioUI.Options
     public class EditableComboBoxOption : Option
     {
         public ViewModelProperty<string> Property { get; }
-        public ViewModelProperty<string[]> ItemsProperty { get; }
+        public ViewModelProperty<ImmutableArray<string>> ItemsProperty { get; }
 
-        public EditableComboBoxOption(ViewModelProperty<string> property, ViewModelProperty<string[]> itemsProperty)
+        public EditableComboBoxOption(ViewModelProperty<string> property, ViewModelProperty<ImmutableArray<string>> itemsProperty)
         {
             Property = property;
             ItemsProperty = itemsProperty;

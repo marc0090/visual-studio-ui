@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Immutable;
 using AppKit;
 using Foundation;
 using Microsoft.VisualStudioUI.Options;
@@ -87,11 +88,11 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         {
             _comboBox.RemoveAll();
 
-            string[] items = EditableComboBoxOption.ItemsProperty.Value;
+            ImmutableArray<string> items = EditableComboBoxOption.ItemsProperty.Value;
 
             // The intention is that null items aren't allowed - no items should be an empty list.
             // But handle this case just in case, to be safe.
-            if ((string[]?) items == null)
+            if ((ImmutableArray<string>?) items == null)
                 return;
 
             foreach (string item in items)
@@ -100,8 +101,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             }
 
             string? value = EditableComboBoxOption.Property.Value;
-            if (!string.IsNullOrWhiteSpace(value) &&
-                Array.IndexOf(EditableComboBoxOption.ItemsProperty.Value, value) != -1)
+            if (!string.IsNullOrWhiteSpace(value) && items.IndexOf(value) != -1)
             {
                 _comboBox.StringValue = value!;
             }
