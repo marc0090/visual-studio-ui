@@ -1,3 +1,5 @@
+using System.Collections.Immutable;
+
 namespace Microsoft.VisualStudioUI.Options.Models
 {
     public delegate string ItemDisplayStringFunc<in TItem>(TItem? item) where TItem : class;
@@ -12,7 +14,8 @@ namespace Microsoft.VisualStudioUI.Options.Models
             return item.ToString();
         }
         
-        public static TItem? FindMatch<TItem>(TItem[] items, string? displayString, ItemDisplayStringFunc<TItem> itemDisplayStringFunc) where TItem : class
+        public static TItem? FindMatch<TItem>(ImmutableArray<TItem> items, string? displayString,
+            ItemDisplayStringFunc<TItem> itemDisplayStringFunc) where TItem : class
         {
             if (displayString == null)
                 return null;
@@ -26,7 +29,7 @@ namespace Microsoft.VisualStudioUI.Options.Models
             return null;
         }
         
-        public static string? FindMatch(string[] items, string? displayString)
+        public static string? FindMatch(ImmutableArray<string> items, string? displayString)
         {
             if (displayString == null)
                 return null;

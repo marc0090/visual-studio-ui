@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Collections.Immutable;
 using AppKit;
 using Microsoft.VisualStudioUI.Options;
 using Microsoft.VisualStudioUI.Options.Models;
@@ -26,7 +27,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 if (_popUpButton == null)
                 {
                     ViewModelProperty<TItem?> property = ComboBoxOption.Property;
-                    ViewModelProperty<TItem[]> itemsProperty = ComboBoxOption.ItemsProperty;
+                    ViewModelProperty<ImmutableArray<TItem>> itemsProperty = ComboBoxOption.ItemsProperty;
 
                     // View:     popUpButton
                     _popUpButton = new AppKit.NSPopUpButton();
@@ -87,11 +88,11 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             }
             */
             
-            TItem[] items = ComboBoxOption.ItemsProperty.Value;
+            ImmutableArray<TItem> items = ComboBoxOption.ItemsProperty.Value;
 
             // The intention is that null items aren't allowed - no items should be an empty list.
             // But handle this case just in case, to be safe.
-            if ((TItem[]?) items == null)
+            if ((ImmutableArray<TItem>?) items == null)
                 return;
 
             foreach (TItem item in items)

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using Microsoft.VisualStudioUI.Options;
 using Microsoft.VisualStudioUI.Options.Models;
 
@@ -119,8 +120,8 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             new ViewModelProperty<bool>("boolProp", defaultValue);
         public static ViewModelProperty<string> StringProp(string defaultValue) =>
             new ViewModelProperty<string>("stringProp", defaultValue);
-        public static ViewModelProperty<string[]> StringArrayProp(string[] defaultValue) =>
-            new ViewModelProperty<string[]>("stringArrayProp", defaultValue);
+        public static ViewModelProperty<ImmutableArray<string>> StringArrayProp(string[] defaultValue) =>
+            new ViewModelProperty<ImmutableArray<string>>("stringArrayProp", ImmutableArray.Create(defaultValue));
 
         public static ViewModelProperty<List<string>> ListProp(List<string> defaultValue) => new ViewModelProperty<List<string>>("listProp", defaultValue);
     }
