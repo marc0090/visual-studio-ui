@@ -6,15 +6,16 @@
 //
 // Copyright (c) 2021 
 //
-
 using System;
 using AppKit;
 using Microsoft.VisualStudioUI.Options;
+using Microsoft.VisualStudioUI.Options.Models;
 
 namespace Microsoft.VisualStudioUI.VSMac.Options
 {
     public class SwitchableGroupOptionVSMac : OptionVSMac
     {
+
         private NSView _optionView;
         private NSSwitch _switchButton;
         private NSTextField _title;
@@ -27,7 +28,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         {
         }
 
-        public SwitchableGroupOption SwitchableGroupOption => ((SwitchableGroupOption) Option);
+        public SwitchableGroupOption SwitchableGroupOption => ((SwitchableGroupOption)Option);
+
 
         public override NSView View
         {
@@ -56,10 +58,13 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
             _switchButton = new AppKit.NSSwitch();
             _switchButton.ControlSize = NSControlSize.Regular;
-            _switchButton.State = 1;
+            _switchButton.State = ((SwitchableGroupOption)Option).IsOn.Value ? 1 : 0;
             _switchButton.TranslatesAutoresizingMaskIntoConstraints = false;
             _switchButton.AccessibilityHelp = "Provides a control";
 
+            _switchButton.Activated += SwitchButtonActivated; ;
+
+            ((SwitchableGroupOption)Option).IsOn.PropertyChanged += SwitchPropertyChanged;
 
             _optionView.AddSubview(_switchButton);
             var _switchButtonWidthConstraint = _switchButton.WidthAnchor.ConstraintEqualToConstant(38f);
@@ -81,7 +86,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
             _optionView.AddSubview(_title);
             var _titleWidthConstraint = _title.WidthAnchor.ConstraintEqualToConstant(467f);
-            _titleWidthConstraint.Priority = (System.Int32) AppKit.NSLayoutPriority.DefaultLow;
+            _titleWidthConstraint.Priority = (System.Int32)AppKit.NSLayoutPriority.DefaultLow;
             _titleWidthConstraint.Active = true;
             var _titleHeightConstraint = _title.HeightAnchor.ConstraintEqualToConstant(16f);
             _titleHeightConstraint.Active = true;
@@ -120,24 +125,43 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 _helpButton.TranslatesAutoresizingMaskIntoConstraints = false;
 
                 _optionView.AddSubview(_helpButton);
-                var helpButtonWidthConstraint = _helpButton.WidthAnchor.ConstraintEqualToConstant(21f);
-                helpButtonWidthConstraint.Priority = (System.Int32) AppKit.NSLayoutPriority.DefaultLow;
-                helpButtonWidthConstraint.Active = true;
+                var _helpButtonWidthConstraint = _helpButton.WidthAnchor.ConstraintEqualToConstant(21f);
+                _helpButtonWidthConstraint.Priority = (System.Int32)AppKit.NSLayoutPriority.DefaultLow;
+                _helpButtonWidthConstraint.Active = true;
 
                 _helpButton.RightAnchor.ConstraintEqualToAnchor(_optionView.RightAnchor, -6f).Active = true;
                 _helpButton.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 30f).Active = true;
                 _helpButton.Activated += (o, args) => ShowHintPopover(Option.Hint, _helpButton);
+
             }
 
             _childrenView = new NSView();
 
-            foreach (Option option in ((SwitchableGroupOption) Option).ChildOptions)
+            foreach (Option option in ((SwitchableGroupOption)Option).ChildOptions)
             {
-                var optionVSMac = (OptionVSMac) option.Platform;
+                var optionVSMac = (OptionVSMac)option.Platform;
                 _optionView.AddSubview(optionVSMac.View);
             }
 
             UpdateChildOptions();
+        }
+
+
+        private void SwitchButtonActivated(object sender, EventArgs e)
+        {
+            ((SwitchableGroupOption)Option).IsOn.PropertyChanged -= SwitchPropertyChanged;
+            ((SwitchableGroupOption)Option).IsOn.Value = (_switchButton.State == 1);
+            ((SwitchableGroupOption)Option).SwitchChangedInvoke(sender, e);
+            ((SwitchableGroupOption)Option).IsOn.PropertyChanged += SwitchPropertyChanged;
+
+        }
+
+        private void SwitchPropertyChanged(object sender, ViewModelPropertyChangedEventArgs e)
+        {
+            _switchButton.Activated -= SwitchButtonActivated;
+            _switchButton.State = ((SwitchableGroupOption)Option).IsOn.Value ? 1 : 0;
+            _switchButton.Activated += SwitchButtonActivated;
+
         }
 
         void ShowHintPopover(string message, NSButton button)
@@ -155,6 +179,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         private void UpdateChildOptions()
         {
+
             _optionView.AddSubview(_childrenView);
 
             //if (_switchButton)
@@ -167,4 +192,5 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             //}
         }
     }
+
 }

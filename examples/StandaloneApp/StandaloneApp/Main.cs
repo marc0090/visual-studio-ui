@@ -88,10 +88,7 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             card4.AddOption(switchableView);
 
 
-            List<string> list = new List<string>();
-
-            list.Add("testStringList1");
-            list.Add("testStringList1");
+            ImmutableArray<string> list = ImmutableArray.Create("test1", "test2", "test3");
 
             card4.AddOption(new StringListOption(ListProp(list), "default string") { Label = "Containers" });
 
@@ -99,6 +96,7 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             var signing = new OptionCard() { Label = "Signing" };
             bool isSelected = false;
             var manual = new ButtonOption(ButtonOption.ButtonType.Radio)
+
             {
                 IsSelected = BoolProp(isSelected),
                 Label = "Scheme",
@@ -146,11 +144,11 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
 
             OptionCards cards = new OptionCards();
 
-            cards.AddCard(signing);
-            cards.AddCard(card3);
+            //cards.AddCard(signing);
+            //cards.AddCard(card3);
             cards.AddCard(card4);
-            cards.AddCard(card1);
-            cards.AddCard(card2);
+            //cards.AddCard(card1);
+            //cards.AddCard(card2);
 
             return cards;
         }
@@ -162,6 +160,6 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
         public static ViewModelProperty<ImmutableArray<string>> StringArrayProp(string[] defaultValue) =>
             new ViewModelProperty<ImmutableArray<string>>("stringArrayProp", ImmutableArray.Create(defaultValue));
 
-        public static ViewModelProperty<List<string>> ListProp(List<string> defaultValue) => new ViewModelProperty<List<string>>("listProp", defaultValue);
+        public static ViewModelProperty<ImmutableArray<string>> ListProp(ImmutableArray<string> defaultValue) => new ViewModelProperty<ImmutableArray<string>>("listProp", defaultValue);
     }
 }
