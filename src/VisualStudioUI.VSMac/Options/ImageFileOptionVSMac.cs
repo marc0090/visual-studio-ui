@@ -5,16 +5,16 @@ using Microsoft.VisualStudioUI.Options.Models;
 
 namespace Microsoft.VisualStudioUI.VSMac.Options
 {
-    public class ImageViewOptionVSMac : OptionWithLeftLabelVSMac
+    public class ImageFileOptionVSMac : OptionWithLeftLabelVSMac
     {
-        NSView frameView;
+        NSView _frameView;
         NSImageView _imageView;
 
-        public ImageViewOptionVSMac(ImageViewOption option) : base(option)
+        public ImageFileOptionVSMac(ImageFileOption option) : base(option)
         {
         }
 
-        public ImageViewOption TextOption => ((ImageViewOption)Option);
+        public ImageFileOption TextOption => ((ImageFileOption) Option);
 
         protected override NSView Control
         {
@@ -30,7 +30,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     _imageView.Layer.BorderWidth = 1;
 
                     var imageViewWidthConstraint = _imageView.WidthAnchor.ConstraintEqualToConstant(80f);
-                    imageViewWidthConstraint.Priority = (System.Int32)AppKit.NSLayoutPriority.DefaultLow;
+                    imageViewWidthConstraint.Priority = (System.Int32) AppKit.NSLayoutPriority.DefaultLow;
                     imageViewWidthConstraint.Active = true;
                     var imageViewHeightConstraint = _imageView.HeightAnchor.ConstraintEqualToConstant(50f);
                     imageViewHeightConstraint.Active = true;

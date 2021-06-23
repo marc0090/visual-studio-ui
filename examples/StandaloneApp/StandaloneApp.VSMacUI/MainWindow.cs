@@ -7,20 +7,20 @@ using Microsoft.VisualStudioUI.VSMac.Options;
 
 namespace Microsoft.VisualStudioUI.StandaloneApp.VSMacUI
 {
-	public class MainWindow : NSWindow
-	{
-		private int NumberOfTimesClicked = 0;
+    public class MainWindow : NSWindow
+    {
+        private int NumberOfTimesClicked = 0;
 
-		public NSButton ClickMeButton { get; set; }
-		public NSTextField ClickMeLabel { get; set; }
+        public NSButton ClickMeButton { get; set; }
+        public NSTextField ClickMeLabel { get; set; }
 
-		public MainWindow(CGRect contentRect, NSWindowStyle aStyle, NSBackingStore bufferingType, bool deferCreation) : base(contentRect, aStyle, bufferingType, deferCreation)
-		{
-			// Define the User Interface of the Window here
-			Title = "MY Window From Code";
+        public MainWindow(CGRect contentRect, NSWindowStyle aStyle, NSBackingStore bufferingType, bool deferCreation) :
+            base(contentRect, aStyle, bufferingType, deferCreation)
+        {
+            // Define the User Interface of the Window here
+            Title = "MY Window From Code";
 
 #if false
-
 			// Create the content view for the window and make it fill the window
 			ContentView = new NSView(Frame);
 
@@ -32,10 +32,10 @@ namespace Microsoft.VisualStudioUI.StandaloneApp.VSMacUI
 			ContentView.AddSubview(ClickMeButton);
 #endif
 
-			OptionCards optionCards = Main.CreateOptionCards();
-			OptionsPanelVSMac optionsPanel = new OptionsPanelVSMac(optionCards);
-			//ContentView.AddSubview(optionsPanel);
-			ContentView = optionsPanel;
+            OptionCards optionCards = Main.CreateOptionCards();
+            OptionsPanelVSMac optionsPanel = new OptionsPanelVSMac(optionCards);
+            //ContentView.AddSubview(optionsPanel);
+            ContentView = optionsPanel;
 
 #if false
 			ClickMeLabel = new NSTextField(new CGRect(120, Frame.Height - 65, Frame.Width - 130, 20))
@@ -49,20 +49,19 @@ namespace Microsoft.VisualStudioUI.StandaloneApp.VSMacUI
 			};
 			ContentView.AddSubview(ClickMeLabel);
 #endif
+        }
 
-		}
+        public override void AwakeFromNib()
+        {
+            base.AwakeFromNib();
 
-		public override void AwakeFromNib()
-		{
-			base.AwakeFromNib();
-
-			/*
-			// Wireup events
-			ClickMeButton.Activated += (sender, e) => {
-				// Update count
-				ClickMeLabel.StringValue = (++NumberOfTimesClicked == 1) ? "Button clicked one time." : string.Format("Button clicked {0} times.", NumberOfTimesClicked);
-			};
-			*/
-		}
-	}
+            /*
+            // Wireup events
+            ClickMeButton.Activated += (sender, e) => {
+                // Update count
+                ClickMeLabel.StringValue = (++NumberOfTimesClicked == 1) ? "Button clicked one time." : string.Format("Button clicked {0} times.", NumberOfTimesClicked);
+            };
+            */
+        }
+    }
 }

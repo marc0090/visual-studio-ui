@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using Microsoft.VisualStudioUI.Options;
 using Microsoft.VisualStudioUI.Options.Models;
 
@@ -36,7 +36,7 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
                 }
             );
             card1.AddOption(
-                new ComboBoxOption(StringProp("option1"), StringArrayProp(new[] { "option1", "option2", "option3" }))
+                new ComboBoxOption<string>(StringProp("option1"), StringArrayProp(new[] { "option1", "option2", "option3" }))
                 {
                     Label = "Choices",
                     Hint = "This is the hint for the combo box"
@@ -149,17 +149,19 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             cards.AddCard(signing);
             cards.AddCard(card3);
             cards.AddCard(card4);
-            //cards.AddCard(card1);
-            //cards.AddCard(card2);
+            cards.AddCard(card1);
+            cards.AddCard(card2);
 
             return cards;
         }
 
-        public static ViewModelProperty<bool> BoolProp(bool defaultValue) => new ViewModelProperty<bool>("boolProp", defaultValue);
-        public static ViewModelProperty<string> StringProp(string defaultValue) => new ViewModelProperty<string>("stringProp", defaultValue);
-        public static ViewModelProperty<string[]> StringArrayProp(string[] defaultValue) =>
-            new ViewModelProperty<string[]>("stringArrayProp", defaultValue);
-        public static ViewModelProperty<List<string>> ListProp(List<string> defaultValue) => new ViewModelProperty<List<string>>("listProp", defaultValue);
+        public static ViewModelProperty<bool> BoolProp(bool defaultValue) =>
+            new ViewModelProperty<bool>("boolProp", defaultValue);
+        public static ViewModelProperty<string> StringProp(string defaultValue) =>
+            new ViewModelProperty<string>("stringProp", defaultValue);
+        public static ViewModelProperty<ImmutableArray<string>> StringArrayProp(string[] defaultValue) =>
+            new ViewModelProperty<ImmutableArray<string>>("stringArrayProp", ImmutableArray.Create(defaultValue));
 
+        public static ViewModelProperty<List<string>> ListProp(List<string> defaultValue) => new ViewModelProperty<List<string>>("listProp", defaultValue);
     }
 }

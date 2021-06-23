@@ -35,11 +35,11 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             //cardHeightConstraint.Active = true;
 
             /*
-			cardView.RightAnchor.ConstraintEqualToAnchor (this.RightAnchor, 0f).Active = true;
-			cardView.LeftAnchor.ConstraintEqualToAnchor (this.LeftAnchor, 0f).Active = true;
-			cardView.BottomAnchor.ConstraintEqualToAnchor (this.BottomAnchor, 0f).Active = true;
-			cardView.TopAnchor.ConstraintEqualToAnchor (this.TopAnchor, 0f).Active = true;
-			*/
+            cardView.RightAnchor.ConstraintEqualToAnchor (this.RightAnchor, 0f).Active = true;
+            cardView.LeftAnchor.ConstraintEqualToAnchor (this.LeftAnchor, 0f).Active = true;
+            cardView.BottomAnchor.ConstraintEqualToAnchor (this.BottomAnchor, 0f).Active = true;
+            cardView.TopAnchor.ConstraintEqualToAnchor (this.TopAnchor, 0f).Active = true;
+            */
 
             // View:     background
             var background = new AppKit.NSBox();
@@ -53,13 +53,13 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
             cardView.AddSubview(background);
             /*
-			var backgroundWidthConstraint = background.WidthAnchor.ConstraintEqualToConstant (640f);
-			backgroundWidthConstraint.Priority = (System.Int32)AppKit.NSLayoutPriority.DefaultLow;
-			backgroundWidthConstraint.Active = true;
-			var backgroundHeightConstraint = background.HeightAnchor.ConstraintEqualToConstant (367f);
-			backgroundHeightConstraint.Priority = (System.Int32)AppKit.NSLayoutPriority.DefaultLow;
-			backgroundHeightConstraint.Active = true;
-			*/
+            var backgroundWidthConstraint = background.WidthAnchor.ConstraintEqualToConstant (640f);
+            backgroundWidthConstraint.Priority = (System.Int32)AppKit.NSLayoutPriority.DefaultLow;
+            backgroundWidthConstraint.Active = true;
+            var backgroundHeightConstraint = background.HeightAnchor.ConstraintEqualToConstant (367f);
+            backgroundHeightConstraint.Priority = (System.Int32)AppKit.NSLayoutPriority.DefaultLow;
+            backgroundHeightConstraint.Active = true;
+            */
 
             background.RightAnchor.ConstraintEqualToAnchor(cardView.RightAnchor, 0f).Active = true;
             background.LeftAnchor.ConstraintEqualToAnchor(cardView.LeftAnchor, 0f).Active = true;
@@ -113,7 +113,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
             foreach (Option option in OptionCard.Options)
             {
-                var optionVSMac = (OptionVSMac)option.Platform;
+                var optionVSMac = (OptionVSMac) option.Platform;
                 optionsStackView.AddArrangedSubview(optionVSMac.View);
             }
 

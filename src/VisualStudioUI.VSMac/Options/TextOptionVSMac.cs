@@ -5,63 +5,54 @@ using Microsoft.VisualStudioUI.Options.Models;
 
 namespace Microsoft.VisualStudioUI.VSMac.Options
 {
-	public class TextOptionVSMac : OptionWithLeftLabelVSMac
-	{
-		NSTextField _textField;
+    public class TextOptionVSMac : OptionWithLeftLabelVSMac
+    {
+        NSTextField _textField;
 
-		public TextOptionVSMac(TextOption option) : base(option)
-		{
-		}
+        public TextOptionVSMac(TextOption option) : base(option)
+        {
+        }
 
-		public TextOption TextOption => ((TextOption)Option);
+        public TextOption TextOption => ((TextOption) Option);
 
-		protected override NSView Control
-		{
-			get
-			{
-				if (_textField == null)
-				{
+        protected override NSView Control
+        {
+            get
+            {
+                if (_textField == null)
+                {
                     ViewModelProperty<string> property = TextOption.Property;
 
-					_textField = new AppKit.NSTextField();
-					_textField.Font = AppKit.NSFont.SystemFontOfSize(AppKit.NSFont.SystemFontSize);
-					_textField.StringValue = property?.Value ?? string.Empty;
-					_textField.TranslatesAutoresizingMaskIntoConstraints = false;
-					_textField.Editable = TextOption.Editable;
-					_textField.Bordered = TextOption.Bordered;
-					_textField.DrawsBackground = TextOption.DrawsBackground;
+                    _textField = new AppKit.NSTextField();
+                    _textField.Font = AppKit.NSFont.SystemFontOfSize(AppKit.NSFont.SystemFontSize);
+                    _textField.StringValue = property.Value ?? string.Empty;
+                    _textField.TranslatesAutoresizingMaskIntoConstraints = false;
+                    _textField.Editable = TextOption.Editable;
+                    _textField.Bordered = TextOption.Bordered;
+                    _textField.DrawsBackground = TextOption.DrawsBackground;
 
-					_textField.WidthAnchor.ConstraintEqualToConstant(196f).Active = true;
+                    _textField.WidthAnchor.ConstraintEqualToConstant(196f).Active = true;
 
-                    if (property != null)
-					{
-						property.PropertyChanged += delegate (object o, ViewModelPropertyChangedEventArgs args)
-						{
-							_textField.StringValue = ((string)args.NewValue) ?? string.Empty;
-						};
-					}
+                    property.PropertyChanged += delegate(object o, ViewModelPropertyChangedEventArgs args)
+                    {
+                        _textField.StringValue = ((string) args.NewValue) ?? string.Empty;
+                    };
 
-					_textField.Changed += delegate
-					{
-                        if (property != null)
-                        {
-							property.Value = _textField.StringValue;
-						}
-					};
-				}
+                    _textField.Changed += delegate { property.Value = _textField.StringValue; };
+                }
 
-				return _textField;
-			}
-		}
+                return _textField;
+            }
+        }
 
-		/*
-		public override void Dispose ()
-		{
-			Property.PropertyChanged -= UpdatePopUpBtnValue;
-			textField.Changed -= UpdatePropertyValue;
+        /*
+        public override void Dispose ()
+        {
+            Property.PropertyChanged -= UpdatePopUpBtnValue;
+            textField.Changed -= UpdatePropertyValue;
 
-			base.Dispose ();
-		}
-		*/
-	}
+            base.Dispose ();
+        }
+        */
+    }
 }

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	<TargetFrameworks>netstandard2.0</TargetFrameworks>
+	<TargetFramework>netstandard2.0</TargetFramework>
 	<LangVersion>8.0</LangVersion>
 	<Nullable>enable</Nullable>
     <RootNamespace>Microsoft.VisualStudioUI</RootNamespace>
@@ -12,4 +12,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="System.Collections.Immutable" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
+  </ItemGroup>
 </Project>
