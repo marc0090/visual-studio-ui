@@ -28,7 +28,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             removeToolTip = option.RemoveToolTip;
         }
 
-        void UpdateStringListFromeModel()
+        void UpdateStringListFromModel()
         {
             foreach (string item in StringListOption.Model.Value)
             {
@@ -61,7 +61,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         public void CreateView()
         {
-            UpdateStringListFromeModel();
 
             var vContainer = new NSStackView
             {
@@ -149,6 +148,9 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 _optionView = vContainer;
 
             }
+
+            UpdateStringListFromModel();
+            _tableView.ReloadData();
         }
 
         public string ValuePrefix
@@ -304,7 +306,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 {
                     TextField = new NSTextField
                     {
-                        Frame = new CoreGraphics.CGRect(3, 3, tableColumn.Width, 20),
+                        Frame = new CoreGraphics.CGRect(4, 5, tableColumn.Width, 20),
                         Hidden = false,
                         Bordered = false,
                         DrawsBackground = false
