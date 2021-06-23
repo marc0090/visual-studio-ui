@@ -39,7 +39,10 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         void UpdateModelFromStringList()
         {
+            StringListOption.Model.PropertyChanged -= OnStringsListChanged;
             StringListOption.Model.Value = StringList.ToImmutableArray();
+            StringListOption.Model.PropertyChanged += OnStringsListChanged;
+
         }
 
         public override NSView View
@@ -186,8 +189,14 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         void OnStringsListChanged(object sender, EventArgs e)
         {
-            RefreshList();
-            //QueueDraw ();
+            UpdateStringListFromModel();
+
+            _tableView.ReloadData();
+
+            TableSelectLastItem();
+
+            _removeButton.Enabled = StringList.Count > 0;
+
         }
 
         public void OnValueEdited(object sender, EventArgs e)
@@ -237,12 +246,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             {
                 StringList.RemoveAt(selectedRow);
                 RefreshList();
-
-                if (StringList.Count <= 0)
-                {
-                    _removeButton.Enabled = false;
-                    return;
-                }
             }
             catch
             {
