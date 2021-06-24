@@ -16,7 +16,7 @@ namespace Microsoft.VisualStudioUI.Options {
 			ListChanged?.Invoke (sender, e);
 		}
 
-		public StringListOption (ViewModelProperty<ImmutableArray<string>> model, string label = "", string defaultListValue = "", string addToolTip = "", string removeToolTip = "")
+		public StringListOption (ViewModelProperty<ImmutableArray<string>> model, string addToolTip = "", string removeToolTip = "", string label = "", string defaultListValue = "")
 		{
 			Label = label;
 			DefaultValue = defaultListValue;
