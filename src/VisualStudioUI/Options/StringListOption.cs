@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Immutable;
 using Microsoft.VisualStudioUI.Options.Models;
 
 namespace Microsoft.VisualStudioUI.Options
@@ -7,13 +6,20 @@ namespace Microsoft.VisualStudioUI.Options
     public class StringListOption : Option
     {
         public string DefaultValue;
-        public ViewModelProperty<List<string>> Property { get; }
+        public string AddToolTip;
+        public string RemoveToolTip;
 
-        public StringListOption(ViewModelProperty<List<string>> property, string defaultListValue)
+        public ViewModelProperty<ImmutableArray<string>> Model { get; }
+
+        public StringListOption(ViewModelProperty<ImmutableArray<string>> model, string label = "", string defaultListValue = "", string addToolTip = "", string removeToolTip = "")
         {
+            Label = label;
             DefaultValue = defaultListValue;
-            Property = property;
+            AddToolTip = addToolTip;
+            RemoveToolTip = removeToolTip;
+            Model = model;
             Platform = OptionFactoryPlatform.Instance.CreateStringListOptionPlatform(this);
+
         }
     }
 }

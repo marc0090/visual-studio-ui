@@ -18,7 +18,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         {
         }
 
-        public ComboBoxOption<TItem> ComboBoxOption => ((ComboBoxOption<TItem>) Option);
+        public ComboBoxOption<TItem> ComboBoxOption => ((ComboBoxOption<TItem>)Option);
 
         protected override NSView Control
         {
@@ -87,12 +87,12 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 _popUpButton.AddItem (TranslationCatalog.GetString("Default"));
             }
             */
-            
+
             ImmutableArray<TItem> items = ComboBoxOption.ItemsProperty.Value;
 
             // The intention is that null items aren't allowed - no items should be an empty list.
             // But handle this case just in case, to be safe.
-            if ((ImmutableArray<TItem>?) items == null)
+            if ((ImmutableArray<TItem>?)items == null)
                 return;
 
             foreach (TItem item in items)
@@ -109,10 +109,11 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         {
             TItem? currentValue = ComboBoxOption.Property.Value;
             if (currentValue == null)
-                _popUpButton!.SelectItem ((NSMenuItem?) null);
-            else {
-                string currenValueDisplayString = ComboBoxOption.ItemDisplayStringFunc (currentValue);
-                _popUpButton!.SelectItem (currenValueDisplayString);
+                _popUpButton!.SelectItem((NSMenuItem?)null);
+            else
+            {
+                string currenValueDisplayString = ComboBoxOption.ItemDisplayStringFunc(currentValue);
+                _popUpButton!.SelectItem(currenValueDisplayString);
             }
         }
 

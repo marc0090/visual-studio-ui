@@ -7,22 +7,20 @@ namespace Microsoft.VisualStudioUI.Options
     {
         private static OptionFactoryPlatform? _instance;
 
-        public static void Initialize(OptionFactoryPlatform factory)
-        {
-            _instance = factory;
-        }
+		public static void Initialize (OptionFactoryPlatform factory)
+		{
+			_instance = factory;
+		}
 
-        public static bool IsInitialized => _instance != null;
+		public static bool IsInitialized => _instance != null;
 
-        public static OptionFactoryPlatform Instance
-        {
-            get
-            {
-                if (_instance == null)
-                    throw new InvalidOperationException("OptionsPlatformFactory needs to be initialized");
-                return _instance;
-            }
-        }
+		public static OptionFactoryPlatform Instance {
+			get {
+				if (_instance == null)
+					throw new InvalidOperationException ("OptionsPlatformFactory needs to be initialized");
+				return _instance;
+			}
+		}
 
         public abstract OptionCardsPlatform CreateOptionCardsPlatform(OptionCards optionCards);
         public abstract OptionCardPlatform CreateOptionCardPlatform(OptionCard optionCard);

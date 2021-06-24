@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.VisualStudioUI.Options;
 using Microsoft.VisualStudioUI.Options.Models;
 

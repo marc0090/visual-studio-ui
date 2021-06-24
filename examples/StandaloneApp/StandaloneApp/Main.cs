@@ -78,40 +78,77 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
 
 
             var card4 = new OptionCard();
-            card4.AddOption(
-                new SwitchableGroupOption(BoolProp(true))
-                {
-                    Label = "iCloud",
-                    Name = "Allows your application to store data in the cloud and lets users share their data across devices.",
-                    Hint = "Hint: Allows your application to store data in the cloud and lets users share their data across devices.",
-                }
-            );
+            var switchableView = new SwitchableGroupOption(BoolProp(true))
+            {
+                Label = "iCloud",
+                Name = "Allows your application to store data in the cloud and lets users share their data across devices.",
+                Hint = "Hint: Allows your application to store data in the cloud and lets users share their data across devices.",
+            };
 
-            List<string> list = new List<string>();
+            card4.AddOption(switchableView);
 
-            list.Add("testStringList1");
-            list.Add("testStringList1");
 
-            card4.AddOption(new StringListOption(ListProp(list), "default string") { Label = "list" });
+            ImmutableArray<string> list = ImmutableArray.Create("test1", "test2", "test3");
+
+            card4.AddOption(new StringListOption(ListProp(list), "default string") { Label = "Containers" });
 
             //Signing 
-            var signing = new OptionCard() {Label = "Signing" };
-            signing.AddOption(new ButtonOption(ButtonOption.ButtonType.Radio)
+            var signing = new OptionCard() { Label = "Signing" };
+            bool isSelected = false;
+            var manual = new ButtonOption(ButtonOption.ButtonType.Radio)
+
             {
-                IsSelected = BoolProp(true),
+                IsSelected = BoolProp(isSelected),
                 Label = "Scheme",
                 Name = "Manual Provisioning",
                 Description = "Set provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioning"
+            };
+            manual.IsSelected.Bind();
+
+            var auto = new ButtonOption(ButtonOption.ButtonType.Radio)
+            {
+                IsSelected = BoolProp(!isSelected),
+                Name = "Automatic Provisioning",
+                Description = "Set provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioning"
+            };
+            auto.IsSelected.Bind();
+
+            manual.SelectionChanged += (sbye, e) =>
+            {
+                if (manual.IsSelected.Value == true)
+                {
+                    isSelected = !isSelected;
+                    manual.IsSelected.Value = isSelected;
+                    auto.IsSelected.Value = !isSelected;
+                }
+            };
+
+            auto.SelectionChanged += (sbye, e) =>
+            {
+                if (auto.IsSelected.Value == true)
+                {
+                    isSelected = !isSelected;
+                    manual.IsSelected.Value = isSelected;
+                    auto.IsSelected.Value = !isSelected;
+                }
+            };
+
+            signing.AddOption(manual);
+            signing.AddOption(auto);
+            signing.AddOption(new ButtonOption(ButtonOption.ButtonType.CheckBox)
+            {
+                Label = "Orientations:",
+                Name = "Portrait",
+                Description = "Set provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioning"
             });
-            signing.AddOption(new ButtonOption(ButtonOption.ButtonType.CheckBox) { Label = "Orientations", Name = "Portrait" });
 
             OptionCards cards = new OptionCards();
 
-            cards.AddCard(signing);
-            cards.AddCard(card3);
+            //cards.AddCard(signing);
+            //cards.AddCard(card3);
             cards.AddCard(card4);
-            cards.AddCard(card1);
-            cards.AddCard(card2);
+            //cards.AddCard(card1);
+            //cards.AddCard(card2);
 
             return cards;
         }
@@ -123,6 +160,6 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
         public static ViewModelProperty<ImmutableArray<string>> StringArrayProp(string[] defaultValue) =>
             new ViewModelProperty<ImmutableArray<string>>("stringArrayProp", ImmutableArray.Create(defaultValue));
 
-        public static ViewModelProperty<List<string>> ListProp(List<string> defaultValue) => new ViewModelProperty<List<string>>("listProp", defaultValue);
+        public static ViewModelProperty<ImmutableArray<string>> ListProp(ImmutableArray<string> defaultValue) => new ViewModelProperty<ImmutableArray<string>>("listProp", defaultValue);
     }
 }
