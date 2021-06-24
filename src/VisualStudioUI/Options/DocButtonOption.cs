@@ -2,6 +2,10 @@
 
 namespace Microsoft.VisualStudioUI.Options
 {
+    /// <summary>
+    /// A DocButtonOption shows a help-style button that when pressed launches
+    /// the browser for the specified URL. It normally points to web doc.
+    /// </summary>
     public class DocButtonOption : Option
     {
         public ViewModelProperty<string> UrlProperty { get; }

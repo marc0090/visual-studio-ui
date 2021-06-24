@@ -11,7 +11,8 @@ namespace Microsoft.VisualStudioUI.Options
 
         public ViewModelProperty<ImmutableArray<string>> Model { get; }
 
-        public StringListOption(ViewModelProperty<ImmutableArray<string>> model, string label = "", string defaultListValue = "", string addToolTip = "", string removeToolTip = "")
+        public StringListOption(ViewModelProperty<ImmutableArray<string>> model, string label = "",
+            string defaultListValue = "", string addToolTip = "", string removeToolTip = "")
         {
             Label = label;
             DefaultValue = defaultListValue;
@@ -19,7 +20,6 @@ namespace Microsoft.VisualStudioUI.Options
             RemoveToolTip = removeToolTip;
             Model = model;
             Platform = OptionFactoryPlatform.Instance.CreateStringListOptionPlatform(this);
-
         }
     }
 }

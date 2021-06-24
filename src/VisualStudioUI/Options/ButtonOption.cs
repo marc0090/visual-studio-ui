@@ -17,17 +17,17 @@ namespace Microsoft.VisualStudioUI.Options
 
         public ViewModelProperty<bool> IsSelected { get; set; } = null;
 
-		public event EventHandler SelectionChanged;
+        public event EventHandler SelectionChanged;
 
-		public void UpdateStatus(object sender, EventArgs e)
-		{
-			SelectionChanged?.Invoke(sender, e);
-		}
+        public void UpdateStatus(object sender, EventArgs e)
+        {
+            SelectionChanged?.Invoke(sender, e);
+        }
 
-		public ButtonOption (ButtonType btnType = ButtonType.Normal)
-		{
-			Type = btnType;
-			Platform = OptionFactoryPlatform.Instance.CreateRadioButtonOptionPlatform (this);
-		}
-	}
+        public ButtonOption(ButtonType btnType = ButtonType.Normal)
+        {
+            Type = btnType;
+            Platform = OptionFactoryPlatform.Instance.CreateRadioButtonOptionPlatform(this);
+        }
+    }
 }

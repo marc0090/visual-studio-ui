@@ -31,7 +31,7 @@ namespace Microsoft.VisualStudioUI.Options.Models
         /// </summary>
         public new T Value
         {
-            get { return (T) base.Value; }
+            get { return (T)base.Value; }
 
             set { base.Value = value; }
         }
