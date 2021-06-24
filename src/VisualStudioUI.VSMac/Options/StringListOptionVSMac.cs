@@ -14,15 +14,14 @@ namespace Microsoft.VisualStudioUI.VSMac.Options {
 		NSButton _addButton, _removeButton;
 		string addToolTip, removeToolTip, defaultValue;
 
-		List<string> StringList;
+		List<string> StringList = new List<string> ();
 
 		public StringListOptionVSMac (StringListOption option) : base (option)
 		{
-			option.Model.PropertyChanged += OnStringsListChanged;
-			StringList = new List<string> ();
 			defaultValue = option.DefaultValue;
 			addToolTip = option.AddToolTip;
 			removeToolTip = option.RemoveToolTip;
+			option.Model.PropertyChanged += OnStringsListChanged;
 		}
 
 		void UpdateStringListFromModel ()
@@ -31,7 +30,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options {
 			foreach (string item in StringListOption.Model.Value) {
 				StringList.Add (item);
 			}
-
 		}
 
 		void UpdateModelFromStringList ()
@@ -137,9 +135,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options {
 				_optionView = vContainer;
 
 			}
-
-			UpdateStringListFromModel ();
-			_tableView.ReloadData ();
 		}
 
 		public string ValuePrefix {
