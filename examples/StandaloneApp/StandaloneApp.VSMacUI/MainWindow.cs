@@ -17,8 +17,7 @@ namespace Microsoft.VisualStudioUI.StandaloneApp.VSMacUI
         public MainWindow(CGRect contentRect, NSWindowStyle aStyle, NSBackingStore bufferingType, bool deferCreation) :
             base(contentRect, aStyle, bufferingType, deferCreation)
         {
-            // Define the User Interface of the Window here
-            Title = "MY Window From Code";
+            Title = "Options Standalone App";
 
 #if false
 			// Create the content view for the window and make it fill the window
@@ -35,7 +34,7 @@ namespace Microsoft.VisualStudioUI.StandaloneApp.VSMacUI
             OptionCards optionCards = Main.CreateOptionCards();
             OptionsPanelVSMac optionsPanel = new OptionsPanelVSMac(optionCards);
             //ContentView.AddSubview(optionsPanel);
-            ContentView = optionsPanel;
+            ContentView = optionsPanel.View;
 
 #if false
 			ClickMeLabel = new NSTextField(new CGRect(120, Frame.Height - 65, Frame.Width - 130, 20))
