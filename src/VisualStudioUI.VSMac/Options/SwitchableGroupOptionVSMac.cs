@@ -21,7 +21,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         private NSTextField _title;
         private NSTextField _description;
         private NSButton _helpButton;
-        private NSView _childrenView;
         private HintPopover _hintPopover;
 
         public SwitchableGroupOptionVSMac(SwitchableGroupOption option) : base(option)

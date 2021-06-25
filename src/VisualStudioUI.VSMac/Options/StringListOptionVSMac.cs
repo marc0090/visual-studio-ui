@@ -85,7 +85,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             {
                 BezelStyle = NSBezelStyle.TexturedRounded,
                 Bordered = false,
-                Title = "",
+                Title = string.Empty,
                 WantsLayer = true,
                 Image = NSImage.GetSystemSymbol("plus.circle", null),
                 ContentTintColor = NSColor.SystemGreenColor,
@@ -245,7 +245,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             }
             finally
             {
-                //this.remove.Accessible.MakeAccessibilityAnnouncement (TranslationCatalog.GetString ("Row removed"));
+                // this.remove.Accessible.MakeAccessibilityAnnouncement (TranslationCatalog.GetString ("Row removed"));
             }
         }
 
