@@ -24,7 +24,6 @@ namespace Microsoft.VisualStudioUI.Options {
 			RemoveToolTip = removeToolTip;
 			Model = model;
 			Platform = OptionFactoryPlatform.Instance.CreateStringListOptionPlatform (this);
-
 		}
 	}
 }

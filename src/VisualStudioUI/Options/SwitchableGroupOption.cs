@@ -6,6 +6,7 @@
 //
 // Copyright (c) 2021 
 //
+
 using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudioUI.Options.Models;
