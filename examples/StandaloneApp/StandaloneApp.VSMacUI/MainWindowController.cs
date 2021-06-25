@@ -19,7 +19,7 @@ namespace Microsoft.VisualStudioUI.StandaloneApp.VSMacUI
         public MainWindowController() : base("MainWindow")
         {
             // Construct the window from code here
-            CGRect contentRect = new CGRect(0, 0, 1000, 500);
+            CGRect contentRect = new CGRect(0, 0, 1000, 1000);
             base.Window = new MainWindow(contentRect,
                 (NSWindowStyle.Titled | NSWindowStyle.Closable | NSWindowStyle.Miniaturizable |
                  NSWindowStyle.Resizable), NSBackingStore.Buffered, false);
