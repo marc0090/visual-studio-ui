@@ -4,29 +4,57 @@ using Microsoft.VisualStudioUI.Options;
 
 namespace Microsoft.VisualStudioUI.VSMac.Options
 {
-    public class OptionsPanelVSMac : NSScrollView
+    public class OptionsPanelVSMac
     {
-        NSView _documentView;
+        NSScrollView _scrollView;
 
-        public OptionsPanelVSMac(OptionCards optionCards) : base()
+        public OptionsPanelVSMac(OptionCards optionCards)
         {
-            DrawsBackground = false;
+            _scrollView = new AppKit.NSScrollView();
+            _scrollView.TranslatesAutoresizingMaskIntoConstraints = false;
 
-            _documentView = new NSView();
-            DocumentView = _documentView;
+            _scrollView.DrawsBackground = false;
+            _scrollView.HasVerticalScroller = true;
+            _scrollView.HasHorizontalScroller = false;
+            _scrollView.AutohidesScrollers = true;
 
-            NSView optionsView = ((OptionCardsVSMac) optionCards.Platform).View;
-            _documentView.AddSubview(optionsView);
-            optionsView.TopAnchor.ConstraintEqualToAnchor(_documentView.TopAnchor, 24f).Active = true;
-            optionsView.LeftAnchor.ConstraintEqualToAnchor(_documentView.LeftAnchor, 24f).Active = true;
-            optionsView.RightAnchor.ConstraintEqualToAnchor(_documentView.RightAnchor, 24f).Active = true;
-            optionsView.BottomAnchor.ConstraintEqualToAnchor(_documentView.BottomAnchor, 24f).Active = true;
+            var clipView = new FlippedClipView();
+            clipView.DrawsBackground = false;
+            _scrollView.ContentView = clipView;
+            clipView.TranslatesAutoresizingMaskIntoConstraints = false;
+
+            clipView.TopAnchor.ConstraintEqualToAnchor(_scrollView.TopAnchor).Active = true;
+            clipView.LeftAnchor.ConstraintEqualToAnchor(_scrollView.LeftAnchor).Active = true;
+            clipView.RightAnchor.ConstraintEqualToAnchor(_scrollView.RightAnchor).Active = true;
+            clipView.BottomAnchor.ConstraintEqualToAnchor(_scrollView.BottomAnchor).Active = true;
+
+            var documentView = new NSStackView();
+            documentView.TranslatesAutoresizingMaskIntoConstraints = false;
+            _scrollView.DocumentView = documentView;
+
+            documentView.TopAnchor.ConstraintEqualToAnchor(clipView.TopAnchor).Active = true;
+            documentView.LeftAnchor.ConstraintEqualToAnchor(clipView.LeftAnchor).Active = true;
+
+            documentView.EdgeInsets = new NSEdgeInsets(24f, 24f, 24f, 24f);
+
+            NSView optionsView = ((OptionCardsVSMac)optionCards.Platform).View;
+            documentView.AddArrangedSubview(optionsView);
         }
 
+        public NSView View => _scrollView;
+
+        /*
         public override void SetFrameSize(CGSize newSize)
         {
             base.SetFrameSize(newSize);
             _documentView.Frame = new CGRect(0, 0, newSize.Width, newSize.Height);
         }
+        */
+
+        class FlippedClipView : NSClipView
+        {
+            public override bool IsFlipped => true;
+        }
+
     }
 }

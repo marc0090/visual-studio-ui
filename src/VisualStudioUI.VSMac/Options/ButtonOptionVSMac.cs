@@ -28,7 +28,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     CreateView();
                 }
 
-                return _optionView;
+                return _optionView!;
             }
         }
 

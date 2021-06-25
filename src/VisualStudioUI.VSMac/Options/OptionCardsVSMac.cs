@@ -5,7 +5,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 {
     public class OptionCardsVSMac : OptionCardsPlatform
     {
-        NSStackView _cardsStack;
+        NSStackView? _cardsStack;
 
         public OptionCardsVSMac(VisualStudioUI.Options.OptionCards optionCards) : base(optionCards)
         {
@@ -30,9 +30,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             cardsStack.Spacing = 10f;
             cardsStack.Orientation = NSUserInterfaceLayoutOrientation.Vertical;
             cardsStack.Distribution = NSStackViewDistribution.Fill;
-
-            var optionsStackWidthConstraint = cardsStack.WidthAnchor.ConstraintEqualToConstant(600f);
-            optionsStackWidthConstraint.Active = true;
 
             foreach (OptionCard card in OptionCards.Cards)
             {
