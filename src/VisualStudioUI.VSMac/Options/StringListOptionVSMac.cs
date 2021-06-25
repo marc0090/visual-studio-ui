@@ -6,297 +6,333 @@ using Foundation;
 using Microsoft.VisualStudioUI.Options;
 using Microsoft.VisualStudioUI.Options.Models;
 
-namespace Microsoft.VisualStudioUI.VSMac.Options {
+namespace Microsoft.VisualStudioUI.VSMac.Options
+{
 
-	public class StringListOptionVSMac : OptionVSMac {
-		NSStackView _optionView;
-		NSTableView _tableView;
-		NSButton _addButton, _removeButton;
-		string addToolTip, removeToolTip, defaultValue;
+    public class StringListOptionVSMac : OptionVSMac
+    {
+        NSStackView _optionView;
+        NSTableView _tableView;
+        NSButton _addButton, _removeButton;
+        string addToolTip, removeToolTip, defaultValue;
 
-		List<string> StringList = new List<string> ();
+        List<string> StringList = new List<string>();
 
-		public StringListOptionVSMac (StringListOption option) : base (option)
-		{
-			defaultValue = option.DefaultValue;
-			addToolTip = option.AddToolTip;
-			removeToolTip = option.RemoveToolTip;
-			option.Model.PropertyChanged += OnStringsListChanged;
-		}
+        public StringListOptionVSMac(StringListOption option) : base(option)
+        {
+            defaultValue = option.DefaultValue;
+            addToolTip = option.AddToolTip;
+            removeToolTip = option.RemoveToolTip;
+            option.Model.PropertyChanged += OnStringsListChanged;
+        }
 
-		void UpdateStringListFromModel ()
-		{
-			StringList.Clear ();
-			foreach (string item in StringListOption.Model.Value) {
-				StringList.Add (item);
-			}
-		}
+        void UpdateStringListFromModel()
+        {
+            StringList.Clear();
+            foreach (string item in StringListOption.Model.Value)
+            {
+                StringList.Add(item);
+            }
+        }
 
-		void UpdateModelFromStringList ()
-		{
-			StringListOption.Model.PropertyChanged -= OnStringsListChanged;
-			StringListOption.Model.Value = StringList.ToImmutableArray ();
-			StringListOption.Model.PropertyChanged += OnStringsListChanged;
-		}
+        void UpdateModelFromStringList()
+        {
+            StringListOption.Model.PropertyChanged -= OnStringsListChanged;
+            StringListOption.Model.Value = StringList.ToImmutableArray();
+            StringListOption.Model.PropertyChanged += OnStringsListChanged;
+        }
 
-		public override NSView View {
-			get {
-				if (_optionView == null) {
-					CreateView ();
-				}
+        public override NSView View
+        {
+            get
+            {
+                if (_optionView == null)
+                {
+                    CreateView();
+                }
 
-				return _optionView;
-			}
-		}
+                return _optionView;
+            }
+        }
 
-		public StringListOption StringListOption => ((StringListOption) Option);
+        public StringListOption StringListOption => ((StringListOption)Option);
 
-		public IntPtr Handle => throw new NotImplementedException ();
+        public IntPtr Handle => throw new NotImplementedException();
 
-		public void CreateView ()
-		{
+        public void CreateView()
+        {
 
-			var vContainer = new NSStackView {
-				Orientation = NSUserInterfaceLayoutOrientation.Vertical,
-				Alignment = NSLayoutAttribute.Left
+            var vContainer = new NSStackView
+            {
+                Orientation = NSUserInterfaceLayoutOrientation.Vertical,
+                Alignment = NSLayoutAttribute.Left
 
-			};
+            };
 
-			_tableView = new NSTableView () { HeaderView = null, Source = new ListSource (this) };
-			_tableView.GridStyleMask = NSTableViewGridStyle.DashedHorizontalGridLine;
-			_tableView.AddColumn (new NSTableColumn ());
+            _tableView = new NSTableView() { HeaderView = null, Source = new ListSource(this) };
+            _tableView.GridStyleMask = NSTableViewGridStyle.DashedHorizontalGridLine;
+            _tableView.AddColumn(new NSTableColumn());
 
-			var scrolledView = new NSScrollView () {
-				DocumentView = _tableView,
-				BorderType = NSBorderType.LineBorder,
-				HasVerticalScroller = true,
-				HasHorizontalScroller = true,
-				AutohidesScrollers = true,
-			};
-			scrolledView.HeightAnchor.ConstraintEqualToConstant (72).Active = true;
-			scrolledView.WidthAnchor.ConstraintEqualToConstant (450).Active = true;
+            var scrolledView = new NSScrollView()
+            {
+                DocumentView = _tableView,
+                BorderType = NSBorderType.LineBorder,
+                HasVerticalScroller = true,
+                HasHorizontalScroller = true,
+                AutohidesScrollers = true,
+            };
+            scrolledView.HeightAnchor.ConstraintEqualToConstant(72).Active = true;
+            scrolledView.WidthAnchor.ConstraintEqualToConstant(450).Active = true;
 
-			vContainer.AddArrangedSubview (scrolledView);
+            vContainer.AddArrangedSubview(scrolledView);
 
-			_addButton = new NSButton {
-				BezelStyle = NSBezelStyle.TexturedRounded,
-				Bordered = false,
-				Title = "",
-				WantsLayer = true,
-				Image = NSImage.GetSystemSymbol ("plus.circle", null),
-				ContentTintColor = NSColor.SystemGreenColor,
-				TranslatesAutoresizingMaskIntoConstraints = false,
-				ToolTip = addToolTip
-			};
+            _addButton = new NSButton
+            {
+                BezelStyle = NSBezelStyle.TexturedRounded,
+                Bordered = false,
+                Title = "",
+                WantsLayer = true,
+                Image = NSImage.GetSystemSymbol("plus.circle", null),
+                ContentTintColor = NSColor.SystemGreenColor,
+                TranslatesAutoresizingMaskIntoConstraints = false,
+                ToolTip = addToolTip
+            };
 
-			_addButton.WidthAnchor.ConstraintEqualToConstant (25).Active = true;
-			_addButton.HeightAnchor.ConstraintEqualToConstant (21).Active = true;
-			_addButton.Layer.BackgroundColor = NSColor.TextBackground.CGColor;
-			_addButton.Layer.CornerRadius = 5;
-			_addButton.Activated += OnAddClicked;
+            _addButton.WidthAnchor.ConstraintEqualToConstant(25).Active = true;
+            _addButton.HeightAnchor.ConstraintEqualToConstant(21).Active = true;
+            _addButton.Layer.BackgroundColor = NSColor.TextBackground.CGColor;
+            _addButton.Layer.CornerRadius = 5;
+            _addButton.Activated += OnAddClicked;
 
-			_removeButton = new NSButton {
-				BezelStyle = NSBezelStyle.Rounded,
-				Bordered = false,
-				WantsLayer = true,
-				Title = "",
-				Image = NSImage.GetSystemSymbol ("xmark.circle", null),
-				ContentTintColor = NSColor.SystemPinkColor,
-				TranslatesAutoresizingMaskIntoConstraints = false,
-				ToolTip = removeToolTip
-			};
-			_removeButton.WidthAnchor.ConstraintEqualToConstant (25).Active = true;
-			_removeButton.HeightAnchor.ConstraintEqualToConstant (21).Active = true;
-			_removeButton.Activated += OnRemoveClicked;
-			_removeButton.Layer.BackgroundColor = NSColor.TextBackground.CGColor;
-			_removeButton.Layer.CornerRadius = 5;
+            _removeButton = new NSButton
+            {
+                BezelStyle = NSBezelStyle.Rounded,
+                Bordered = false,
+                WantsLayer = true,
+                Title = "",
+                Image = NSImage.GetSystemSymbol("xmark.circle", null),
+                ContentTintColor = NSColor.SystemPinkColor,
+                TranslatesAutoresizingMaskIntoConstraints = false,
+                ToolTip = removeToolTip
+            };
+            _removeButton.WidthAnchor.ConstraintEqualToConstant(25).Active = true;
+            _removeButton.HeightAnchor.ConstraintEqualToConstant(21).Active = true;
+            _removeButton.Activated += OnRemoveClicked;
+            _removeButton.Layer.BackgroundColor = NSColor.TextBackground.CGColor;
+            _removeButton.Layer.CornerRadius = 5;
 
-			var h = new NSStackView () { Orientation = NSUserInterfaceLayoutOrientation.Horizontal };
-			h.AddArrangedSubview (_addButton);
-			h.AddArrangedSubview (_removeButton);
+            var h = new NSStackView() { Orientation = NSUserInterfaceLayoutOrientation.Horizontal };
+            h.AddArrangedSubview(_addButton);
+            h.AddArrangedSubview(_removeButton);
 
-			vContainer.AddArrangedSubview (h);
+            vContainer.AddArrangedSubview(h);
 
-			if (!string.IsNullOrEmpty (Option.Label)) {
-				var left = new NSTextField ();
-				left.Editable = false;
-				left.Bordered = false;
-				left.DrawsBackground = false;
-				left.StringValue = Option.Label + ":";
-				left.Alignment = NSTextAlignment.Right;
-				left.Font = NSFont.SystemFontOfSize (NSFont.SystemFontSize);
-				left.TextColor = NSColor.LabelColor;
-				left.TranslatesAutoresizingMaskIntoConstraints = false;
+            if (!string.IsNullOrEmpty(Option.Label))
+            {
+                var left = new NSTextField();
+                left.Editable = false;
+                left.Bordered = false;
+                left.DrawsBackground = false;
+                left.StringValue = Option.Label + ":";
+                left.Alignment = NSTextAlignment.Right;
+                left.Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize);
+                left.TextColor = NSColor.LabelColor;
+                left.TranslatesAutoresizingMaskIntoConstraints = false;
 
-				_optionView = new NSStackView () { Orientation = NSUserInterfaceLayoutOrientation.Horizontal, Alignment = NSLayoutAttribute.Top };
-				_optionView.AddArrangedSubview (left);
-				_optionView.AddArrangedSubview (vContainer);
-			} else {
-				_optionView = vContainer;
+                _optionView = new NSStackView() { Orientation = NSUserInterfaceLayoutOrientation.Horizontal, Alignment = NSLayoutAttribute.Top };
+                _optionView.AddArrangedSubview(left);
+                _optionView.AddArrangedSubview(vContainer);
+            }
+            else
+            {
+                _optionView = vContainer;
 
-			}
-		}
+            }
 
-		public string ValuePrefix {
-			get; set;
-		}
+            UpdateStringListFromModel();
+        }
 
-		public bool ShowDescriptions {
-			get { return false; }
-		}
+        public string ValuePrefix
+        {
+            get; set;
+        }
 
-		void OnSelectionChanged (object sender, EventArgs e)
-		{
-			_removeButton.Enabled = (_tableView.SelectedCell != null);
+        public bool ShowDescriptions
+        {
+            get { return false; }
+        }
 
-		}
+        void OnSelectionChanged(object sender, EventArgs e)
+        {
+            _removeButton.Enabled = (_tableView.SelectedCell != null);
 
-		void OnStringsListChanged (object sender, EventArgs e)
-		{
-			UpdateStringListFromModel ();
+        }
 
-			_tableView.ReloadData ();
+        void OnStringsListChanged(object sender, EventArgs e)
+        {
+            UpdateStringListFromModel();
 
-			TableSelectLastItem ();
+            _tableView.ReloadData();
 
-			_removeButton.Enabled = StringList.Count > 0;
+            TableSelectLastItem();
 
-		}
+            _removeButton.Enabled = StringList.Count > 0;
 
-		public void OnValueEdited (object sender, EventArgs e)
-		{
-			var sObject = ((NSNotification) sender).Object;
+        }
 
-			if (sObject == null) {
-				return;
-			}
+        public void OnValueEdited(object sender, EventArgs e)
+        {
+            var sObject = ((NSNotification)sender).Object;
 
-			var textField = (NSTextField) (sObject);
+            if (sObject == null)
+            {
+                return;
+            }
 
-			int row = (int) textField.Tag;
-			var newText = textField.StringValue;
-			if (newText == null)
-				return;
+            var textField = (NSTextField)(sObject);
 
-			var newValue = !string.IsNullOrEmpty (ValuePrefix) ? ValuePrefix + textField : newText;
+            int row = (int)textField.Tag;
+            var newText = textField.StringValue;
+            if (newText == null)
+                return;
 
-			StringList[row] = newValue;
-			UpdateModelFromStringList ();
-			RefreshList ();
-			StringListOption.ListChangedInvoke (sender, e);
-		}
+            var newValue = !string.IsNullOrEmpty(ValuePrefix) ? ValuePrefix + textField : newText;
 
-		void OnAddClicked (object sender, EventArgs e)
-		{
-			var defalutString = !string.IsNullOrEmpty (ValuePrefix) ? ValuePrefix + defaultValue : defaultValue;
+            StringList[row] = newValue;
+            UpdateModelFromStringList();
+            RefreshList();
+            StringListOption.ListChangedInvoke(sender, e);
+        }
 
-			try {
-				StringList.Add (defalutString);
+        void OnAddClicked(object sender, EventArgs e)
+        {
+            var defalutString = !string.IsNullOrEmpty(ValuePrefix) ? ValuePrefix + defaultValue : defaultValue;
 
-				UpdateModelFromStringList ();
-				RefreshList ();
+            try
+            {
+                StringList.Add(defalutString);
 
-				StringListOption.ListChangedInvoke (sender, e);
+                UpdateModelFromStringList();
+                RefreshList();
 
-			} catch {
-				return;
-			} finally {
-				// _addButton.accessibil.MakeAccessibilityAnnouncement (TranslationCatalog.GetString ("Row added"));
-			}
-		}
+                StringListOption.ListChangedInvoke(sender, e);
 
-		void OnRemoveClicked (object sender, EventArgs e)
-		{
-			int selectedRow = (int) _tableView.SelectedRow;
+            }
+            catch
+            {
+                return;
+            }
+            finally
+            {
+                // _addButton.accessibil.MakeAccessibilityAnnouncement (TranslationCatalog.GetString ("Row added"));
+            }
+        }
 
-			if (selectedRow < 0 || selectedRow >= StringList.Count) {
-				return;
-			}
+        void OnRemoveClicked(object sender, EventArgs e)
+        {
+            int selectedRow = (int)_tableView.SelectedRow;
 
-			try {
-				StringList.RemoveAt (selectedRow);
-				UpdateModelFromStringList ();
-				RefreshList ();
-				StringListOption.ListChangedInvoke (sender, e);
-			} catch {
-				return;
-			} finally {
-				//this.remove.Accessible.MakeAccessibilityAnnouncement (TranslationCatalog.GetString ("Row removed"));
-			}
-		}
+            if (selectedRow < 0 || selectedRow >= StringList.Count)
+            {
+                return;
+            }
 
-		void TableSelectLastItem ()
-		{
-			if (StringList.Count <= 0) {
-				return;
-			}
-			int selectRow = StringList.Count - 1;
+            try
+            {
+                StringList.RemoveAt(selectedRow);
+                UpdateModelFromStringList();
+                RefreshList();
+                StringListOption.ListChangedInvoke(sender, e);
+            }
+            catch
+            {
+                return;
+            }
+            finally
+            {
+                //this.remove.Accessible.MakeAccessibilityAnnouncement (TranslationCatalog.GetString ("Row removed"));
+            }
+        }
 
-			_tableView.SelectRow (selectRow, false);
-			_tableView.ScrollRowToVisible (selectRow);
-		}
+        void TableSelectLastItem()
+        {
+            if (StringList.Count <= 0)
+            {
+                return;
+            }
+            int selectRow = StringList.Count - 1;
 
-		void TableSelectFirstItem ()
-		{
-			if (StringList.Count <= 0) {
-				return;
-			}
-			_tableView.SelectRow (0, false);
-		}
+            _tableView.SelectRow(selectRow, false);
+            _tableView.ScrollRowToVisible(selectRow);
+        }
 
-		void RefreshList ()
-		{
-			_tableView.ReloadData ();
+        void TableSelectFirstItem()
+        {
+            if (StringList.Count <= 0)
+            {
+                return;
+            }
+            _tableView.SelectRow(0, false);
+        }
 
-			TableSelectLastItem ();
+        void RefreshList()
+        {
+            _tableView.ReloadData();
 
-			_removeButton.Enabled = StringList.Count > 0;
+            TableSelectLastItem();
 
-		}
-	}
+            _removeButton.Enabled = StringList.Count > 0;
 
-	class ListSource : NSTableViewSource {
-		StringListOptionVSMac Platform;
+        }
+    }
 
-		public ListSource (StringListOptionVSMac platform)
-		{
-			Platform = platform;
-		}
+    class ListSource : NSTableViewSource
+    {
+        StringListOptionVSMac Platform;
 
-		public override NSView GetViewForItem (NSTableView tableView, NSTableColumn tableColumn, nint row)
-		{
-			var view = (NSTableCellView) tableView.MakeView ("cell", this);
-			if (view == null) {
-				view = new NSTableCellView {
-					TextField = new NSTextField {
-						Frame = new CoreGraphics.CGRect (4, 5, tableColumn.Width, 20),
-						Hidden = false,
-						Bordered = false,
-						DrawsBackground = false
-					},
-					Identifier = "cell"
-				};
+        public ListSource(StringListOptionVSMac platform)
+        {
+            Platform = platform;
+        }
 
-				view.AddSubview (view.TextField);
+        public override NSView GetViewForItem(NSTableView tableView, NSTableColumn tableColumn, nint row)
+        {
+            var view = (NSTableCellView)tableView.MakeView("cell", this);
+            if (view == null)
+            {
+                view = new NSTableCellView
+                {
+                    TextField = new NSTextField
+                    {
+                        Frame = new CoreGraphics.CGRect(4, 5, tableColumn.Width, 20),
+                        Hidden = false,
+                        Bordered = false,
+                        DrawsBackground = false,
+                        Highlighted = false,
+                    },
+                    Identifier = "cell"
+                };
 
-				view.TextField.EditingEnded += Platform.OnValueEdited;
-			}
+                view.AddSubview(view.TextField);
 
-			view.TextField.Tag = row;
-			view.TextField.StringValue = Platform.StringListOption.Model.Value[(int) row];
+                view.TextField.EditingEnded += Platform.OnValueEdited;
+            }
 
-			return view;
-		}
+            view.TextField.Tag = row;
+            view.TextField.StringValue = Platform.StringListOption.Model.Value[(int)row];
 
-		public override nint GetRowCount (NSTableView tableView)
-		{
-			return Platform.StringListOption.Model.Value.Length;
-		}
+            return view;
+        }
 
-		public override nfloat GetRowHeight (NSTableView tableView, nint row)
-		{
-			return 30;
-		}
-	}
+        public override nint GetRowCount(NSTableView tableView)
+        {
+            return Platform.StringListOption.Model.Value.Length;
+        }
+
+        public override nfloat GetRowHeight(NSTableView tableView, nint row)
+        {
+            return 30;
+        }
+    }
 
 }

@@ -81,7 +81,7 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             var switchableView = new SwitchableGroupOption(BoolProp(true))
             {
                 Label = "iCloud",
-                Name = "Allows your application to store data in the cloud and lets users share their data across devices.",
+                Name = "Allows your application to store data in the cloud and lets users share their data across devices.Allows your application to store data in the cloud and lets users share their data across devices.Allows your application to store data in the cloud and lets users share their data across devices.Allows your application to store data in the cloud and lets users share their data across devices.",
                 Hint = "Hint: Allows your application to store data in the cloud and lets users share their data across devices.",
             };
 
