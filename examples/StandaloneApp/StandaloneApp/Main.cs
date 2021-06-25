@@ -90,7 +90,16 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
 
             ImmutableArray<string> list = ImmutableArray.Create("test1", "test2", "test3");
 
-            card4.AddOption(new StringListOption(ListProp(list), "default string") { Label = "Containers" });
+            var KeychainAccessGroupsList = new StringListOption(new ViewModelProperty<ImmutableArray<string>>("t", list))
+            {
+                AddToolTip = "Click to add an Keychain Access Group",
+                RemoveToolTip = "Click to remove the selected Keychain Access Group",
+                Label = "Keychain Groups",
+                DefaultValue = "BundleIdentifier",
+                PrefixValue = "AppIdentifierPrefix"
+            };
+
+            card4.AddOption(KeychainAccessGroupsList);
 
             //Signing 
             var signing = new OptionCard() { Label = "Signing" };

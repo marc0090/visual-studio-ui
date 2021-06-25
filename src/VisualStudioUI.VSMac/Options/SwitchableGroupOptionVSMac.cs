@@ -178,20 +178,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             _hintPopover.Show(bounds, button, NSRectEdge.MaxYEdge);
         }
 
-        private void UpdateChildOptions()
-        {
-
-            _optionView.AddSubview(_childrenView);
-
-            //if (_switchButton)
-            //{
-            //    _optionView.AddSubview(_childrenView);
-            //}
-            //else
-            //{
-            //    _childrenView.RemoveFromSuperview();
-            //}
-        }
     }
 
 }
