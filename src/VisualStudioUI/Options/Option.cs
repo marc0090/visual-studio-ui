@@ -28,7 +28,7 @@ namespace Microsoft.VisualStudioUI.Options
         public string? Description { get; set; } = null;
 
         /// <summary>
-        /// Hint, present, will cause a help button to show, pops up the hint message.
+        /// Hint, when present, will cause a help button to show, pops up the hint message.
         /// </summary>
         public string? Hint { get; set; } = null;
 
@@ -37,5 +37,11 @@ namespace Microsoft.VisualStudioUI.Options
         /// shown instead of the hint, taking its place in the UI.
         /// </summary>
         public ViewModelProperty<Message?>? ValidationMessage { get; set; } = null;
+
+        /// <summary>
+        /// When set, this option will only be shown when the specified ToggleButtonOption is
+        /// toggled on.
+        /// </summary>
+        public ToggleButtonOption? VisibilityDependsOn { get; set; }
     }
 }
