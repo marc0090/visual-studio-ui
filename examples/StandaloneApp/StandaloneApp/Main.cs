@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using Microsoft.VisualStudioUI.Options;
 using Microsoft.VisualStudioUI.Options.Models;
 
@@ -94,9 +93,27 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
 
             //Signing 
             var signing = new OptionCard() { Label = "Signing" };
+
+            var signingRadioGroup = new RadioButtonGroup();
+            var manualNew = new RadioButtonOption(signingRadioGroup, BoolProp(true))
+            {
+                Label = "Scheme",
+                ButtonLabel = "Manual Provisioning",
+                Description = "Set provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioning"
+            };
+
+            var autoNew = new RadioButtonOption(signingRadioGroup, BoolProp(false))
+            {
+                ButtonLabel = "Automatic Provisioning",
+                Description = "Set provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioning"
+            };
+
+            signing.AddOption(manualNew);
+            signing.AddOption(autoNew);
+
+
             bool isSelected = false;
             var manual = new ButtonOption(ButtonOption.ButtonType.Radio)
-
             {
                 IsSelected = BoolProp(isSelected),
                 Label = "Scheme",
@@ -161,8 +178,13 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             return cards;
         }
 
-        public static ViewModelProperty<bool> BoolProp(bool defaultValue) =>
-            new ViewModelProperty<bool>("boolProp", defaultValue);
+        public static ViewModelProperty<bool> BoolProp(bool defaultValue)
+        {
+            var prop = new ViewModelProperty<bool>("boolProp", defaultValue);
+            prop.Bind();
+            return prop;
+        }
+        
         public static ViewModelProperty<string> StringProp(string defaultValue) =>
             new ViewModelProperty<string>("stringProp", defaultValue);
         public static ViewModelProperty<ImmutableArray<string>> StringArrayProp(string[] defaultValue) =>
