@@ -8,7 +8,6 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
     {
         public static OptionCards CreateOptionCards()
         {
-            //return CreateInfoPlistUI();
             var card1 = new OptionCard()
             {
                 Label = "My Card"
@@ -91,81 +90,49 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
 
             card4.AddOption(new StringListOption(ListProp(list), "default string") { Label = "Containers" });
 
-            //Signing 
+            // Signing 
             var signing = new OptionCard() { Label = "Signing" };
 
+            ViewModelProperty<bool> automaticSigningEnabled = BoolProp(false);
+            ViewModelProperty<bool> manualSigningEnabled = BoolProp(!automaticSigningEnabled.Value);
+
             var signingRadioGroup = new RadioButtonGroup();
-            var manualNew = new RadioButtonOption(signingRadioGroup, BoolProp(true))
+            var manual = new RadioButtonOption(signingRadioGroup, manualSigningEnabled)
             {
                 Label = "Scheme",
                 ButtonLabel = "Manual Provisioning",
                 Description = "Set provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioning"
             };
 
-            var autoNew = new RadioButtonOption(signingRadioGroup, BoolProp(false))
+            var auto = new RadioButtonOption(signingRadioGroup, automaticSigningEnabled)
             {
                 ButtonLabel = "Automatic Provisioning",
                 Description = "Set provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioning"
             };
 
-            signing.AddOption(manualNew);
-            signing.AddOption(autoNew);
-
-
-            bool isSelected = false;
-            var manual = new ButtonOption(ButtonOption.ButtonType.Radio)
-            {
-                IsSelected = BoolProp(isSelected),
-                Label = "Scheme",
-                Name = "Manual Provisioning",
-                Description = "Set provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioning"
-            };
-            manual.IsSelected.Bind();
-
-            var auto = new ButtonOption(ButtonOption.ButtonType.Radio)
-            {
-                IsSelected = BoolProp(!isSelected),
-                Name = "Automatic Provisioning",
-                Description = "Set provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioning"
-            };
-            auto.IsSelected.Bind();
-
-            manual.SelectionChanged += (sbye, e) =>
-            {
-                if (manual.IsSelected.Value == true)
-                {
-                    isSelected = !isSelected;
-                    manual.IsSelected.Value = isSelected;
-                    auto.IsSelected.Value = !isSelected;
-                }
-            };
-
-            auto.SelectionChanged += (sbye, e) =>
-            {
-                if (auto.IsSelected.Value == true)
-                {
-                    isSelected = !isSelected;
-                    manual.IsSelected.Value = isSelected;
-                    auto.IsSelected.Value = !isSelected;
-                }
-            };
-
             signing.AddOption(manual);
             signing.AddOption(auto);
 
-            signing.AddOption(new CheckBoxOption(BoolProp(false))
+            var manualSigningOption1 = new CheckBoxOption(BoolProp(false))
             {
-                Label = "Orientations:",
-                ButtonLabel = "Portrait",
-                Description = "Set provisioningSet provisioningSet"
-            });
+                ButtonLabel = "Some option for manual signing",
+                VisibilityDependsOn = manual
+            };
+            signing.AddOption(manualSigningOption1);
 
-            signing.AddOption(new CheckBoxOption(BoolProp(false))
+
+            var autoSigningOption1 = new CheckBoxOption(BoolProp(false))
             {
-                Label = "Orientations:",
-                ButtonLabel = "Portrait",
-                Description = "Set provisioningSet provisioningSet. And here is more text, to be two lines."
-            });
+                ButtonLabel = "Some option for automatic signing",
+                VisibilityDependsOn = auto
+            };
+            var autoSigningOption2 = new CheckBoxOption(BoolProp(false))
+            {
+                ButtonLabel = "Another option for automatic signing",
+                VisibilityDependsOn = auto
+            };
+            signing.AddOption(autoSigningOption1);
+            signing.AddOption(autoSigningOption2);
 
             OptionCards cards = new OptionCards();
 
