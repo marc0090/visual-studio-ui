@@ -7,7 +7,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 {
     public class SeparatorOptionVSMac : OptionVSMac
     {
-        NSView _separatorView;
+        NSView? _separatorView;
 
         public SeparatorOptionVSMac(SeparatorOption option) : base(option)
         {

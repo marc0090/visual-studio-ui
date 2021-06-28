@@ -17,7 +17,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         public EditableComboBoxOption EditableComboBoxOption => (EditableComboBoxOption) Option;
 
-        protected override NSView Control
+        protected override NSView ControlView
         {
             get
             {

@@ -4,7 +4,7 @@ namespace Microsoft.VisualStudioUI.Options
 {
     /// <summary>
     /// An OptionCard represents a group of options, with an optional label.
-    /// In the UI, these may represented visually by a "card" - a rounded rect border
+    /// In the UI, these may be represented visually by a "card" - a rounded rect border
     /// that surrounds the option group.
     /// </summary>
     public class OptionCard

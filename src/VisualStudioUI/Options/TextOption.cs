@@ -2,6 +2,9 @@
 
 namespace Microsoft.VisualStudioUI.Options
 {
+    /// <summary>
+    /// A TextOption shows an editable string. The UI is typically an edit box.
+    /// </summary>
     public class TextOption : Option
     {
         public bool Editable { get; set; } = true;
