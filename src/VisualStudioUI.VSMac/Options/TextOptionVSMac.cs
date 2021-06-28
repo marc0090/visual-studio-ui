@@ -7,7 +7,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 {
     public class TextOptionVSMac : OptionWithLeftLabelVSMac
     {
-        NSTextField _textField;
+        private NSTextField? _textField;
 
         public TextOptionVSMac(TextOption option) : base(option)
         {
@@ -15,7 +15,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         public TextOption TextOption => ((TextOption) Option);
 
-        protected override NSView Control
+        protected override NSView ControlView
         {
             get
             {

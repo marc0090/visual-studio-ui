@@ -31,17 +31,16 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         public override OptionPlatform CreateSeparatorOptionPlatform(SeparatorOption separatorOption) =>
             new SeparatorOptionVSMac(separatorOption);
 
-        public override OptionPlatform
-            CreateSwitchableGroupOptionPlatform(SwitchableGroupOption switchableGroupOption) =>
+        public override OptionPlatform CreateSwitchableGroupOptionPlatform(SwitchableGroupOption switchableGroupOption) =>
             new SwitchableGroupOptionVSMac(switchableGroupOption);
 
-        public override OptionPlatform CreateStringListOptionPlatform(StringListOption stringListOption) =>
-            new StringListOptionVSMac(stringListOption);
+        public override OptionPlatform CreateStringListOptionPlatform(StringListOption stringListOption) => new StringListOptionVSMac(stringListOption);
+        public override OptionPlatform CreateImageViewOptionPlatform(ImageFileOption imageFileOption) => new ImageFileOptionVSMac(imageFileOption);
+        public override OptionPlatform CreateButtonOptionPlatform(ButtonOption buttonOption) => new ButtonOptionVSMac(buttonOption);
 
-        public override OptionPlatform CreateRadioButtonOptionPlatform(ButtonOption radioBtnOption) =>
-            new ButtonOptionVSMac(radioBtnOption);
-
-        public override OptionPlatform CreateImageViewOptionPlatform(ImageFileOption imageFileOption) =>
-            new ImageFileOptionVSMac(imageFileOption);
+        public override OptionPlatform CreateSwitchOptionPlatform(SwitchOption switchOption) => throw new NotImplementedException(); // new SwitchOptionVSMac(switchOption);
+        public override OptionPlatform CreateCheckBoxOptionPlatform(CheckBoxOption checkBoxOption) => new CheckBoxOptionVSMac(checkBoxOption);
+        public override OptionPlatform CreateRadioButtonOptionPlatform(RadioButtonOption radioButtonOption) => new RadioButtonOptionVSMac(radioButtonOption);
+        
     }
 }

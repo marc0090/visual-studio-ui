@@ -1,7 +1,5 @@
-﻿using System;
-using AppKit;
+﻿using AppKit;
 using Microsoft.VisualStudioUI.Options;
-using Microsoft.VisualStudioUI.Options.Models;
 
 namespace Microsoft.VisualStudioUI.VSMac.Options
 {
@@ -16,7 +14,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         public ImageFileOption TextOption => ((ImageFileOption) Option);
 
-        protected override NSView Control
+        protected override NSView ControlView
         {
             get
             {

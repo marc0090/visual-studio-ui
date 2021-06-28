@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Collections.Immutable;
 using AppKit;
 using Microsoft.VisualStudioUI.Options;
@@ -20,7 +19,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         public ComboBoxOption<TItem> ComboBoxOption => ((ComboBoxOption<TItem>)Option);
 
-        protected override NSView Control
+        protected override NSView ControlView
         {
             get
             {

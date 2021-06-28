@@ -3,6 +3,9 @@ using Microsoft.VisualStudioUI.Options.Models;
 
 namespace Microsoft.VisualStudioUI.Options
 {
+    /// <summary>
+    /// This class will go away, being replaced by RadioButtonOption, CheckBoxOption, and SwitchOption. 
+    /// </summary>
     public class ButtonOption : Option
     {
         public enum ButtonType
@@ -27,7 +30,7 @@ namespace Microsoft.VisualStudioUI.Options
         public ButtonOption(ButtonType btnType = ButtonType.Normal)
         {
             Type = btnType;
-            Platform = OptionFactoryPlatform.Instance.CreateRadioButtonOptionPlatform(this);
+            Platform = OptionFactoryPlatform.Instance.CreateButtonOptionPlatform(this);
         }
     }
 }

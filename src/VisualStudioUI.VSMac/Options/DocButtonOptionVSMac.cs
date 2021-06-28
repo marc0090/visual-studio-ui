@@ -16,7 +16,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         public DocButtonOption DocButtonOption => ((DocButtonOption) Option);
 
-        protected override NSView Control
+        protected override NSView ControlView
         {
             get
             {
