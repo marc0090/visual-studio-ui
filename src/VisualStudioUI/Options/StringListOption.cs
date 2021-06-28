@@ -1,4 +1,13 @@
-﻿using System;
+﻿//
+// SwitchableGroupOption.cs
+//
+// Author:
+//       marcbookpro19 <v-marcguo@microsoft.com>
+//
+// Copyright (c) 2021 
+//
+
+using System;
 using System.Collections.Immutable;
 using Microsoft.VisualStudioUI.Options.Models;
 

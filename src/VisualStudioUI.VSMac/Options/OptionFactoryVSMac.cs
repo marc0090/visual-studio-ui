@@ -41,6 +41,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         public override OptionPlatform CreateSwitchOptionPlatform(SwitchOption switchOption) => throw new NotImplementedException(); // new SwitchOptionVSMac(switchOption);
         public override OptionPlatform CreateCheckBoxOptionPlatform(CheckBoxOption checkBoxOption) => new CheckBoxOptionVSMac(checkBoxOption);
         public override OptionPlatform CreateRadioButtonOptionPlatform(RadioButtonOption radioButtonOption) => new RadioButtonOptionVSMac(radioButtonOption);
-        
+
+        public override OptionPlatform CreateCheckBoxListOptionPlatform(CheckBoxListOption checkBoxListOption) => new CheckBoxListOptionVSMac(checkBoxListOption);
+
     }
 }

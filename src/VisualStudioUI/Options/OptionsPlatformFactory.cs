@@ -41,5 +41,8 @@ namespace Microsoft.VisualStudioUI.Options
         public abstract OptionPlatform CreateSwitchOptionPlatform(SwitchOption switchOption);
         public abstract OptionPlatform CreateCheckBoxOptionPlatform(CheckBoxOption checkBoxOption);
         public abstract OptionPlatform CreateRadioButtonOptionPlatform(RadioButtonOption radioButtonOption);
+
+        public abstract OptionPlatform CreateCheckBoxListOptionPlatform(CheckBoxListOption checkBoxListOption);
+
     }
 }

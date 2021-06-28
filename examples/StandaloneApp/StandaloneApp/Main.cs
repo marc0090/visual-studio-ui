@@ -99,6 +99,38 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
 
             card4.AddOption(KeychainAccessGroupsList);
 
+
+            var card5 = new OptionCard();
+            var switchableView5 = new SwitchableGroupOption(BoolProp(true))
+            {
+                Label = "Wallet",
+                Name = "Allows your application to manage passes, tickets, gift cards, and loyalty cards. It supports a variety of bar code formats."
+            };
+            var passTypeRadioGroup = new RadioButtonGroup();
+            var alltype = new RadioButtonOption(passTypeRadioGroup, BoolProp(false))
+            {
+                Label = "Pass Types",
+                ButtonLabel = "Allow all team pass types",
+            };
+
+            var subtype = new RadioButtonOption(passTypeRadioGroup, BoolProp(false))
+            {
+                ButtonLabel = "Allow subset of pass types",
+            };
+
+            card5.AddOption(switchableView5);
+            card5.AddOption(alltype);
+            card5.AddOption(subtype);
+            ImmutableArray<CheckBoxlistItem> CheckBoxList = ImmutableArray.Create(
+                new CheckBoxlistItem("test1", false),
+                new CheckBoxlistItem("test2", false),
+                new CheckBoxlistItem("test3", false),
+                new CheckBoxlistItem("test1", false)
+             );
+
+            var testCheckBoxList = new CheckBoxListOption(new ViewModelProperty<ImmutableArray<CheckBoxlistItem>>("", CheckBoxList));
+            card5.AddOption(testCheckBoxList);
+
             // Signing 
             var signing = new OptionCard() { Label = "Signing" };
 
@@ -148,6 +180,7 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             cards.AddCard(signing);
             cards.AddCard(card3);
             cards.AddCard(card4);
+            cards.AddCard(card5);
             cards.AddCard(card1);
             cards.AddCard(card2);
 
@@ -160,12 +193,16 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             prop.Bind();
             return prop;
         }
-        
+
         public static ViewModelProperty<string> StringProp(string defaultValue) =>
             new ViewModelProperty<string>("stringProp", defaultValue);
         public static ViewModelProperty<ImmutableArray<string>> StringArrayProp(string[] defaultValue) =>
             new ViewModelProperty<ImmutableArray<string>>("stringArrayProp", ImmutableArray.Create(defaultValue));
 
-        public static ViewModelProperty<ImmutableArray<string>> ListProp(ImmutableArray<string> defaultValue) => new ViewModelProperty<ImmutableArray<string>>("listProp", defaultValue);
+        public static ViewModelProperty<bool[]> BoolArrayProp(bool[] defaultValue) =>
+           new ViewModelProperty<bool[]>("boolArrayProp", defaultValue);
+
+        public static ViewModelProperty<ImmutableArray<string>> ListProp(ImmutableArray<string> defaultValue) =>
+            new ViewModelProperty<ImmutableArray<string>>("listProp", defaultValue);
     }
 }
