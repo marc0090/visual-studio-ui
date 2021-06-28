@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using AppKit;
 using Microsoft.VisualStudioUI.Options;
+using Microsoft.VisualStudioUI.Options.Models;
 
 namespace Microsoft.VisualStudioUI.VSMac.Options
 {
@@ -112,8 +113,26 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
             foreach (Option option in OptionCard.Options)
             {
-                var optionVSMac = (OptionVSMac) option.Platform;
-                optionsStackView.AddArrangedSubview(optionVSMac.View);
+                NSView optionView = ((OptionVSMac) option.Platform).View;
+
+                // If the option's visibility depends on a button, hide if it's not initially showing and update the
+                // hidden property if the button changes. For NSStackViews, hidden views are automatically detached,
+                // excluded from the layout.
+                ToggleButtonOption? visibilityDependsOn = option.VisibilityDependsOn;
+                if (visibilityDependsOn != null)
+                {
+                    ViewModelProperty<bool> buttonProperty = visibilityDependsOn.Property;
+
+                    if (!buttonProperty.Value)
+                        optionView.Hidden = true;
+                    
+                    buttonProperty.PropertyChanged += delegate
+                    {
+                        optionView.Hidden = !buttonProperty.Value;
+                    };
+                }
+                
+                optionsStackView.AddArrangedSubview(optionView);
             }
 
             return cardView;
