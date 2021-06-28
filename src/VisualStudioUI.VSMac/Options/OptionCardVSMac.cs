@@ -101,15 +101,14 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             optionsStackView.EdgeInsets = new AppKit.NSEdgeInsets(0, 0, 0, 0);
             optionsStackView.Spacing = 0f;
             optionsStackView.Orientation = NSUserInterfaceLayoutOrientation.Vertical;
-            optionsStackView.Distribution = NSStackViewDistribution.EqualSpacing;
+            optionsStackView.Distribution = NSStackViewDistribution.Fill;
 
             cardView.AddSubview(optionsStackView);
-            var optionsStackWidthConstraint = optionsStackView.WidthAnchor.ConstraintEqualToConstant(600f);
-            optionsStackWidthConstraint.Active = true;
+            optionsStackView.WidthAnchor.ConstraintEqualToConstant(600f).Active = true;
 
-            optionsStackView.LeftAnchor.ConstraintEqualToAnchor(cardView.LeftAnchor, 20f).Active = true;
-            optionsStackView.TopAnchor.ConstraintEqualToAnchor(cardView.TopAnchor, 20f + titleOffset).Active = true;
+            optionsStackView.LeadingAnchor.ConstraintEqualToAnchor(cardView.LeadingAnchor, 20f).Active = true;
             optionsStackView.BottomAnchor.ConstraintEqualToAnchor(cardView.BottomAnchor, -20f).Active = true;
+            optionsStackView.TopAnchor.ConstraintEqualToAnchor(cardView.TopAnchor, 20f + titleOffset).Active = true;
 
             foreach (Option option in OptionCard.Options)
             {
@@ -118,37 +117,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             }
 
             return cardView;
-
-#if OLD
-			contentGrid = new NSGridView
-			{
-				RowSpacing = (int)Alignments.Spacing.Row,
-				ColumnSpacing = (int)Alignments.Spacing.Column,
-				X = NSGridCellPlacement.Trailing
-			};
-
-			foreach (OptionsWidget optionsWidget in children)
-			{
-				var label = new NSTextField
-				{
-					StringValue = optionsWidget.Label,
-					DrawsBackground = false,
-					Bordered = false,
-					Editable = false,
-					Selectable = false,
-					Alignment = NSTextAlignment.Right
-				};
-
-				label.SizeToFit();
-
-				NSView dataUIElement = optionsWidget.GetDataUIElement(label);
-				contentGrid.AddRow(new NSView[]
-				{
-					label, dataUIElement
-				});
-				
-			}
-#endif
         }
     }
 }

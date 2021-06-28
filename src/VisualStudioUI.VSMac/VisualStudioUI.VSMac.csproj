@@ -57,11 +57,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Options\CheckBoxOptionVSMac.cs" />
     <Compile Include="Options\DocButtonOptionVSMac.cs" />
     <Compile Include="Options\EditableComboBoxOptionVSMac.cs" />
     <Compile Include="Options\OptionCardsVSMac.cs" />
     <Compile Include="Options\OptionWithLeftLabelVSMac.cs" />
     <Compile Include="Options\OptionVSMac.cs" />
+    <Compile Include="Options\RadioButtonOptionVSMac.cs" />
     <Compile Include="Options\SeparatorOptionVSMac.cs" />
     <Compile Include="Options\WarningOrErrorSeverity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -35,7 +35,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             {
                 StringList.Add(item);
             }
-
         }
 
         void UpdateModelFromStringList()
@@ -43,7 +42,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             StringListOption.Model.PropertyChanged -= OnStringsListChanged;
             StringListOption.Model.Value = StringList.ToImmutableArray();
             StringListOption.Model.PropertyChanged += OnStringsListChanged;
-
         }
 
         public override NSView View
