@@ -5,4 +5,5 @@
 *.resx text
 *.sh text eol=lf
 *.sln text eol=crlf
+*.csproj text eol=crlf
 *.targets text
