@@ -84,7 +84,7 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             };
 
             card4.AddOption(switchableView);
-
+            //card4.AddOption(new SpinnerOption());
 
             ImmutableArray<string> list = ImmutableArray.Create("test1", "test2", "test3");
 

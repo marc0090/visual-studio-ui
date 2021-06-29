@@ -12,7 +12,7 @@ namespace Microsoft.VisualStudioUI.Options.Models
     public class CheckBoxlistItem
     {
         public string Title { get; }
-        public bool Selected { get; }
+        public bool Selected { get; set; }
 
         public CheckBoxlistItem(string title, bool selected)
         {

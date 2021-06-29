@@ -22,6 +22,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         private NSTextField _description;
         private NSButton _helpButton;
         private HintPopover _hintPopover;
+        private NSProgressIndicator _progressIndicator;
 
         public SwitchableGroupOptionVSMac(SwitchableGroupOption option) : base(option)
         {
@@ -73,26 +74,35 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 _title.Editable = false;
                 _title.Bordered = false;
                 _title.DrawsBackground = false;
-                _title.PreferredMaxLayoutWidth = 1;
                 _title.StringValue = Option.Label;
                 _title.Alignment = NSTextAlignment.Left;
                 _title.Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize, NSFontWeight.Bold);
                 _title.TextColor = NSColor.LabelColor;
                 _title.TranslatesAutoresizingMaskIntoConstraints = false;
+                _title.SizeToFit();
 
                 _optionView.AddSubview(_title);
 
-                var _titleWidthConstraint = _title.WidthAnchor.ConstraintEqualToConstant(467f);
-                _titleWidthConstraint.Priority = (int)NSLayoutPriority.DefaultLow;
-                _titleWidthConstraint.Active = true;
-                var _titleHeightConstraint = _title.HeightAnchor.ConstraintEqualToConstant(16f);
-                _titleHeightConstraint.Active = true;
+                //var _titleWidthConstraint = _title.WidthAnchor.ConstraintEqualToConstant(467f);
+                // _titleWidthConstraint.Priority = (int)NSLayoutPriority.DefaultLow;
+                // _titleWidthConstraint.Active = true;
+                // var _titleHeightConstraint = _title.HeightAnchor.ConstraintEqualToConstant(16f);
+                // _titleHeightConstraint.Active = true;
 
-                _title.TrailingAnchor.ConstraintEqualToAnchor(_optionView.TrailingAnchor, -32f).Active = true;
+                // _title.TrailingAnchor.ConstraintEqualToAnchor(_optionView.TrailingAnchor, -32f).Active = true;
                 _title.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 101f).Active = true;
                 _title.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 24f).Active = true;
             }
 
+            _progressIndicator = new NSProgressIndicator(new CoreGraphics.CGRect(0, 0, 18, 18));
+            _progressIndicator.Style = NSProgressIndicatorStyle.Spinning;
+            _progressIndicator.ControlSize = NSControlSize.Small;
+            _progressIndicator.IsDisplayedWhenStopped = false;
+            _progressIndicator.TranslatesAutoresizingMaskIntoConstraints = false;
+            _optionView.AddSubview(_progressIndicator);
+
+            _progressIndicator.LeadingAnchor.ConstraintEqualToAnchor(_title.TrailingAnchor, 6).Active = true;
+            _progressIndicator.CenterYAnchor.ConstraintEqualToAnchor(_title.CenterYAnchor).Active = true;
 
             if (!string.IsNullOrEmpty(Option.Label))
             {
@@ -164,7 +174,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         }
 
-        void ShowHintPopover(string message, NSButton button)
+        private void ShowHintPopover(string message, NSButton button)
         {
             _hintPopover?.Close();
             _hintPopover?.Dispose();
@@ -175,6 +185,18 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
             var bounds = button.Bounds;
             _hintPopover.Show(bounds, button, NSRectEdge.MaxYEdge);
+        }
+
+        public void ShowSpinner(bool isShow)
+        {
+            if (isShow)
+            {
+                _progressIndicator.StartAnimation(null);
+            }
+            else
+            {
+                _progressIndicator.StopAnimation(null);
+            }
         }
 
     }

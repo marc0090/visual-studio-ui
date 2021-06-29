@@ -12,22 +12,22 @@ using Microsoft.VisualStudioUI.Options.Models;
 
 namespace Microsoft.VisualStudioUI.Options
 {
-	public class SwitchableGroupOption : Option
-	{
-		public ViewModelProperty<bool> IsOn { get; }
+    public class SwitchableGroupOption : Option
+    {
+        public ViewModelProperty<bool> IsOn { get; }
 
-		public event EventHandler? SwitchChanged;
+        public event EventHandler? SwitchChanged;
 
 
-		public void SwitchChangedInvoke(object sender, EventArgs e)
-		{
-			SwitchChanged?.Invoke(sender, e);
-		}
+        public void SwitchChangedInvoke(object sender, EventArgs e)
+        {
+            SwitchChanged?.Invoke(sender, e);
+        }
 
-		public SwitchableGroupOption(ViewModelProperty<bool> isOn)
-		{
-			IsOn = isOn;
-			Platform = OptionFactoryPlatform.Instance.CreateSwitchableGroupOptionPlatform(this);
-		}
-	}
+        public SwitchableGroupOption(ViewModelProperty<bool> isOn)
+        {
+            IsOn = isOn;
+            Platform = OptionFactoryPlatform.Instance.CreateSwitchableGroupOptionPlatform(this);
+        }
+    }
 }
