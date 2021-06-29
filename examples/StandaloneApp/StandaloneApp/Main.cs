@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using Microsoft.VisualStudioUI.Options;
+
 using Microsoft.VisualStudioUI.Options.Models;
 
 namespace Microsoft.VisualStudioUI.StandaloneApp
@@ -84,7 +85,6 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             };
 
             card4.AddOption(switchableView);
-            //card4.AddOption(new SpinnerOption());
 
             ImmutableArray<string> list = ImmutableArray.Create("test1", "test2", "test3");
 

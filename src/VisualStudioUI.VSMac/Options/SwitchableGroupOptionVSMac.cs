@@ -58,7 +58,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
             _switchButton.Activated += SwitchButtonActivated; ;
 
-            ((SwitchableGroupOption)Option).IsOn.PropertyChanged += SwitchPropertyChanged;
+            SwitchableGroupOption.IsOn.PropertyChanged += SwitchPropertyChanged;
+            SwitchableGroupOption.ShowSpinner.PropertyChanged += SpinnerChanged;
 
             _optionView.AddSubview(_switchButton);
             var _switchButtonWidthConstraint = _switchButton.WidthAnchor.ConstraintEqualToConstant(38f);
@@ -83,13 +84,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                 _optionView.AddSubview(_title);
 
-                //var _titleWidthConstraint = _title.WidthAnchor.ConstraintEqualToConstant(467f);
-                // _titleWidthConstraint.Priority = (int)NSLayoutPriority.DefaultLow;
-                // _titleWidthConstraint.Active = true;
-                // var _titleHeightConstraint = _title.HeightAnchor.ConstraintEqualToConstant(16f);
-                // _titleHeightConstraint.Active = true;
-
-                // _title.TrailingAnchor.ConstraintEqualToAnchor(_optionView.TrailingAnchor, -32f).Active = true;
                 _title.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 101f).Active = true;
                 _title.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 24f).Active = true;
             }
@@ -187,9 +181,9 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             _hintPopover.Show(bounds, button, NSRectEdge.MaxYEdge);
         }
 
-        public void ShowSpinner(bool isShow)
+        public void SpinnerChanged(object sender, ViewModelPropertyChangedEventArgs e)
         {
-            if (isShow)
+            if (SwitchableGroupOption.ShowSpinner.Value)
             {
                 _progressIndicator.StartAnimation(null);
             }
