@@ -18,7 +18,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         public StringListOptionVSMac(StringListOption option) : base(option)
         {
-            option.Model.PropertyChanged += OnStringsListChanged;
         }
 
         private void UpdateStringListFromModel()
@@ -143,6 +142,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 _optionView = vContainer;
 
             }
+            StringListOption.Model.PropertyChanged += OnStringsListChanged;
 
             UpdateStringListFromModel();
         }
@@ -231,6 +231,9 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             {
                 return;
             }
+            //fix reference bug when selected row in textfield editing state
+            NSTableRowView? view = _tableView.GetRowView(selectedRow, false);
+            view.Window.MakeFirstResponder(null);
 
             try
             {

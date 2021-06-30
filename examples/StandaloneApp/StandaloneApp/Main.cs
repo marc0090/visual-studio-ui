@@ -77,14 +77,14 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
 
 
             var card4 = new OptionCard();
-            var switchableView = new SwitchableGroupOption(BoolProp(true))
+            var switchableOption = new SwitchableGroupOption(BoolProp(true))
             {
                 Label = "iCloud",
                 Name = "Allows your application to store data in the cloud and lets users share their data across devices.Allows your application to store data in the cloud and lets users share their data across devices.Allows your application to store data in the cloud and lets users share their data across devices.Allows your application to store data in the cloud and lets users share their data across devices.",
                 Hint = "Hint: Allows your application to store data in the cloud and lets users share their data across devices.",
             };
 
-            card4.AddOption(switchableView);
+            card4.AddOption(switchableOption);
 
             ImmutableArray<string> list = ImmutableArray.Create("test1", "test2", "test3");
 
@@ -101,7 +101,7 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
 
 
             var card5 = new OptionCard();
-            var switchableView5 = new SwitchableGroupOption(BoolProp(true))
+            var switchableOption5 = new SwitchableGroupOption(BoolProp(true))
             {
                 Label = "Wallet",
                 Name = "Allows your application to manage passes, tickets, gift cards, and loyalty cards. It supports a variety of bar code formats."
@@ -118,7 +118,7 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
                 ButtonLabel = "Allow subset of pass types",
             };
 
-            card5.AddOption(switchableView5);
+            card5.AddOption(switchableOption5);
             card5.AddOption(alltype);
             card5.AddOption(subtype);
             ImmutableArray<CheckBoxlistItem> CheckBoxList = ImmutableArray.Create(

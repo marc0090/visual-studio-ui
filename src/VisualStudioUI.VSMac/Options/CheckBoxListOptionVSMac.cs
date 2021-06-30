@@ -35,14 +35,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         public void CreateView()
         {
-
-            var vContainer = new NSStackView
-            {
-                Orientation = NSUserInterfaceLayoutOrientation.Vertical,
-                Alignment = NSLayoutAttribute.Left
-
-            };
-
             _tableView = new NSTableView() { HeaderView = null, Source = new CheckBoxSource(this) };
             _tableView.GridStyleMask = NSTableViewGridStyle.DashedHorizontalGridLine;
             _tableView.SelectionHighlightStyle = NSTableViewSelectionHighlightStyle.None;
@@ -57,10 +49,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 AutohidesScrollers = true,
 
             };
-            scrolledView.HeightAnchor.ConstraintEqualToConstant(72).Active = true;
-            scrolledView.WidthAnchor.ConstraintEqualToConstant(450).Active = true;
 
-            vContainer.AddArrangedSubview(scrolledView);
+            _optionView = new NSStackView() { Orientation = NSUserInterfaceLayoutOrientation.Horizontal, Alignment = NSLayoutAttribute.Top };
 
             if (!string.IsNullOrEmpty(Option.Label))
             {
@@ -76,13 +66,13 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                 _optionView = new NSStackView() { Orientation = NSUserInterfaceLayoutOrientation.Horizontal, Alignment = NSLayoutAttribute.Top };
                 _optionView.AddArrangedSubview(left);
-                _optionView.AddArrangedSubview(vContainer);
             }
-            else
-            {
-                _optionView = vContainer;
 
-            }
+            _optionView.AddArrangedSubview(scrolledView);
+
+            scrolledView.HeightAnchor.ConstraintEqualToConstant(72).Active = true;
+            scrolledView.WidthAnchor.ConstraintEqualToConstant(450).Active = true;
+            scrolledView.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 101).Active = true;
 
         }
 

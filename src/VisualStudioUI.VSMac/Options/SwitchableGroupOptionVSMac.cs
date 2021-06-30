@@ -56,7 +56,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             _switchButton.TranslatesAutoresizingMaskIntoConstraints = false;
             _switchButton.AccessibilityHelp = "Provides a control";
 
-            _switchButton.Activated += SwitchButtonActivated; ;
+            _switchButton.Activated += SwitchButtonActivated;
 
             SwitchableGroupOption.IsOn.PropertyChanged += SwitchPropertyChanged;
             SwitchableGroupOption.ShowSpinner.PropertyChanged += SpinnerChanged;

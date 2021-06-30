@@ -37,6 +37,7 @@ namespace Microsoft.VisualStudioUI.Options
             AddToolTip = addToolTip;
             RemoveToolTip = removeToolTip;
             Model = model;
+            Model.Bind();
             Platform = OptionFactoryPlatform.Instance.CreateStringListOptionPlatform(this);
         }
     }

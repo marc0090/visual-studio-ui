@@ -29,6 +29,9 @@ namespace Microsoft.VisualStudioUI.Options
         {
             IsOn = isOn;
             ShowSpinner = new ViewModelProperty<bool>("showSpinner", false);
+
+            IsOn.Bind();
+            ShowSpinner.Bind();
             Platform = OptionFactoryPlatform.Instance.CreateSwitchableGroupOptionPlatform(this);
         }
     }
