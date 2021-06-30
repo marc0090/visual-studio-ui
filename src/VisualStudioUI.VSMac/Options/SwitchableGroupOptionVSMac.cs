@@ -23,6 +23,10 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         private NSButton _helpButton;
         private HintPopover _hintPopover;
         private NSProgressIndicator _progressIndicator;
+        private NSStackView _childrenControl;
+
+        NSLayoutConstraint _descriptionBottomeConstrains;
+        NSLayoutConstraint _childrenControlBottomeConstrains;
 
         public SwitchableGroupOptionVSMac(SwitchableGroupOption option) : base(option)
         {
@@ -46,13 +50,15 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         private void CreateView()
         {
+            bool enable = ((SwitchableGroupOption)Option).IsOn.Value;
+
             _optionView = new NSStackView() { Orientation = NSUserInterfaceLayoutOrientation.Vertical };
             _optionView.WantsLayer = true;
             _optionView.TranslatesAutoresizingMaskIntoConstraints = false;
 
             _switchButton = new NSSwitch();
             _switchButton.ControlSize = NSControlSize.Regular;
-            _switchButton.State = ((SwitchableGroupOption)Option).IsOn.Value ? 1 : 0;
+            _switchButton.State = enable ? 1 : 0;
             _switchButton.TranslatesAutoresizingMaskIntoConstraints = false;
             _switchButton.AccessibilityHelp = "Provides a control";
 
@@ -62,9 +68,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             SwitchableGroupOption.ShowSpinner.PropertyChanged += SpinnerChanged;
 
             _optionView.AddSubview(_switchButton);
-            var _switchButtonWidthConstraint = _switchButton.WidthAnchor.ConstraintEqualToConstant(38f);
-            _switchButtonWidthConstraint.Active = true;
-
+            _switchButton.WidthAnchor.ConstraintEqualToConstant(38f).Active = true;
+            _switchButton.HeightAnchor.ConstraintEqualToConstant(38f).Active = true;
             _switchButton.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 48f).Active = true;
             _switchButton.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 30f).Active = true;
 
@@ -84,6 +89,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                 _optionView.AddSubview(_title);
 
+                //_title.WidthAnchor.ConstraintEqualToConstant(38f).Active = true;
+                //_title.HeightAnchor.ConstraintEqualToConstant(28f).Active = true;
                 _title.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 101f).Active = true;
                 _title.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 24f).Active = true;
             }
@@ -115,7 +122,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                 _description.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 101f).Active = true;
                 _description.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 42f).Active = true;
-                _description.BottomAnchor.ConstraintEqualToAnchor(_optionView.BottomAnchor, -21).Active = true;
 
                 var bestHeight = _description.Cell.CellSizeForBounds(new CoreGraphics.CGRect(0, 0, 354, 600)).Height;
 
@@ -123,6 +129,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 _descriptionHeightConstraint.Active = true;
                 var _descriptionWidthConstraint = _description.WidthAnchor.ConstraintEqualToConstant(354f);
                 _descriptionWidthConstraint.Active = true;
+                _descriptionBottomeConstrains = _description.BottomAnchor.ConstraintEqualToAnchor(_optionView.BottomAnchor, -20);
             }
 
             if (!string.IsNullOrEmpty(Option.Hint))
@@ -148,16 +155,55 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             var _optionViewWidthConstraint = _optionView.WidthAnchor.ConstraintEqualToConstant(600f);
             _optionViewWidthConstraint.Active = true;
 
+            _childrenControl = new NSStackView()
+            {
+                Orientation = NSUserInterfaceLayoutOrientation.Vertical,
+                Spacing = 10,
+                Distribution = NSStackViewDistribution.Fill,
+                TranslatesAutoresizingMaskIntoConstraints = false
+            };
+
+            foreach (Option option in SwitchableGroupOption.ChildrenOptions)
+            {
+                NSView optionView = ((OptionVSMac)option.Platform).View;
+                _childrenControl.AddArrangedSubview(optionView);
+            }
+
+            _optionView.AddSubview(_childrenControl);
+
+            _childrenControl.TopAnchor.ConstraintEqualToAnchor(_description.BottomAnchor, 10).Active = true;
+            _childrenControl.WidthAnchor.ConstraintEqualToAnchor(_optionView.WidthAnchor).Active = true;
+            _childrenControl.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 20f).Active = true;
+            _childrenControlBottomeConstrains = _childrenControl.BottomAnchor.ConstraintEqualToAnchor(_optionView.BottomAnchor, -20f);
+
+            ShowChildrenOption(enable);
         }
 
+        private void ShowChildrenOption(bool enable)
+        {
+            if (enable)
+            {
+                _childrenControl.Hidden = false;
+                _childrenControlBottomeConstrains.Active = true;
+                _descriptionBottomeConstrains.Active = false;
+            }
+            else
+            {
+                _childrenControl.Hidden = true;
+                _childrenControlBottomeConstrains.Active = false;
+                _descriptionBottomeConstrains.Active = true;
+            }
+        }
 
         private void SwitchButtonActivated(object sender, EventArgs e)
         {
+            bool enable = (_switchButton.State == 1);
+
             ((SwitchableGroupOption)Option).IsOn.PropertyChanged -= SwitchPropertyChanged;
-            ((SwitchableGroupOption)Option).IsOn.Value = (_switchButton.State == 1);
+            ((SwitchableGroupOption)Option).IsOn.Value = enable;
             ((SwitchableGroupOption)Option).SwitchChangedInvoke(sender, e);
             ((SwitchableGroupOption)Option).IsOn.PropertyChanged += SwitchPropertyChanged;
-
+            ShowChildrenOption(enable);
         }
 
         private void SwitchPropertyChanged(object sender, ViewModelPropertyChangedEventArgs e)

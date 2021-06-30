@@ -10,7 +10,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
     public class StringListOptionVSMac : OptionVSMac
     {
-        private NSStackView _optionView;
+        private NSView _optionView;
         private NSTableView _tableView;
         private NSButton _addButton, _removeButton;
 
@@ -55,18 +55,20 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         public void CreateView()
         {
+            _optionView = new NSView();// { Orientation = NSUserInterfaceLayoutOrientation.Vertical };
+            _optionView.WantsLayer = true;
+            _optionView.TranslatesAutoresizingMaskIntoConstraints = false;
 
-            var vContainer = new NSStackView
+
+
+            _tableView = new NSTableView()
             {
-                Orientation = NSUserInterfaceLayoutOrientation.Vertical,
-                Alignment = NSLayoutAttribute.Left
-
+                HeaderView = null,
+                Source = new ListSource(this),
+                TranslatesAutoresizingMaskIntoConstraints = false
             };
-
-            _tableView = new NSTableView() { HeaderView = null, Source = new ListSource(this) };
             _tableView.GridStyleMask = NSTableViewGridStyle.DashedHorizontalGridLine;
             _tableView.AddColumn(new NSTableColumn());
-
             var scrolledView = new NSScrollView()
             {
                 DocumentView = _tableView,
@@ -74,11 +76,13 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 HasVerticalScroller = true,
                 HasHorizontalScroller = true,
                 AutohidesScrollers = true,
+                TranslatesAutoresizingMaskIntoConstraints = false
             };
+
+            _optionView.AddSubview(scrolledView);
+
             scrolledView.HeightAnchor.ConstraintEqualToConstant(72).Active = true;
             scrolledView.WidthAnchor.ConstraintEqualToConstant(450).Active = true;
-
-            vContainer.AddArrangedSubview(scrolledView);
 
             _addButton = new NSButton
             {
@@ -92,8 +96,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 ToolTip = StringListOption.AddToolTip
             };
 
-            _addButton.WidthAnchor.ConstraintEqualToConstant(28).Active = true;
-            _addButton.HeightAnchor.ConstraintEqualToConstant(21).Active = true;
             _addButton.Layer.BackgroundColor = NSColor.TextBackground.CGColor;
             _addButton.Layer.CornerRadius = 5;
             _addButton.Activated += OnAddClicked;
@@ -109,17 +111,12 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 TranslatesAutoresizingMaskIntoConstraints = false,
                 ToolTip = StringListOption.RemoveToolTip
             };
-            _removeButton.WidthAnchor.ConstraintEqualToConstant(28).Active = true;
-            _removeButton.HeightAnchor.ConstraintEqualToConstant(21).Active = true;
             _removeButton.Activated += OnRemoveClicked;
             _removeButton.Layer.BackgroundColor = NSColor.TextBackground.CGColor;
             _removeButton.Layer.CornerRadius = 5;
 
-            var h = new NSStackView() { Orientation = NSUserInterfaceLayoutOrientation.Horizontal };
-            h.AddArrangedSubview(_addButton);
-            h.AddArrangedSubview(_removeButton);
-
-            vContainer.AddArrangedSubview(h);
+            _optionView.AddSubview(_addButton);
+            _optionView.AddSubview(_removeButton);
 
             if (!string.IsNullOrEmpty(Option.Label))
             {
@@ -132,16 +129,29 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 left.Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize);
                 left.TextColor = NSColor.LabelColor;
                 left.TranslatesAutoresizingMaskIntoConstraints = false;
-
-                _optionView = new NSStackView() { Orientation = NSUserInterfaceLayoutOrientation.Horizontal, Alignment = NSLayoutAttribute.Top };
-                _optionView.AddArrangedSubview(left);
-                _optionView.AddArrangedSubview(vContainer);
+                left.SizeToFit();
+                _optionView.AddSubview(left);
+                left.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor).Active = true;
+                left.TrailingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 120).Active = true;
+                left.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor).Active = true;
             }
-            else
-            {
-                _optionView = vContainer;
 
-            }
+            _addButton.WidthAnchor.ConstraintEqualToConstant(28).Active = true;
+            _addButton.HeightAnchor.ConstraintEqualToConstant(21).Active = true;
+            _removeButton.WidthAnchor.ConstraintEqualToConstant(28).Active = true;
+            _removeButton.HeightAnchor.ConstraintEqualToConstant(21).Active = true;
+
+            _optionView.WidthAnchor.ConstraintEqualToConstant(640f).Active = true;
+
+            _addButton.TopAnchor.ConstraintEqualToAnchor(scrolledView.BottomAnchor, 10).Active = true;
+            _addButton.LeadingAnchor.ConstraintEqualToAnchor(scrolledView.LeadingAnchor).Active = true;
+            _removeButton.TopAnchor.ConstraintEqualToAnchor(_addButton.TopAnchor).Active = true;
+            _removeButton.LeadingAnchor.ConstraintEqualToAnchor(_addButton.TrailingAnchor, 10).Active = true;
+            _optionView.BottomAnchor.ConstraintEqualToAnchor(_addButton.BottomAnchor, 2).Active = true;
+            scrolledView.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor).Active = true;
+            scrolledView.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 125).Active = true;
+            // _optionView.TrailingAnchor.ConstraintEqualToAnchor(scrolledView.TrailingAnchor).Active = true;
+
             StringListOption.Model.PropertyChanged += OnStringsListChanged;
 
             UpdateStringListFromModel();

@@ -97,7 +97,7 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
                 PrefixValue = "AppIdentifierPrefix"
             };
 
-            card4.AddOption(KeychainAccessGroupsList);
+            switchableOption.AddOption(KeychainAccessGroupsList);
 
 
             var card5 = new OptionCard();

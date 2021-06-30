@@ -8,17 +8,30 @@
 //
 
 using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudioUI.Options.Models;
 
 namespace Microsoft.VisualStudioUI.Options
 {
     public class SwitchableGroupOption : Option
     {
+        private readonly List<Option> _childrenOptions = new List<Option>();
+        public IReadOnlyList<Option> ChildrenOptions => _childrenOptions;
+
         public ViewModelProperty<bool> IsOn { get; }
         public ViewModelProperty<bool> ShowSpinner { get; }
 
         public event EventHandler? SwitchChanged;
 
+        public void AddOption(Option option) => _childrenOptions.Add(option);
+
+        public void RemoveOption(Option option)
+        {
+            if (_childrenOptions.Count <= 0)
+                return;
+
+            _childrenOptions.Remove(option);
+        }
 
         public void SwitchChangedInvoke(object sender, EventArgs e)
         {
