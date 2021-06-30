@@ -175,6 +175,9 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             signing.AddOption(autoSigningOption1);
             signing.AddOption(autoSigningOption2);
 
+            var image = new ImageFileOption() { Label = "1X", CenterLable = "(512x512)" };
+            signing.AddOption(image);
+
             OptionCards cards = new OptionCards();
 
             cards.AddCard(signing);
