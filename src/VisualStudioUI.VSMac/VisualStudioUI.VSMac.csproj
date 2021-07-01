@@ -77,7 +77,7 @@
     <Compile Include="Options\SwitchableGroupOptionVSMac.cs" />
     <Compile Include="Options\StringListOptionVSMac.cs" />
     <Compile Include="Options\ButtonOptionVSMac.cs" />
-    <Compile Include="Options\ImageFileOptionVSMac.cs" />
+    <Compile Include="Options\ScaledImageFileOptionVSMac.cs" />
     <Compile Include="Options\CheckBoxListOptionVSMac.cs" />
   </ItemGroup>
   <ItemGroup>

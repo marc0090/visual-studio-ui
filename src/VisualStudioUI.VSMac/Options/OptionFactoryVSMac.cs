@@ -35,7 +35,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             new SwitchableGroupOptionVSMac(switchableGroupOption);
 
         public override OptionPlatform CreateStringListOptionPlatform(StringListOption stringListOption) => new StringListOptionVSMac(stringListOption);
-        public override OptionPlatform CreateImageViewOptionPlatform(ImageFileOption imageFileOption) => new ImageFileOptionVSMac(imageFileOption);
+        public override OptionPlatform CreateImageViewOptionPlatform(ScaledImageFileOption imageFileOption) => new ScaledImageFileOptionVSMac (imageFileOption);
         public override OptionPlatform CreateButtonOptionPlatform(ButtonOption buttonOption) => new ButtonOptionVSMac(buttonOption);
 
         public override OptionPlatform CreateSwitchOptionPlatform(SwitchOption switchOption) => throw new NotImplementedException(); // new SwitchOptionVSMac(switchOption);

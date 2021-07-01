@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using Microsoft.VisualStudioUI.Options;
 
 using Microsoft.VisualStudioUI.Options.Models;
@@ -177,11 +178,16 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             signing.AddOption(autoSigningOption1);
             signing.AddOption(autoSigningOption2);
 
-            var image = new ImageFileOption() { Label = "1X", CenterLable = "(512x512)" };
-            signing.AddOption(image);
+            var iTunesArtwork = new OptionCard() { Label = "iTunes Artwork" };
+            List<ScaledImageFile> imagelist = new List<ScaledImageFile>();
+            imagelist.Add(new ScaledImageFile(512, 512, "1X"));
+            imagelist.Add(new ScaledImageFile(1024, 1024, "2X"));
+            ViewModelProperty<ImmutableArray<ScaledImageFile>> imageArray = new ViewModelProperty<ImmutableArray<ScaledImageFile>>("", imagelist.ToImmutableArray());
+            var image = new ScaledImageFileOption(imageArray);
+            iTunesArtwork.AddOption(image);
 
             OptionCards cards = new OptionCards();
-
+            cards.AddCard(iTunesArtwork);
             cards.AddCard(signing);
             cards.AddCard(card3);
             cards.AddCard(card4);
