@@ -6,6 +6,9 @@ namespace Microsoft.VisualStudioUI.Options
 {
     public class CheckBoxListOption : Option
     {
+        public float Space = 10.0f;
+        public float Width = 354.0f;
+        public float Height = 72.0f;
 
         public event EventHandler? ListChanged;
 

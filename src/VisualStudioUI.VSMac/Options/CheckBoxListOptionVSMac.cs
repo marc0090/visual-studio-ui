@@ -8,7 +8,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
     public class CheckBoxListOptionVSMac : OptionVSMac
     {
-        private NSStackView _optionView;
+        private NSView _optionView;
         private NSTableView _tableView;
 
         public CheckBoxListOptionVSMac(CheckBoxListOption option) : base(option)
@@ -35,9 +35,18 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         public void CreateView()
         {
-            _tableView = new NSTableView() { HeaderView = null, Source = new CheckBoxSource(this) };
+            _optionView = new NSView();// { Orientation = NSUserInterfaceLayoutOrientation.Vertical };
+                                       // _optionView.WantsLayer = true;
+            _optionView.TranslatesAutoresizingMaskIntoConstraints = false;
+
+            _tableView = new NSTableView()
+            {
+                HeaderView = null,
+                SelectionHighlightStyle = NSTableViewSelectionHighlightStyle.None,
+                Source = new CheckBoxSource(this),
+                TranslatesAutoresizingMaskIntoConstraints = false
+            };
             _tableView.GridStyleMask = NSTableViewGridStyle.DashedHorizontalGridLine;
-            _tableView.SelectionHighlightStyle = NSTableViewSelectionHighlightStyle.None;
             _tableView.AddColumn(new NSTableColumn());
 
             var scrolledView = new NSScrollView()
@@ -47,10 +56,10 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 HasVerticalScroller = true,
                 HasHorizontalScroller = true,
                 AutohidesScrollers = true,
-
+                TranslatesAutoresizingMaskIntoConstraints = false
             };
 
-            _optionView = new NSStackView() { Orientation = NSUserInterfaceLayoutOrientation.Horizontal, Alignment = NSLayoutAttribute.Top };
+            _optionView.AddSubview(scrolledView);
 
             if (!string.IsNullOrEmpty(Option.Label))
             {
@@ -63,16 +72,21 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 left.Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize);
                 left.TextColor = NSColor.LabelColor;
                 left.TranslatesAutoresizingMaskIntoConstraints = false;
-
-                _optionView = new NSStackView() { Orientation = NSUserInterfaceLayoutOrientation.Horizontal, Alignment = NSLayoutAttribute.Top };
-                _optionView.AddArrangedSubview(left);
+                left.SizeToFit();
+                _optionView.AddSubview(left);
+                left.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor).Active = true;
+                left.TrailingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 120).Active = true;
+                left.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor).Active = true;
             }
 
-            _optionView.AddArrangedSubview(scrolledView);
+            _optionView.WidthAnchor.ConstraintEqualToConstant(640f).Active = true;
 
-            scrolledView.HeightAnchor.ConstraintEqualToConstant(72).Active = true;
-            scrolledView.WidthAnchor.ConstraintEqualToConstant(450).Active = true;
-            scrolledView.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 101).Active = true;
+            scrolledView.HeightAnchor.ConstraintEqualToConstant(CheckBoxListOption.Height).Active = true;
+            scrolledView.WidthAnchor.ConstraintEqualToConstant(CheckBoxListOption.Width).Active = true;
+
+            _optionView.TopAnchor.ConstraintEqualToAnchor(scrolledView.TopAnchor).Active = true;
+            _optionView.LeadingAnchor.ConstraintEqualToAnchor(scrolledView.LeadingAnchor, -125).Active = true;
+            _optionView.BottomAnchor.ConstraintEqualToAnchor(scrolledView.BottomAnchor).Active = true;
 
         }
 
@@ -93,11 +107,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
             int row = (int)checkBoxButton.Tag;
 
-            // CheckBoxListOption.Property.Value[row].Selected = (checkBoxButton.State == NSCellStateValue.On);
-            // CheckBoxListOption.Items.Value = new bool[] { false, false, false, false, false, false };
+            CheckBoxListOption.Property.Value[row].Selected = (checkBoxButton.State == NSCellStateValue.On);
             CheckBoxListOption.ListChangedInvoke(sender, e);
-
-
         }
 
         private void RefreshList()

@@ -55,11 +55,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         public void CreateView()
         {
-            _optionView = new NSView();// { Orientation = NSUserInterfaceLayoutOrientation.Vertical };
-            _optionView.WantsLayer = true;
+            _optionView = new NSView();
             _optionView.TranslatesAutoresizingMaskIntoConstraints = false;
-
-
 
             _tableView = new NSTableView()
             {
@@ -69,6 +66,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             };
             _tableView.GridStyleMask = NSTableViewGridStyle.DashedHorizontalGridLine;
             _tableView.AddColumn(new NSTableColumn());
+
             var scrolledView = new NSScrollView()
             {
                 DocumentView = _tableView,
@@ -80,9 +78,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             };
 
             _optionView.AddSubview(scrolledView);
-
-            scrolledView.HeightAnchor.ConstraintEqualToConstant(72).Active = true;
-            scrolledView.WidthAnchor.ConstraintEqualToConstant(450).Active = true;
 
             _addButton = new NSButton
             {
@@ -140,7 +135,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             _addButton.HeightAnchor.ConstraintEqualToConstant(21).Active = true;
             _removeButton.WidthAnchor.ConstraintEqualToConstant(28).Active = true;
             _removeButton.HeightAnchor.ConstraintEqualToConstant(21).Active = true;
-
+            scrolledView.HeightAnchor.ConstraintEqualToConstant(StringListOption.Height).Active = true;
+            scrolledView.WidthAnchor.ConstraintEqualToConstant(StringListOption.Width).Active = true;
             _optionView.WidthAnchor.ConstraintEqualToConstant(640f).Active = true;
 
             _addButton.TopAnchor.ConstraintEqualToAnchor(scrolledView.BottomAnchor, 10).Active = true;
@@ -148,9 +144,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             _removeButton.TopAnchor.ConstraintEqualToAnchor(_addButton.TopAnchor).Active = true;
             _removeButton.LeadingAnchor.ConstraintEqualToAnchor(_addButton.TrailingAnchor, 10).Active = true;
             _optionView.BottomAnchor.ConstraintEqualToAnchor(_addButton.BottomAnchor, 2).Active = true;
-            scrolledView.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor).Active = true;
-            scrolledView.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 125).Active = true;
-            // _optionView.TrailingAnchor.ConstraintEqualToAnchor(scrolledView.TrailingAnchor).Active = true;
+            _optionView.TopAnchor.ConstraintEqualToAnchor(scrolledView.TopAnchor).Active = true;
+            _optionView.LeadingAnchor.ConstraintEqualToAnchor(scrolledView.LeadingAnchor, -125).Active = true;
 
             StringListOption.Model.PropertyChanged += OnStringsListChanged;
 

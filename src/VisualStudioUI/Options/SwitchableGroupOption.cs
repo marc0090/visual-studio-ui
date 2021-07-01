@@ -15,7 +15,12 @@ namespace Microsoft.VisualStudioUI.Options
 {
     public class SwitchableGroupOption : Option
     {
+        public float Space = 10;
+        public float Width = 640;
+
         private readonly List<Option> _childrenOptions = new List<Option>();
+
+
         public IReadOnlyList<Option> ChildrenOptions => _childrenOptions;
 
         public ViewModelProperty<bool> IsOn { get; }

@@ -97,7 +97,7 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
                 PrefixValue = "AppIdentifierPrefix"
             };
 
-            switchableOption.AddOption(KeychainAccessGroupsList);
+            card4.AddOption(KeychainAccessGroupsList);
 
 
             var card5 = new OptionCard();
@@ -118,9 +118,7 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
                 ButtonLabel = "Allow subset of pass types",
             };
 
-            card5.AddOption(switchableOption5);
-            card5.AddOption(alltype);
-            card5.AddOption(subtype);
+
             ImmutableArray<CheckBoxlistItem> CheckBoxList = ImmutableArray.Create(
                 new CheckBoxlistItem("test1", false),
                 new CheckBoxlistItem("test2", false),
@@ -129,7 +127,12 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
              );
 
             var testCheckBoxList = new CheckBoxListOption(new ViewModelProperty<ImmutableArray<CheckBoxlistItem>>("", CheckBoxList));
-            card5.AddOption(testCheckBoxList);
+
+            switchableOption.AddOption(alltype);
+            switchableOption.AddOption(subtype);
+            switchableOption.AddOption(testCheckBoxList);
+            card5.AddOption(switchableOption5);
+
 
             // Signing 
             var signing = new OptionCard() { Label = "Signing" };

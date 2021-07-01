@@ -15,6 +15,9 @@ namespace Microsoft.VisualStudioUI.Options
 {
     public class StringListOption : Option
     {
+        public float Space = 10.0f;
+        public float Width = 354.0f;
+        public float Height = 72.0f;
 
         public string PrefixValue = string.Empty;
         public string DefaultValue = string.Empty;

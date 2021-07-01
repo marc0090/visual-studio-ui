@@ -129,7 +129,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 _descriptionHeightConstraint.Active = true;
                 var _descriptionWidthConstraint = _description.WidthAnchor.ConstraintEqualToConstant(354f);
                 _descriptionWidthConstraint.Active = true;
-                _descriptionBottomeConstrains = _description.BottomAnchor.ConstraintEqualToAnchor(_optionView.BottomAnchor, -20);
+                _descriptionBottomeConstrains = _description.BottomAnchor.ConstraintEqualToAnchor(_optionView.BottomAnchor, -30);
             }
 
             if (!string.IsNullOrEmpty(Option.Hint))
@@ -158,7 +158,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             _childrenControl = new NSStackView()
             {
                 Orientation = NSUserInterfaceLayoutOrientation.Vertical,
-                Spacing = 10,
+                Spacing = SwitchableGroupOption.Space,
                 Distribution = NSStackViewDistribution.Fill,
                 TranslatesAutoresizingMaskIntoConstraints = false
             };
@@ -171,17 +171,17 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
             _optionView.AddSubview(_childrenControl);
 
-            _childrenControl.TopAnchor.ConstraintEqualToAnchor(_description.BottomAnchor, 10).Active = true;
+            _childrenControl.TopAnchor.ConstraintEqualToAnchor(_description.BottomAnchor, SwitchableGroupOption.Space).Active = true;
             _childrenControl.WidthAnchor.ConstraintEqualToAnchor(_optionView.WidthAnchor).Active = true;
-            _childrenControl.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 20f).Active = true;
-            _childrenControlBottomeConstrains = _childrenControl.BottomAnchor.ConstraintEqualToAnchor(_optionView.BottomAnchor, -20f);
+            _childrenControl.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor).Active = true;
+            _childrenControlBottomeConstrains = _childrenControl.BottomAnchor.ConstraintEqualToAnchor(_optionView.BottomAnchor, -SwitchableGroupOption.Space);
 
             ShowChildrenOption(enable);
         }
 
         private void ShowChildrenOption(bool enable)
         {
-            if (enable)
+            if (enable && SwitchableGroupOption.ChildrenOptions.Count > 0)
             {
                 _childrenControl.Hidden = false;
                 _childrenControlBottomeConstrains.Active = true;
