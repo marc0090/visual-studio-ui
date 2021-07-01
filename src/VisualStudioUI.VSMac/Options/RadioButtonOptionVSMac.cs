@@ -12,7 +12,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         {
         }
 
-        public RadioButtonOption RadioButtonOption => ((RadioButtonOption) Option);
+        public RadioButtonOption RadioButtonOption => ((RadioButtonOption)Option);
 
         protected override NSView ControlView
         {

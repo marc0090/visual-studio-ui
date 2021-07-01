@@ -129,7 +129,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 _descriptionHeightConstraint.Active = true;
                 var _descriptionWidthConstraint = _description.WidthAnchor.ConstraintEqualToConstant(354f);
                 _descriptionWidthConstraint.Active = true;
-                _descriptionBottomeConstrains = _description.BottomAnchor.ConstraintEqualToAnchor(_optionView.BottomAnchor, -30);
+                _descriptionBottomeConstrains = _description.BottomAnchor.ConstraintEqualToAnchor(_optionView.BottomAnchor, -SwitchableGroupOption.Space);
             }
 
             if (!string.IsNullOrEmpty(Option.Hint))
@@ -175,6 +175,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             _childrenControl.WidthAnchor.ConstraintEqualToAnchor(_optionView.WidthAnchor).Active = true;
             _childrenControl.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor).Active = true;
             _childrenControlBottomeConstrains = _childrenControl.BottomAnchor.ConstraintEqualToAnchor(_optionView.BottomAnchor, -SwitchableGroupOption.Space);
+            _childrenControlBottomeConstrains.Active = true;
 
             ShowChildrenOption(enable);
         }
@@ -203,6 +204,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             ((SwitchableGroupOption)Option).IsOn.Value = enable;
             ((SwitchableGroupOption)Option).SwitchChangedInvoke(sender, e);
             ((SwitchableGroupOption)Option).IsOn.PropertyChanged += SwitchPropertyChanged;
+
             ShowChildrenOption(enable);
         }
 

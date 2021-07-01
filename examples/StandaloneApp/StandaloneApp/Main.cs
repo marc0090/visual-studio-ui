@@ -97,11 +97,11 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
                 PrefixValue = "AppIdentifierPrefix"
             };
 
-            card4.AddOption(KeychainAccessGroupsList);
+            switchableOption.AddOption(KeychainAccessGroupsList);
 
 
             var card5 = new OptionCard();
-            var switchableOption5 = new SwitchableGroupOption(BoolProp(true))
+            var walletSwitchableOption = new SwitchableGroupOption(BoolProp(true))
             {
                 Label = "Wallet",
                 Name = "Allows your application to manage passes, tickets, gift cards, and loyalty cards. It supports a variety of bar code formats."
@@ -120,19 +120,18 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
 
 
             ImmutableArray<CheckBoxlistItem> CheckBoxList = ImmutableArray.Create(
-                new CheckBoxlistItem("test1", false),
-                new CheckBoxlistItem("test2", false),
-                new CheckBoxlistItem("test3", false),
-                new CheckBoxlistItem("test1", false)
+                new CheckBoxlistItem("Pass types1", false),
+                new CheckBoxlistItem("Pass types2", false),
+                new CheckBoxlistItem("Pass types3", false)
+
              );
 
             var testCheckBoxList = new CheckBoxListOption(new ViewModelProperty<ImmutableArray<CheckBoxlistItem>>("", CheckBoxList));
 
-            switchableOption.AddOption(alltype);
-            switchableOption.AddOption(subtype);
-            switchableOption.AddOption(testCheckBoxList);
-            card5.AddOption(switchableOption5);
-
+            walletSwitchableOption.AddOption(alltype);
+            walletSwitchableOption.AddOption(subtype);
+            walletSwitchableOption.AddOption(testCheckBoxList);
+            card5.AddOption(walletSwitchableOption);
 
             // Signing 
             var signing = new OptionCard() { Label = "Signing" };
