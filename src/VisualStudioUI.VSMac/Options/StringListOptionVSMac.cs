@@ -80,7 +80,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             _optionView.AddSubview(scrolledView);
             _addButton = new NSButton
             {
-                BezelStyle = NSBezelStyle.TexturedRounded,
+                BezelStyle = NSBezelStyle.Inline,
                 Bordered = false,
                 Title = string.Empty,
                 WantsLayer = true,
@@ -95,7 +95,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
             _removeButton = new NSButton
             {
-                BezelStyle = NSBezelStyle.Rounded,
+                BezelStyle = NSBezelStyle.Inline,
                 Bordered = false,
                 WantsLayer = true,
                 Title = "",
