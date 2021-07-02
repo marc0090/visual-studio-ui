@@ -22,6 +22,7 @@ namespace Microsoft.VisualStudioUI.Options
         public CheckBoxListOption(ViewModelProperty<ImmutableArray<CheckBoxlistItem>> items)
         {
             Property = items;
+            Property.Bind();
             Platform = OptionFactoryPlatform.Instance.CreateCheckBoxListOptionPlatform(this);
         }
     }

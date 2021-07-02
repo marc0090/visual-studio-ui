@@ -13,7 +13,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         public CheckBoxListOptionVSMac(CheckBoxListOption option) : base(option)
         {
-            option.Property.PropertyChanged += OnCheckBoxListChanged;
         }
 
         public override NSView View
@@ -87,6 +86,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             _optionView.TopAnchor.ConstraintEqualToAnchor(scrolledView.TopAnchor).Active = true;
             _optionView.LeadingAnchor.ConstraintEqualToAnchor(scrolledView.LeadingAnchor, -125).Active = true;
             _optionView.BottomAnchor.ConstraintEqualToAnchor(scrolledView.BottomAnchor).Active = true;
+
+            CheckBoxListOption.Property.PropertyChanged += OnCheckBoxListChanged;
 
         }
 
