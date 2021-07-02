@@ -101,6 +101,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             if (ButtonOption.Type == ButtonOption.ButtonType.Normal)
             {
                 _button.BezelStyle = NSBezelStyle.RegularSquare;
+                _button.Activated += ButtonOption.ButtonClicked;
+
             }
             else
             {
