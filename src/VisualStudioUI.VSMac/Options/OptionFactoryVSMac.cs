@@ -44,5 +44,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         public override OptionPlatform CreateCheckBoxListOptionPlatform(CheckBoxListOption checkBoxListOption) => new CheckBoxListOptionVSMac(checkBoxListOption);
 
+        public override OptionPlatform CreateLabelOptionPlatform(LabelOption labelOption) => new LabelOptionVSMac(labelOption);
+
     }
 }

@@ -186,6 +186,14 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             var image = new ScaledImageFileOption(imageArray);
             iTunesArtwork.AddOption(image);
 
+            var signInLabel = new LabelOption()
+            {
+                Label = ("Apple ID"),
+                Name = "Sign in and select a team to enable Automatic Provisioning",
+                IsBold = true
+            };
+            iTunesArtwork.AddOption(signInLabel);
+
             OptionCards cards = new OptionCards();
             cards.AddCard(iTunesArtwork);
             cards.AddCard(signing);

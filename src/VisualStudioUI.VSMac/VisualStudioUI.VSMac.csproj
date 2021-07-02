@@ -79,6 +79,7 @@
     <Compile Include="Options\ButtonOptionVSMac.cs" />
     <Compile Include="Options\ScaledImageFileOptionVSMac.cs" />
     <Compile Include="Options\CheckBoxListOptionVSMac.cs" />
+    <Compile Include="Options\LabelOptionVSMac.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\VisualStudioUI\VisualStudioUI.csproj">
