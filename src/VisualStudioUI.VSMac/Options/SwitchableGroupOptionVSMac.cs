@@ -69,8 +69,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
             _optionView.AddSubview(_switchButton);
             _switchButton.WidthAnchor.ConstraintEqualToConstant(38f).Active = true;
-            _switchButton.HeightAnchor.ConstraintEqualToConstant(38f).Active = true;
-            _switchButton.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 48f).Active = true;
+            _switchButton.HeightAnchor.ConstraintEqualToConstant(21f).Active = true;
+            _switchButton.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 68f).Active = true;
             _switchButton.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 30f).Active = true;
 
 
@@ -91,7 +91,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                 //_title.WidthAnchor.ConstraintEqualToConstant(38f).Active = true;
                 //_title.HeightAnchor.ConstraintEqualToConstant(28f).Active = true;
-                _title.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 101f).Active = true;
+                _title.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 121f).Active = true;
                 _title.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 24f).Active = true;
             }
 
@@ -103,7 +103,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             _optionView.AddSubview(_progressIndicator);
 
             _progressIndicator.LeadingAnchor.ConstraintEqualToAnchor(_title.TrailingAnchor, 6).Active = true;
-            _progressIndicator.CenterYAnchor.ConstraintEqualToAnchor(_title.CenterYAnchor).Active = true;
+            _progressIndicator.TopAnchor.ConstraintEqualToAnchor(_title.TopAnchor).Active = true;
 
             if (!string.IsNullOrEmpty(Option.Label))
             {
@@ -120,16 +120,18 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 _description.LineBreakMode = NSLineBreakMode.ByWordWrapping;
                 _optionView.AddSubview(_description);
 
-                _description.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 101f).Active = true;
+                _description.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 121f).Active = true;
                 _description.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 42f).Active = true;
 
                 var bestHeight = _description.Cell.CellSizeForBounds(new CoreGraphics.CGRect(0, 0, 354, 600)).Height;
-
                 var _descriptionHeightConstraint = _description.HeightAnchor.ConstraintEqualToConstant(bestHeight);
                 _descriptionHeightConstraint.Active = true;
                 var _descriptionWidthConstraint = _description.WidthAnchor.ConstraintEqualToConstant(354f);
                 _descriptionWidthConstraint.Active = true;
-                _descriptionBottomeConstrains = _description.BottomAnchor.ConstraintEqualToAnchor(_optionView.BottomAnchor, -SwitchableGroupOption.Space);
+
+                float bottomeSpace = -24;
+                if (bestHeight > 26) { bottomeSpace = -14; }
+                _descriptionBottomeConstrains = _description.BottomAnchor.ConstraintEqualToAnchor(_optionView.BottomAnchor, bottomeSpace);
             }
 
             if (!string.IsNullOrEmpty(Option.Hint))

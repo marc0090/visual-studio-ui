@@ -78,7 +78,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             };
 
             _optionView.AddSubview(scrolledView);
-
             _addButton = new NSButton
             {
                 BezelStyle = NSBezelStyle.TexturedRounded,
@@ -90,8 +89,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 TranslatesAutoresizingMaskIntoConstraints = false,
                 ToolTip = StringListOption.AddToolTip
             };
-
-            _addButton.Layer.BackgroundColor = NSColor.TextBackground.CGColor;
+            _addButton.Layer.BackgroundColor = NSColor.ControlBackground.CGColor;
             _addButton.Layer.CornerRadius = 5;
             _addButton.Activated += OnAddClicked;
 
@@ -107,7 +105,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 ToolTip = StringListOption.RemoveToolTip
             };
             _removeButton.Activated += OnRemoveClicked;
-            _removeButton.Layer.BackgroundColor = NSColor.TextBackground.CGColor;
+            _removeButton.Layer.BackgroundColor = NSColor.ControlBackground.CGColor;
             _removeButton.Layer.CornerRadius = 5;
 
             _optionView.AddSubview(_addButton);
@@ -131,10 +129,10 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 left.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor).Active = true;
             }
 
-            _addButton.WidthAnchor.ConstraintEqualToConstant(28).Active = true;
-            _addButton.HeightAnchor.ConstraintEqualToConstant(21).Active = true;
-            _removeButton.WidthAnchor.ConstraintEqualToConstant(28).Active = true;
-            _removeButton.HeightAnchor.ConstraintEqualToConstant(21).Active = true;
+            _addButton.WidthAnchor.ConstraintEqualToConstant(30).Active = true;
+            _addButton.HeightAnchor.ConstraintEqualToConstant(25).Active = true;
+            _removeButton.WidthAnchor.ConstraintEqualToConstant(30).Active = true;
+            _removeButton.HeightAnchor.ConstraintEqualToConstant(25).Active = true;
             scrolledView.HeightAnchor.ConstraintEqualToConstant(StringListOption.Height).Active = true;
             scrolledView.WidthAnchor.ConstraintEqualToConstant(StringListOption.Width).Active = true;
             _optionView.WidthAnchor.ConstraintEqualToConstant(640f).Active = true;
