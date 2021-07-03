@@ -19,6 +19,7 @@ namespace Microsoft.VisualStudioUI.Options
         public ButtonType Type { get; }
 
         public ViewModelProperty<bool> IsSelected { get; set; } = null;
+        public ViewModelProperty<bool> Hidden { get; set; }
 
         public event EventHandler SelectionChanged;
         public event EventHandler Clicked;

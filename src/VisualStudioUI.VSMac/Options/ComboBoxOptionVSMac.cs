@@ -39,6 +39,12 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     _popUpButton.WidthAnchor.ConstraintEqualToConstant(198f).Active = true;
 
                     _popUpButton.Activated += UpdatePropertyFromUI;
+
+                    if (ComboBoxOption.Hidden != null)
+                    {
+                        ComboBoxOption.Hidden.PropertyChanged += HidView;
+                    }
+
                     property.PropertyChanged += delegate { UpdateSelectedItemUIFromProperty(); };
                     itemsProperty.PropertyChanged += delegate { UpdateItemChoices(); };
 
@@ -116,6 +122,10 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             }
         }
 
+        private void HidView(object sender, ViewModelPropertyChangedEventArgs e)
+        {
+            _popUpButton.Hidden = ComboBoxOption.Hidden.Value;
+        }
         // TODO: Handle this    
         /*
         void UpdateSdkWarning (object sender, ViewModelPropertyChangedEventArgs e)

@@ -178,6 +178,20 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             signing.AddOption(autoSigningOption1);
             signing.AddOption(autoSigningOption2);
 
+            var btn1 = new ButtonOption() { Name = "Hide"};
+            var btn2 = new ButtonOption() { Name = "2", Hidden = new ViewModelProperty<bool>("", false) };
+            var btn3 = new ButtonOption() { Name = "show"};
+            btn2.Hidden.Bind();
+            btn1.Clicked += (sender, e) => {
+                btn2.Hidden.Value = true;
+            };
+            btn3.Clicked += (sender, e) => {
+                btn2.Hidden.Value = false;
+            };
+            signing.AddOption(btn1);
+            signing.AddOption(btn2);
+            signing.AddOption(btn3);
+
             var iTunesArtwork = new OptionCard() { Label = "iTunes Artwork" };
             List<ScaledImageFile> imagelist = new List<ScaledImageFile>();
             imagelist.Add(new ScaledImageFile(512, 512, "1X"));

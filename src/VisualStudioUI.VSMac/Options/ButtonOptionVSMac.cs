@@ -7,11 +7,11 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 {
     public class ButtonOptionVSMac : OptionVSMac
     {
-        NSView _optionView;
-        NSButton _button;
-        NSTextField _description;
-        NSButton _helpButton;
-        HintPopover _hintPopover;
+        private NSView _optionView;
+        private NSButton _button;
+        private NSTextField _description;
+        private NSButton _helpButton;
+        private HintPopover _hintPopover;
 
         public ButtonOptionVSMac(ButtonOption option) : base(option)
         {
@@ -128,6 +128,11 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             _button.LeftAnchor.ConstraintEqualToAnchor(_optionView.LeftAnchor, 220f).Active = true;
             _button.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 5f).Active = true;
 
+            if (ButtonOption.Hidden != null)
+            {
+                ButtonOption.Hidden.PropertyChanged += HidView;
+            }
+
             if (!string.IsNullOrWhiteSpace(ButtonOption.Description))
             {
                 _description = new AppKit.NSTextField();
@@ -195,6 +200,11 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
             var bounds = button.Bounds;
             _hintPopover.Show(bounds, button, NSRectEdge.MaxYEdge);
+        }
+
+        private void HidView(object sender, ViewModelPropertyChangedEventArgs e)
+        {
+            _optionView.Hidden = ButtonOption.Hidden.Value;
         }
     }
 }

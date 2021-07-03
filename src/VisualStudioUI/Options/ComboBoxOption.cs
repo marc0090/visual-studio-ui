@@ -25,6 +25,7 @@ namespace Microsoft.VisualStudioUI.Options
         public ViewModelProperty<TItem?> Property { get; }
         public ViewModelProperty<ImmutableArray<TItem>> ItemsProperty { get; }
         public ItemDisplayStringFunc<TItem> ItemDisplayStringFunc { get; }
+        public ViewModelProperty<bool> Hidden { get; set; }
 
         /// <summary>
         /// Create a ComboBoxOption. 

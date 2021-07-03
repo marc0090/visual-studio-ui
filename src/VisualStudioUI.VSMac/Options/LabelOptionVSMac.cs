@@ -33,10 +33,20 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     _textField.DrawsBackground = false;
 
                     _textField.WidthAnchor.ConstraintEqualToConstant(370f).Active = true;
+
+                    if (LabelOption.Hidden != null)
+                    {
+                        LabelOption.Hidden.PropertyChanged += HidView;
+                    }
                 }
 
                 return _textField;
             }
+        }
+
+        private void HidView(object sender, ViewModelPropertyChangedEventArgs e)
+        {
+            _textField.Hidden = LabelOption.Hidden.Value;
         }
     }
 }
