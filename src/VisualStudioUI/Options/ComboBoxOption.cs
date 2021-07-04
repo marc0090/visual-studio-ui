@@ -26,6 +26,10 @@ namespace Microsoft.VisualStudioUI.Options
         public ViewModelProperty<ImmutableArray<TItem>> ItemsProperty { get; }
         public ItemDisplayStringFunc<TItem> ItemDisplayStringFunc { get; }
         public ViewModelProperty<bool> Hidden { get; set; }
+        /// <summary>
+        /// draw seperator or header menu 
+        /// </summary>
+        public bool HasMultipleLevelMenu { get; set; } = false;
 
         /// <summary>
         /// Create a ComboBoxOption. 
@@ -44,6 +48,52 @@ namespace Microsoft.VisualStudioUI.Options
             if (itemDisplayStringFunc == null)
                 ItemDisplayStringFunc = DisplayableItemsUtil.ItemDisplayStringFromToString;
             else ItemDisplayStringFunc = itemDisplayStringFunc;
+        }
+
+        /// <summary>
+        /// first leve menu just show no respond action
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public string CreateHeaderMenu(string item)
+        {
+            if (string.IsNullOrWhiteSpace(item))
+                return item;
+
+            return string.Format("*{0}*", item.Trim());
+        }
+
+        public bool IsHeaderMenu(string item)
+        {
+            if (string.IsNullOrWhiteSpace(item))
+                return false;
+
+            item = item.Trim();
+
+            return item.StartsWith("*") && item.EndsWith("*");
+        }
+
+        public string GetHeaderMenuValue(string item)
+        {
+            if (string.IsNullOrWhiteSpace(item))
+                return item;
+
+            return item.Trim('*').Trim();
+        }
+
+        public string CreateSeperator()
+        {
+            return "-";
+        }
+
+        public bool IsSeperator(string item)
+        {
+            if (string.IsNullOrWhiteSpace(item))
+                return false;
+
+            item = item.Trim();
+
+            return item.Equals("-");
         }
     }
 }

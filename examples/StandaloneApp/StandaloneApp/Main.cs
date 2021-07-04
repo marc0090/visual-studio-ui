@@ -50,6 +50,25 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
                 }
             );
 
+
+            ViewModelProperty<ImmutableArray<string>> propertyItems = new ViewModelProperty<ImmutableArray<string>>("");
+            var subMenuCombox = new ComboBoxOption<string>(StringProp("option1"), propertyItems)
+            {
+                Label = "Sub Menu",
+                HasMultipleLevelMenu = true,
+                Hint = "This is the hint for the editable combo box"
+            };
+
+            List<string> dropList = new List<string>();
+            dropList.Add(subMenuCombox.CreateHeaderMenu("Areest"));
+            dropList.Add("option1");
+            dropList.Add("option2");
+            dropList.Add(subMenuCombox.CreateSeperator());
+            dropList.Add("None");
+            propertyItems.Value = ImmutableArray.CreateRange(dropList).ToImmutableArray();
+
+            card1.AddOption(subMenuCombox);
+
             var card2 = new OptionCard()
             {
                 Label = "Second Card"
