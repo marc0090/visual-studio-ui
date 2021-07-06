@@ -17,7 +17,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         {
         }
 
-        public ButtonOption ButtonOption => ((ButtonOption) Option);
+        public ButtonOption ButtonOption => ((ButtonOption)Option);
 
         public override NSView View
         {
@@ -35,7 +35,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         private void CreateView()
         {
             // View:     optionView
-            _optionView = new AppKit.NSView();
+            _optionView = new NSView();
             _optionView.WantsLayer = true;
             _optionView.TranslatesAutoresizingMaskIntoConstraints = false;
 
@@ -54,7 +54,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             if (!string.IsNullOrEmpty(Option.Label))
             {
                 // View:     label
-                var label = new AppKit.NSTextField();
+                var label = new NSTextField();
                 label.Editable = false;
                 label.Bordered = false;
                 label.DrawsBackground = false;
@@ -63,7 +63,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 label.StringValue = Option.Label + ":";
 
                 label.Alignment = NSTextAlignment.Right;
-                label.Font = AppKit.NSFont.SystemFontOfSize(AppKit.NSFont.SystemFontSize);
+                label.Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize);
                 label.TextColor = NSColor.LabelColor;
                 label.TranslatesAutoresizingMaskIntoConstraints = false;
 
@@ -78,16 +78,16 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             if (!string.IsNullOrEmpty(Option.Hint))
             {
                 // View:     helpButton
-                _helpButton = new AppKit.NSButton();
+                _helpButton = new NSButton();
                 _helpButton.BezelStyle = NSBezelStyle.HelpButton;
                 _helpButton.Title = "";
                 _helpButton.ControlSize = NSControlSize.Regular;
-                _helpButton.Font = AppKit.NSFont.SystemFontOfSize(AppKit.NSFont.SystemFontSize);
+                _helpButton.Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize);
                 _helpButton.TranslatesAutoresizingMaskIntoConstraints = false;
 
                 _optionView.AddSubview(_helpButton);
                 var helpButtonWidthConstraint = _helpButton.WidthAnchor.ConstraintEqualToConstant(21f);
-                helpButtonWidthConstraint.Priority = (System.Int32) AppKit.NSLayoutPriority.DefaultLow;
+                helpButtonWidthConstraint.Priority = (System.Int32)NSLayoutPriority.DefaultLow;
                 helpButtonWidthConstraint.Active = true;
 
                 _helpButton.RightAnchor.ConstraintEqualToAnchor(_optionView.RightAnchor, -6f).Active = true;
@@ -97,7 +97,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             }
 
             // View:     control
-            _button = new AppKit.NSButton();
+            _button = new NSButton();
             if (ButtonOption.Type == ButtonOption.ButtonType.Normal)
             {
                 _button.BezelStyle = NSBezelStyle.RegularSquare;
@@ -106,18 +106,18 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             }
             else
             {
-                _button.SetButtonType((NSButtonType) ButtonOption.Type);
+                _button.SetButtonType((NSButtonType)ButtonOption.Type);
                 SetSatus();
             }
 
             if (ButtonOption.IsSelected != null)
             {
                 _button.Activated += UpdatePropertyFromUI;
-                ButtonOption.IsSelected.PropertyChanged += UpdateUIFromProperty;
+                // ButtonOption.IsSelected.PropertyChanged += UpdateUIFromProperty;
             }
 
             _button.ControlSize = NSControlSize.Regular;
-            _button.Font = AppKit.NSFont.SystemFontOfSize(AppKit.NSFont.SystemFontSize);
+            _button.Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize);
             _button.Title = ButtonOption.Name ?? string.Empty;
             _button.TranslatesAutoresizingMaskIntoConstraints = false;
             _button.AccessibilityTitle = "Control";
@@ -130,19 +130,26 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
             if (ButtonOption.Hidden != null)
             {
+                _optionView.Hidden = ButtonOption.Hidden.Value;
                 ButtonOption.Hidden.PropertyChanged += HidView;
+            }
+
+            if (ButtonOption.Enable != null)
+            {
+                _button.Enabled = ButtonOption.Enable.Value;
+                ButtonOption.Enable.PropertyChanged += EnableView;
             }
 
             if (!string.IsNullOrWhiteSpace(ButtonOption.Description))
             {
-                _description = new AppKit.NSTextField();
+                _description = new NSTextField();
                 _description.Editable = false;
                 _description.Bordered = false;
                 _description.DrawsBackground = false;
                 _description.PreferredMaxLayoutWidth = 1;
                 _description.StringValue = ButtonOption.Description ?? string.Empty;
                 _description.Alignment = NSTextAlignment.Left;
-                _description.Font = AppKit.NSFont.SystemFontOfSize(AppKit.NSFont.SmallSystemFontSize);
+                _description.Font = NSFont.SystemFontOfSize(NSFont.SmallSystemFontSize);
                 _description.TextColor = NSColor.SecondaryLabelColor;
                 _description.TranslatesAutoresizingMaskIntoConstraints = false;
 
@@ -178,7 +185,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             {
                 return;
             }
-
             ButtonOption.IsSelected.Value = isSelected;
 
             ButtonOption.UpdateStatus(_button, e);
@@ -205,6 +211,11 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         private void HidView(object sender, ViewModelPropertyChangedEventArgs e)
         {
             _optionView.Hidden = ButtonOption.Hidden.Value;
+        }
+
+        private void EnableView(object sender, ViewModelPropertyChangedEventArgs e)
+        {
+            _button.Enabled = ButtonOption.Enable.Value;
         }
     }
 }

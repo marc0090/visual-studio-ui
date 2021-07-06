@@ -58,7 +58,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                         UpdateItemChoices();
                     }
-                    
+
 
                     // TODO: Handle this
                     /*
@@ -140,7 +140,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 }
 
                 NSMenuItem menuItem = new NSMenuItem();
-                
+
                 if (ComboBoxOption.IsHeaderMenu(itemDisplayString))
                 {
                     //header
@@ -148,7 +148,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     menuItem.Enabled = false;
                     hasIndentate = true;
                 }
-                else if(hasIndentate)
+                else if (hasIndentate)
                 {
                     menuItem.IndentationLevel = 1;
                 }
