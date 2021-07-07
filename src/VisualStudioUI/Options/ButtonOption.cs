@@ -15,19 +15,18 @@ namespace Microsoft.VisualStudioUI.Options
             Radio = 4, // NSButtonType.Radio
         }
 
-        public string Description { get; set; }
         public ButtonType Type { get; }
 
-        public ViewModelProperty<bool> IsSelected { get; set; }
+        public ViewModelProperty<bool> Active { get; set; }
         public ViewModelProperty<bool> Hidden { get; set; }
         public ViewModelProperty<bool> Enable { get; set; }
 
-        public event EventHandler SelectionChanged;
+        public event EventHandler Actived;
         public event EventHandler Clicked;
 
         public void UpdateStatus(object sender, EventArgs e)
         {
-            SelectionChanged?.Invoke(sender, e);
+            Actived?.Invoke(sender, e);
         }
 
         public void ButtonClicked(object sender, EventArgs e)

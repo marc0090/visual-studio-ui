@@ -110,7 +110,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 SetSatus();
             }
 
-            if (ButtonOption.IsSelected != null)
+            if (ButtonOption.Active != null)
             {
                 _button.Activated += UpdatePropertyFromUI;
                 // ButtonOption.IsSelected.PropertyChanged += UpdateUIFromProperty;
@@ -166,10 +166,10 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         void SetSatus()
         {
-            if (ButtonOption.IsSelected == null)
+            if (ButtonOption.Active == null)
                 return;
 
-            var state = ButtonOption.IsSelected.Value ? NSCellStateValue.On : NSCellStateValue.Off;
+            var state = ButtonOption.Active.Value ? NSCellStateValue.On : NSCellStateValue.Off;
 
             if (_button.State == state)
                 return;
@@ -181,11 +181,11 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         {
             var isSelected = (_button.State == NSCellStateValue.On) ? true : false;
 
-            if (ButtonOption.IsSelected.Value == isSelected)
+            if (ButtonOption.Active.Value == isSelected)
             {
                 return;
             }
-            ButtonOption.IsSelected.Value = isSelected;
+            ButtonOption.Active.Value = isSelected;
 
             ButtonOption.UpdateStatus(_button, e);
         }
