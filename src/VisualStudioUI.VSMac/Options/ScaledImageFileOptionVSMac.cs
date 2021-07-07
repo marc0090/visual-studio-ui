@@ -146,7 +146,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     alert.MessageText = "Image already exists";
                     alert.InformativeText = string.Format("Should {0} be overwritten?", imageViewer.Title);
                     var result = alert.RunSheetModal(null);
-                    if (result == (int)NSAlertButtonReturn.Second)
+                    if (result == (int)NSAlertButtonReturn.First)
                     {
                         return;
                     }
