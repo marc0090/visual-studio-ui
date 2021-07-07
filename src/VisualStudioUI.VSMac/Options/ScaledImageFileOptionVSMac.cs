@@ -152,7 +152,9 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     }
                 }
 
-                imageViewer.Image = new NSImage(openPanel.Url.Path);
+                var drawImage = new NSImage(openPanel.Url.Path, false);
+                drawImage.Size = new CGSize(ImageOption.DrawSize, ImageOption.DrawSize);
+                imageViewer.Image = drawImage;
             }
         }
 
