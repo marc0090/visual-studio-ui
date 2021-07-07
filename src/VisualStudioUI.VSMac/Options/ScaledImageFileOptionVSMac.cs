@@ -123,13 +123,13 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     NSImage image = new NSImage(openPanel.Url.Path);
                     int.TryParse(size[0], out int width);
                     int.TryParse(size[1], out int height);
-                    if (!image.Size.Equals(new CGSize(width, height)))
+                    if (image.CGImage.Width != width || image.CGImage.Height != height )
                     {
                         NSAlert alert = new NSAlert();
                         alert.AlertStyle = NSAlertStyle.Critical;
                         //alert.Icon = NSImage.GetSystemSymbol("xmark.circle", null);
                         alert.MessageText = "Incorrect image dimensions";
-                        alert.InformativeText = string.Format("Only images with size {0}x{1} are allowed. Picture was {2}x{3}.", size[0], size[1], image.Size.Width, image.Size.Height);
+                        alert.InformativeText = string.Format("Only images with size {0}x{1} are allowed. Picture was {2}x{3}.", size[0], size[1], image.CGImage.Width, image.CGImage.Height);
                         alert.RunSheetModal(null);
 
                         return;
