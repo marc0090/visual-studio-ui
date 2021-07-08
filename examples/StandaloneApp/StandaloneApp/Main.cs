@@ -217,6 +217,12 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             imagelist.Add(new ScaledImageFile(1024, 1024, "2X") { Path = "/Users/vstester/Projects/iOS/iOS/Assets.xcassets/AppIcon.appiconset/Icon1024.png " });
             ViewModelProperty<ImmutableArray<ScaledImageFile>> imageArray = new ViewModelProperty<ImmutableArray<ScaledImageFile>>("", imagelist.ToImmutableArray());
             var image = new ScaledImageFileOption(imageArray);
+            image.ImageArray.Bind();
+            image.ImageArray.PropertyChanged += (sender, e) => {
+                int a = 0;
+                a += 1;
+            };
+
             iTunesArtwork.AddOption(image);
 
             var signInLabel = new LabelOption()

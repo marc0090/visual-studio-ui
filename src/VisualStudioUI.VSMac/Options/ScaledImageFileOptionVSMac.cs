@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using AppKit;
 using CoreAnimation;
 using CoreGraphics;
@@ -55,7 +56,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             };
 
             // image viewer
-            NSButton imageView = new NSButton
+            NSButton imageView = new NSButton ()
             {
                 WantsLayer = true,
                 TranslatesAutoresizingMaskIntoConstraints = false
@@ -64,7 +65,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             imageView.Layer.BorderWidth = 1f;
             imageView.Layer.CornerRadius = 4f;
             imageView.Layer.BackgroundColor = NSColor.White.CGColor;
-            imageView.Activated += OnAddClicked;
+            imageView.Activated += OnImageViewerClicked;
             
             // dashed border
             CAShapeLayer border = new CAShapeLayer();
@@ -82,7 +83,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             imageView.Layer.AddSublayer(border);
 
             // center label
-            imageView.Title = GetImageTitle(imageFile);
+            imageView.Title = ImageOption.GetImageTitle(imageFile);
             NSAttributedString attr = new NSAttributedString(imageView.Title, foregroundColor: NSColor.Gray);
             imageView.AttributedTitle = attr;
 
@@ -112,87 +113,96 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             _view.AddArrangedSubview(_frameView);
         }
 
-        private void OnAddClicked(object sender, EventArgs e)
+        private void OnImageViewerClicked(object sender, EventArgs e)
         {
             NSButton imageViewer = (NSButton)sender;
 
-            var openPanel = new NSOpenPanel();
-            openPanel.CanChooseFiles = true;
-            openPanel.ExtensionHidden = true;
-            openPanel.AllowedFileTypes = new[] { "png" }; 
-            var response = openPanel.RunModal();
-            if (response == 1 && openPanel.Url != null)
+            string path = ImageOption.RedrawImageViewer(sender, e);
+            if (!string.IsNullOrWhiteSpace(path))
             {
-                NSImage? imageNew = null;
-                if (!string.IsNullOrWhiteSpace(imageViewer.Title))
+                NSImage imageNew = new NSImage(path);
+                imageNew.Size = new CGSize(ImageOption.DrawSize, ImageOption.DrawSize);
+                imageViewer.Image = imageNew;
+
+                // Update property
+                ScaledImageFile imageInArrary = ImageOption.ImageArray.Value.Where(x => ImageOption.GetImageTitle(x).Equals(imageViewer?.Title)).First();
+                var arrayNew = ImageOption.ImageArray.Value.Remove(imageInArrary);
+                imageInArrary.Path = path;
+                arrayNew = arrayNew.Add(imageInArrary);
+                ImageOption.ImageArray.Value = arrayNew;
+            }
+            else
+            {
+                // use for Visual-Studio-ui repo test
+                var openPanel = new NSOpenPanel();
+                openPanel.CanChooseFiles = true;
+                openPanel.ExtensionHidden = true;
+                openPanel.AllowedFileTypes = new[] { "png" };
+                var response = openPanel.RunModal();
+                if (response == 1 && openPanel.Url != null)
                 {
-                    var imageOld = GetImageFile(imageViewer.Title);
+                    NSImage? imageNew = null;
+                    if (!string.IsNullOrWhiteSpace(imageViewer.Title))
+                    {
+                        var imageFileOld = ImageOption.GetImageFile(imageViewer.Title);
 
-                    imageNew = new NSImage(openPanel.Url.Path);
+                        imageNew = new NSImage(openPanel.Url.Path);
 
-                    if (imageNew.CGImage.Width != imageOld?.Width || imageNew.CGImage.Height != imageOld?.Height)
+                        if (imageNew.CGImage.Width != imageFileOld?.Width || imageNew.CGImage.Height != imageFileOld?.Height)
+                        {
+                            NSAlert alert = new NSAlert();
+                            alert.AlertStyle = NSAlertStyle.Critical;
+                            //alert.Icon = NSImage.GetSystemSymbol("xmark.circle", null);
+                            alert.MessageText = "Incorrect image dimensions";
+                            alert.InformativeText = string.Format("Only images with size {0}x{1} are allowed. Picture was {2}x{3}.", imageFileOld?.Width, imageFileOld?.Height, imageNew.CGImage.Width, imageNew.CGImage.Height);
+                            alert.RunSheetModal(null);
+
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        //TODO: throw exception/ write log
+                    }
+
+                    if (imageViewer.Image != null)
                     {
                         NSAlert alert = new NSAlert();
-                        alert.AlertStyle = NSAlertStyle.Critical;
-                        //alert.Icon = NSImage.GetSystemSymbol("xmark.circle", null);
-                        alert.MessageText = "Incorrect image dimensions";
-                        alert.InformativeText = string.Format("Only images with size {0}x{1} are allowed. Picture was {2}x{3}.", imageOld?.Width, imageOld?.Height, imageNew.CGImage.Width, imageNew.CGImage.Height);
-                        alert.RunSheetModal(null);
-
-                        return;
+                        alert.AlertStyle = NSAlertStyle.Informational;
+                        alert.AddButton("No");
+                        alert.AddButton("Yes");
+                        alert.Icon = NSImage.GetSystemSymbol("info.circle", null);
+                        alert.MessageText = "Image already exists";
+                        alert.InformativeText = string.Format("Should {0} be overwritten?", imageViewer.Title);
+                        var result = alert.RunSheetModal(null);
+                        if (result == (int)NSAlertButtonReturn.First)
+                        {
+                            // Don't need to overwrite
+                            return;
+                        }
                     }
-                }
-                else
-                {
-                    //TODO: throw exception/ write log
-                }
 
-                if (imageViewer.Image != null)
-                {
-                    NSAlert alert = new NSAlert();
-                    alert.AlertStyle = NSAlertStyle.Informational;
-                    alert.AddButton("No");
-                    alert.AddButton("Yes");
-                    alert.Icon = NSImage.GetSystemSymbol("info.circle", null);
-                    alert.MessageText = "Image already exists";
-                    alert.InformativeText = string.Format("Should {0} be overwritten?", imageViewer.Title);
-                    var result = alert.RunSheetModal(null);
-                    if (result == (int)NSAlertButtonReturn.First)
+                    if (imageNew != null && imageNew.IsValid)
                     {
-                        // Don't need to overwrite
-                        return;
+                        imageNew.Size = new CGSize(ImageOption.DrawSize, ImageOption.DrawSize);
+                        imageViewer.Image = imageNew;
+
+                        // Update property
+                        ScaledImageFile imageInArrary = ImageOption.ImageArray.Value.Where(x => ImageOption.GetImageTitle(x).Equals(imageViewer?.Title)).First();
+                        var arrayNew = ImageOption.ImageArray.Value.Remove(imageInArrary);
+                        imageInArrary.Path = openPanel.Url.Path;
+                        arrayNew = arrayNew.Add(imageInArrary);
+                        ImageOption.ImageArray.Value = arrayNew;
+                    }
+                    else
+                    {
+                        //TODO: throw exception/ write log
                     }
                 }
-
-                if (imageNew != null && imageNew.IsValid)
-                {
-                    imageNew.Size = new CGSize(ImageOption.DrawSize, ImageOption.DrawSize);
-                    imageViewer.Image = imageNew;
-                }
-                else
-                {
-                    //TODO: throw exception/ write log
-                }
             }
         }
 
-        private ScaledImageFile? GetImageFile(string title)
-        {
-            foreach (var item in ImageOption.ImageArray.Value)
-            {
-                if (title.Equals(GetImageTitle(item)))
-                {
-                    return item;
-                }
-            }
-
-            return null;
-        }
-
-        private string GetImageTitle(ScaledImageFile imageFile)
-        {
-            return string.Format("({0}x{1})", imageFile?.Width, imageFile?.Height);
-        }
+        
 
         /*
 		public override void Dispose ()
