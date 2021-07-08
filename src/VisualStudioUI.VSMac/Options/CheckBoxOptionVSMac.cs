@@ -44,7 +44,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         private void CheckBoxSelected()
         {
-            
+            CheckBoxOption.Property.Value = (_button?.State == NSCellStateValue.On) ? true : false;
         }
     }
 }

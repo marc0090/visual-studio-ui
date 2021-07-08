@@ -213,8 +213,8 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
 
             var iTunesArtwork = new OptionCard() { Label = "iTunes Artwork" };
             List<ScaledImageFile> imagelist = new List<ScaledImageFile>();
-            imagelist.Add(new ScaledImageFile(512, 512, "1X"));
-            imagelist.Add(new ScaledImageFile(1024, 1024, "2X"));
+            imagelist.Add(new ScaledImageFile(512, 512, "1X") { Path = null }); ;
+            imagelist.Add(new ScaledImageFile(1024, 1024, "2X") { Path = "/Users/vstester/Projects/iOS/iOS/Assets.xcassets/AppIcon.appiconset/Icon1024.png " });
             ViewModelProperty<ImmutableArray<ScaledImageFile>> imageArray = new ViewModelProperty<ImmutableArray<ScaledImageFile>>("", imagelist.ToImmutableArray());
             var image = new ScaledImageFileOption(imageArray);
             iTunesArtwork.AddOption(image);

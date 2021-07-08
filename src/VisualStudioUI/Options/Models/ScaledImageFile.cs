@@ -6,7 +6,18 @@ namespace Microsoft.VisualStudioUI.Options.Models
         /// <summary>
         /// Image path of slected
         /// </summary>
-        public string? Path { get; set; }
+        private string _path;
+        public string? Path
+        {
+            get
+            {
+                return _path;
+            }
+            set
+            {
+                _path = value?.Trim();
+            }
+        }
 
         public float Width { get; }
         public float Height { get; }

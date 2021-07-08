@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using AppKit;
 using CoreAnimation;
 using CoreGraphics;
@@ -81,13 +82,19 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             imageView.Layer.AddSublayer(border);
 
             // center label
-            imageView.Title = string.Format("({0}x{1})", imageFile.Width, imageFile.Height);
+            imageView.Title = GetImageTitle(imageFile);
             NSAttributedString attr = new NSAttributedString(imageView.Title, foregroundColor: NSColor.Gray);
             imageView.AttributedTitle = attr;
 
             _frameView.AddArrangedSubview(imageView);
             imageView.WidthAnchor.ConstraintEqualToConstant(ImageOption.DrawSize).Active = true;
             imageView.HeightAnchor.ConstraintEqualToConstant(ImageOption.DrawSize).Active = true;
+            if (!string.IsNullOrWhiteSpace(imageFile.Path) && File.Exists(imageFile.Path))
+            {
+                var image = new NSImage(imageFile.Path);
+                image.Size = new CGSize(ImageOption.DrawSize, ImageOption.DrawSize);
+                imageView.Image = image;
+            }
 
             // bottom label
             var bottomLabel = new NSTextField();
@@ -116,24 +123,28 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             var response = openPanel.RunModal();
             if (response == 1 && openPanel.Url != null)
             {
+                NSImage? imageNew = null;
                 if (!string.IsNullOrWhiteSpace(imageViewer.Title))
                 {
-                    var size = imageViewer.Title.TrimStart('(').TrimEnd(')').Split('x');
+                    var imageOld = GetImageFile(imageViewer.Title);
 
-                    NSImage image = new NSImage(openPanel.Url.Path);
-                    int.TryParse(size[0], out int width);
-                    int.TryParse(size[1], out int height);
-                    if (image.CGImage.Width != width || image.CGImage.Height != height )
+                    imageNew = new NSImage(openPanel.Url.Path);
+
+                    if (imageNew.CGImage.Width != imageOld?.Width || imageNew.CGImage.Height != imageOld?.Height)
                     {
                         NSAlert alert = new NSAlert();
                         alert.AlertStyle = NSAlertStyle.Critical;
                         //alert.Icon = NSImage.GetSystemSymbol("xmark.circle", null);
                         alert.MessageText = "Incorrect image dimensions";
-                        alert.InformativeText = string.Format("Only images with size {0}x{1} are allowed. Picture was {2}x{3}.", size[0], size[1], image.CGImage.Width, image.CGImage.Height);
+                        alert.InformativeText = string.Format("Only images with size {0}x{1} are allowed. Picture was {2}x{3}.", imageOld?.Width, imageOld?.Height, imageNew.CGImage.Width, imageNew.CGImage.Height);
                         alert.RunSheetModal(null);
 
                         return;
                     }
+                }
+                else
+                {
+                    //TODO: throw exception/ write log
                 }
 
                 if (imageViewer.Image != null)
@@ -148,14 +159,39 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     var result = alert.RunSheetModal(null);
                     if (result == (int)NSAlertButtonReturn.First)
                     {
+                        // Don't need to overwrite
                         return;
                     }
                 }
 
-                var drawImage = new NSImage(openPanel.Url.Path, false);
-                drawImage.Size = new CGSize(ImageOption.DrawSize, ImageOption.DrawSize);
-                imageViewer.Image = drawImage;
+                if (imageNew != null && imageNew.IsValid)
+                {
+                    imageNew.Size = new CGSize(ImageOption.DrawSize, ImageOption.DrawSize);
+                    imageViewer.Image = imageNew;
+                }
+                else
+                {
+                    //TODO: throw exception/ write log
+                }
             }
+        }
+
+        private ScaledImageFile? GetImageFile(string title)
+        {
+            foreach (var item in ImageOption.ImageArray.Value)
+            {
+                if (title.Equals(GetImageTitle(item)))
+                {
+                    return item;
+                }
+            }
+
+            return null;
+        }
+
+        private string GetImageTitle(ScaledImageFile imageFile)
+        {
+            return string.Format("({0}x{1})", imageFile?.Width, imageFile?.Height);
         }
 
         /*
