@@ -26,6 +26,7 @@ namespace Microsoft.VisualStudioUI.Options.Models
         /// The bottom label of image viewer 
         /// </summary>
         public string? Label { get; }
+        public string Hint { get; set; }
 
         public ScaledImageFile(float width, float height, string label)
         {

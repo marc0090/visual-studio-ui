@@ -66,7 +66,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             imageView.Layer.CornerRadius = 4f;
             imageView.Layer.BackgroundColor = NSColor.White.CGColor;
             imageView.Activated += OnImageViewerClicked;
-            
+
             // dashed border
             CAShapeLayer border = new CAShapeLayer();
             border.Position = new CGPoint(imageView.Bounds.X, imageView.Bounds.Y);
@@ -95,6 +95,12 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 var image = new NSImage(imageFile.Path);
                 image.Size = new CGSize(ImageOption.DrawSize, ImageOption.DrawSize);
                 imageView.Image = image;
+                border?.RemoveFromSuperLayer();
+            }
+
+            if (!string.IsNullOrWhiteSpace(imageFile.Hint))
+            {
+                imageView.ToolTip = imageFile.Hint;
             }
 
             // bottom label
@@ -123,6 +129,12 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 NSImage imageNew = new NSImage(path);
                 imageNew.Size = new CGSize(ImageOption.DrawSize, ImageOption.DrawSize);
                 imageViewer.Image = imageNew;
+
+                var layer = imageViewer.Layer?.Sublayers;
+                if (layer != null && layer.Any())
+                {
+                    layer.First().RemoveFromSuperLayer();
+                }
 
                 // Update property
                 ScaledImageFile imageInArrary = ImageOption.ImageArray.Value.Where(x => ImageOption.GetImageTitle(x).Equals(imageViewer?.Title)).First();
@@ -186,6 +198,12 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     {
                         imageNew.Size = new CGSize(ImageOption.DrawSize, ImageOption.DrawSize);
                         imageViewer.Image = imageNew;
+
+                        var layer = imageViewer.Layer?.Sublayers;
+                        if (layer != null && layer.Any())
+                        {
+                            layer.First().RemoveFromSuperLayer();
+                        }
 
                         // Update property
                         ScaledImageFile imageInArrary = ImageOption.ImageArray.Value.Where(x => ImageOption.GetImageTitle(x).Equals(imageViewer?.Title)).First();
