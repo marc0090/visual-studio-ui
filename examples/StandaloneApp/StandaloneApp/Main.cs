@@ -87,14 +87,19 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
 
             var card3 = new OptionCard();
             card3.AddOption(
-                new SwitchableGroupOption(BoolProp(true))
-                {
-                    Label = "Siri",
-                    Name = "Allows your application to handle Siri requests.",
-                    Hint = "Hint: Allows your application to handle Siri requests.",
-                }
+             new SwitchableGroupOption(BoolProp(true))
+             {
+                 Label = "Siri",
+                 Name = "Allows your application to handle Siri requests.",
+                 Hint = "Hint: Allows your application to handle Siri requests.",
+             }
              );
 
+            card3.AddOption(new StepperOption(new ViewModelProperty<int>("", 100))
+            {
+                Label = "Port",
+                Hint = "hint"
+            });
 
             var card4 = new OptionCard();
             var switchableOption = new SwitchableGroupOption(BoolProp(true))
@@ -116,6 +121,7 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
                 DefaultValue = "BundleIdentifier",
                 PrefixValue = "AppIdentifierPrefix"
             };
+
 
             switchableOption.AddOption(KeychainAccessGroupsList);
 
@@ -197,14 +203,16 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             signing.AddOption(autoSigningOption1);
             signing.AddOption(autoSigningOption2);
 
-            var btn1 = new ButtonOption() { Name = "Hide"};
+            var btn1 = new ButtonOption() { Name = "Hide" };
             var btn2 = new ButtonOption() { Name = "2", Hidden = new ViewModelProperty<bool>("", false) };
-            var btn3 = new ButtonOption() { Name = "show"};
+            var btn3 = new ButtonOption() { Name = "show" };
             btn2.Hidden.Bind();
-            btn1.Clicked += (sender, e) => {
+            btn1.Clicked += (sender, e) =>
+            {
                 btn2.Hidden.Value = true;
             };
-            btn3.Clicked += (sender, e) => {
+            btn3.Clicked += (sender, e) =>
+            {
                 btn2.Hidden.Value = false;
             };
             signing.AddOption(btn1);
@@ -218,7 +226,8 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             ViewModelProperty<ImmutableArray<ScaledImageFile>> imageArray = new ViewModelProperty<ImmutableArray<ScaledImageFile>>("", imagelist.ToImmutableArray());
             var image = new ScaledImageFileOption(imageArray);
             image.ImageArray.Bind();
-            image.ImageArray.PropertyChanged += (sender, e) => {
+            image.ImageArray.PropertyChanged += (sender, e) =>
+            {
                 int a = 0;
                 a += 1;
             };

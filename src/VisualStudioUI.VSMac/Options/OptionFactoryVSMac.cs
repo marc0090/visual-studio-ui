@@ -35,7 +35,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             new SwitchableGroupOptionVSMac(switchableGroupOption);
 
         public override OptionPlatform CreateStringListOptionPlatform(StringListOption stringListOption) => new StringListOptionVSMac(stringListOption);
-        public override OptionPlatform CreateImageViewOptionPlatform(ScaledImageFileOption imageFileOption) => new ScaledImageFileOptionVSMac (imageFileOption);
+        public override OptionPlatform CreateImageViewOptionPlatform(ScaledImageFileOption imageFileOption) => new ScaledImageFileOptionVSMac(imageFileOption);
         public override OptionPlatform CreateButtonOptionPlatform(ButtonOption buttonOption) => new ButtonOptionVSMac(buttonOption);
 
         public override OptionPlatform CreateSwitchOptionPlatform(SwitchOption switchOption) => throw new NotImplementedException(); // new SwitchOptionVSMac(switchOption);
@@ -46,5 +46,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         public override OptionPlatform CreateLabelOptionPlatform(LabelOption labelOption) => new LabelOptionVSMac(labelOption);
 
+        public override OptionPlatform CreateStepperOptionPlatform(StepperOption stepperOption) => new StepperOptionVSMac(stepperOption);
     }
 }
