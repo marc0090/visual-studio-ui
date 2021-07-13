@@ -84,6 +84,14 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         }
         */
 
+        public override void OnEnableChanged(bool enabled)
+        {
+            base.OnEnableChanged(enabled);
+
+            if (_popUpButton != null)
+                _popUpButton.Enabled = enabled;
+        }
+
         void UpdatePropertyFromUI(object sender, EventArgs e)
         {
             TItem? match = DisplayableItemsUtil.FindMatch(ComboBoxOption.ItemsProperty.Value,

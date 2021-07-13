@@ -46,5 +46,12 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         {
             RadioButtonOption.RadioButtonGroup.Select(RadioButtonOption);
         }
+
+        public override void OnEnableChanged(bool enabled)
+        {
+            base.OnEnableChanged(enabled);
+            if (_button != null)
+                _button.Enabled = enabled;
+        }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using AppKit;
+﻿using AppKit;
 using Microsoft.VisualStudioUI.Options;
 
 namespace Microsoft.VisualStudioUI.VSMac.Options
@@ -70,14 +69,21 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                 _textField.Changed += (s, e) =>
                 {
+                    if (_textField.IntValue > StepperOption.Maximum)
+                    {
+                        _textField.IntValue = StepperOption.Maximum;
+                    }
+                    else if (_textField.IntValue < StepperOption.Minimum)
+                    {
+                        _textField.IntValue = StepperOption.Minimum;
+                    }
+
                     StepperOption.Property.Value = _textField.IntValue;
                     _stepper.IntValue = _textField.IntValue;
-
                 };
 
 
                 _helpButton = CreateHelpButton();
-
 
                 if (_leftLabel != null) _optionView.AddArrangedSubview(_leftLabel);
 
@@ -86,15 +92,48 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                 if (_helpButton != null) _optionView!.AddArrangedSubview(_helpButton);
 
+                _leftLabel.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 6f).Active = true;
+
                 _textField.WidthAnchor.ConstraintEqualToConstant(50f).Active = true;
                 _textField.HeightAnchor.ConstraintEqualToConstant(21f).Active = true;
-                _textField.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 203).Active = true;
-
+                _textField.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 220).Active = true;
+                _textField.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 5).Active = true;
+                _textField.BottomAnchor.ConstraintEqualToAnchor(_optionView.BottomAnchor, 5).Active = true;
+                _stepper.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 5).Active = true;
                 _optionView.WidthAnchor.ConstraintEqualToConstant(600f).Active = true;
-
-
             }
 
+        }
+
+        public override void OnEnableChanged(bool enabled)
+        {
+            base.OnEnableChanged(enabled);
+
+            if (_leftLabel != null)
+                _leftLabel.Enabled = enabled;
+
+            if (_textField != null)
+                _textField.Enabled = enabled;
+
+            _stepper.Enabled = enabled;
+        }
+
+
+        protected override void UpdateHelpButton()
+        {
+            if (_helpButton != null)
+            {
+                _helpButton.RemoveFromSuperview();
+                _helpButton.Dispose(); // TODO: Is this needed?
+                _helpButton = null;
+            }
+
+            _helpButton = CreateHelpButton();
+
+            if (_helpButton == null)
+                return;
+
+            _optionView!.AddArrangedSubview(_helpButton);
         }
 
 

@@ -242,7 +242,20 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             };
             iTunesArtwork.AddOption(signInLabel);
 
+            OptionCard card6 = new OptionCard()
+            {
+                Label = "test enable"
+            };
+
+            var dependOn = new CheckBoxOption(BoolProp(false)) { ButtonLabel = "enable" };
+            card6.AddOption(dependOn);
+            card6.AddOption(new CheckBoxOption(BoolProp(false)) { ButtonLabel = "test", DisablebilityDependsOn = dependOn });
+            card6.AddOption(new DocButtonOption(StringProp("test"), "test") { DisablebilityDependsOn = dependOn });
+            card6.AddOption(new TextOption(StringProp("")) { Label = "test", DisablebilityDependsOn = dependOn });
+            card6.AddOption(new StepperOption(new ViewModelProperty<int>("", 100)) { Label = "Port", DisablebilityDependsOn = dependOn });
+
             OptionCards cards = new OptionCards();
+            cards.AddCard(card6);
             cards.AddCard(iTunesArtwork);
             cards.AddCard(signing);
             cards.AddCard(card3);

@@ -43,5 +43,12 @@ namespace Microsoft.VisualStudioUI.Options
         /// toggled on.
         /// </summary>
         public ToggleButtonOption? VisibilityDependsOn { get; set; }
+
+        /// <summary>
+        /// When set, this option will only be enabled/disabled when the specified ToggleButtonOption is
+        /// toggled on.
+        /// </summary>
+        public ToggleButtonOption? DisablebilityDependsOn { get; set; }
+
     }
 }

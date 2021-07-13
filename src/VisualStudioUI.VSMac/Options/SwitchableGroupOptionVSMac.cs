@@ -1,11 +1,5 @@
-﻿//
-// SwitchableGroupOptionVSMac.cs
-//
-// Author:
-//       marcbookpro19 <v-marcguo@microsoft.com>
-//
-// Copyright (c) 2021 
-//
+﻿// Licensed to the .NET Foundation under one or more agreements. The .NET Foundation licenses this file to you under the MIT license. See the LICENSE.md file in the project root for more information.
+
 using System;
 using AppKit;
 using Microsoft.VisualStudioUI.Options;
@@ -180,6 +174,11 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             _childrenControlBottomeConstrains.Active = true;
 
             ShowChildrenOption(enable);
+        }
+
+        public override void OnEnableChanged(bool enabled)
+        {
+            _switchButton.Enabled = enabled;
         }
 
         private void ShowChildrenOption(bool enable)

@@ -150,6 +150,13 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             UpdateStringListFromModel();
         }
 
+        public override void OnEnableChanged(bool enabled)
+        {
+            _addButton.Enabled = enabled;
+            _removeButton.Enabled = enabled;
+            _tableView.Enabled = enabled;
+        }
+
         public bool ShowDescriptions
         {
             get { return false; }

@@ -96,6 +96,13 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             get { return false; }
         }
 
+        public override void OnEnableChanged(bool enabled)
+        {
+            base.OnEnableChanged(enabled);
+
+            _tableView.Enabled = enabled;
+        }
+
         private void OnCheckBoxListChanged(object sender, EventArgs e)
         {
             RefreshList();

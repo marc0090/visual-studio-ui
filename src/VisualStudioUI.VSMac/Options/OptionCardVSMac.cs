@@ -113,7 +113,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
             foreach (Option option in OptionCard.Options)
             {
-                NSView optionView = ((OptionVSMac) option.Platform).View;
+                NSView optionView = ((OptionVSMac)option.Platform).View;
 
                 // If the option's visibility depends on a button, hide if it's not initially showing and update the
                 // hidden property if the button changes. For NSStackViews, hidden views are automatically detached,
@@ -125,13 +125,30 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                     if (!buttonProperty.Value)
                         optionView.Hidden = true;
-                    
+
                     buttonProperty.PropertyChanged += delegate
                     {
                         optionView.Hidden = !buttonProperty.Value;
                     };
                 }
-                
+
+
+                ToggleButtonOption? disablebilityDependsOn = option.DisablebilityDependsOn;
+
+                if (disablebilityDependsOn != null)
+                {
+                    ViewModelProperty<bool> buttonProperty = disablebilityDependsOn.Property;
+
+                    if (!buttonProperty.Value)
+                        option.Platform.OnEnableChanged(buttonProperty.Value);
+
+                    buttonProperty.PropertyChanged += delegate
+                    {
+                        option.Platform.OnEnableChanged(buttonProperty.Value);
+                    };
+                }
+
+
                 optionsStackView.AddArrangedSubview(optionView);
             }
 

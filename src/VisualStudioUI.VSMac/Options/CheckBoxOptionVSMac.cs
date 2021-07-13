@@ -12,7 +12,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         {
         }
 
-        public CheckBoxOption CheckBoxOption => ((CheckBoxOption) Option);
+        public CheckBoxOption CheckBoxOption => ((CheckBoxOption)Option);
 
         protected override NSView ControlView
         {
@@ -40,6 +40,14 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                 return _button!;
             }
+        }
+
+        public override void OnEnableChanged(bool enabled)
+        {
+            base.OnEnableChanged(enabled);
+
+            if (_button != null)
+                _button.Enabled = enabled;
         }
 
         private void CheckBoxSelected()

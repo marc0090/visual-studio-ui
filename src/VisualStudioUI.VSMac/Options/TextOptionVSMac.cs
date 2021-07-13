@@ -13,7 +13,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         {
         }
 
-        public TextOption TextOption => ((TextOption) Option);
+        public TextOption TextOption => ((TextOption)Option);
 
         protected override NSView ControlView
         {
@@ -33,9 +33,9 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                     _textField.WidthAnchor.ConstraintEqualToConstant(196f).Active = true;
 
-                    property.PropertyChanged += delegate(object o, ViewModelPropertyChangedEventArgs args)
+                    property.PropertyChanged += delegate (object o, ViewModelPropertyChangedEventArgs args)
                     {
-                        _textField.StringValue = ((string) args.NewValue) ?? string.Empty;
+                        _textField.StringValue = ((string)args.NewValue) ?? string.Empty;
                     };
 
                     _textField.Changed += delegate { property.Value = _textField.StringValue; };
@@ -43,6 +43,13 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                 return _textField;
             }
+        }
+
+        public override void OnEnableChanged(bool enabled)
+        {
+            base.OnEnableChanged(enabled);
+            if (_textField != null)
+                _textField.Enabled = enabled;
         }
 
         /*
