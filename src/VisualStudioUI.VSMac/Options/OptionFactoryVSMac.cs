@@ -47,5 +47,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         public override OptionPlatform CreateLabelOptionPlatform(LabelOption labelOption) => new LabelOptionVSMac(labelOption);
 
         public override OptionPlatform CreateStepperOptionPlatform(StepperOption stepperOption) => new StepperOptionVSMac(stepperOption);
+
+        public override OptionPlatform CreateProgressIndicatorOptionPlatform(ProgressIndicatorOption progressIndicatorOption) => new ProgressIndicatorOptionVSMac(progressIndicatorOption);
     }
 }
