@@ -81,6 +81,7 @@
     <Compile Include="Options\CheckBoxListOptionVSMac.cs" />
     <Compile Include="Options\LabelOptionVSMac.cs" />
     <Compile Include="Options\StepperOptionVSMac.cs" />
+    <Compile Include="Options\ProgressIndicatorOptionVSMac.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\VisualStudioUI\VisualStudioUI.csproj">

@@ -219,6 +219,14 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             signing.AddOption(btn2);
             signing.AddOption(btn3);
 
+            LabelOption btn = new LabelOption();
+            btn.Name = "Test";
+            btn.IsBold = false;
+            ProgressIndicatorOption pro = new ProgressIndicatorOption(btn);
+            pro.ShowSpinner.Bind();
+            pro.Label = "ProgresssIndicator";
+            signing.AddOption(pro);
+
             var iTunesArtwork = new OptionCard() { Label = "iTunes Artwork" };
             List<ScaledImageFile> imagelist = new List<ScaledImageFile>();
             imagelist.Add(new ScaledImageFile(512, 512, "1X") { Path = null }); ;

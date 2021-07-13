@@ -47,5 +47,6 @@ namespace Microsoft.VisualStudioUI.Options
 
         public abstract OptionPlatform CreateStepperOptionPlatform(StepperOption stepperOption);
 
+        public abstract OptionPlatform CreateProgressIndicatorOptionPlatform(ProgressIndicatorOption progressIndicatorOption);
     }
 }
