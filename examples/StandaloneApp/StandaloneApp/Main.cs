@@ -50,6 +50,18 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
                 }
             );
 
+            TextOption fileEntry = new TextOption(StringProp("")) {
+                Label = "fileEntry",
+            };
+            fileEntry.MacroMenuItems = ImmutableArray.CreateRange(
+                new [] { new MacroMenuItem("Project Directory", "$(ProjectDir)"),
+                new MacroMenuItem("Solution Directory", "$(SolutionDir)"),
+                });
+            card1.AddOption(fileEntry);
+
+            OptionCards cardss = new OptionCards();
+            cardss.AddCard(card1);
+
 
             ViewModelProperty<ImmutableArray<string>> propertyItems = new ViewModelProperty<ImmutableArray<string>>("");
             var subMenuCombox = new ComboBoxOption<string>(StringProp("option1"), propertyItems)
