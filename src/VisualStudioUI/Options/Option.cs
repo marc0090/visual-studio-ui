@@ -39,10 +39,18 @@ namespace Microsoft.VisualStudioUI.Options
         public ViewModelProperty<Message?>? ValidationMessage { get; set; } = null;
 
         /// <summary>
-        /// When set, this option will only be shown when the specified ToggleButtonOption is
+        /// When set, this option will only be shown if the specified ToggleButtonOption is
         /// toggled on.
         /// </summary>
         public ToggleButtonOption? VisibilityDependsOn { get; set; }
+
+        /// <summary>
+        /// When set, this option will only be shown if the specified property is true.
+        /// If visibility just depends on a button state, then using VisibilityDependsOn
+        /// instead is preferred. If VisibilityDependsOn and Visible are both set then
+        /// both must be valid for the option to show.
+        /// </summary>
+        public ViewModelProperty<bool>? Visible { get; set; }
 
         /// <summary>
         /// When set, this option will only be enabled/disabled when the specified ToggleButtonOption is

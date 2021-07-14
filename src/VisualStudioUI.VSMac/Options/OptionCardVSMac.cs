@@ -115,26 +115,25 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             {
                 NSView optionView = ((OptionVSMac)option.Platform).View;
 
-                // If the option's visibility depends on a button, hide if it's not initially showing and update the
-                // hidden property if the button changes. For NSStackViews, hidden views are automatically detached,
+                // If the option's visibility is dynamic, hide if it's not initially showing and update the hidden
+                // property the desired visibility changes. For NSStackViews, hidden views are automatically detached,
                 // excluded from the layout.
+
+                UpdateOptionVisible(option);
+
                 ToggleButtonOption? visibilityDependsOn = option.VisibilityDependsOn;
                 if (visibilityDependsOn != null)
                 {
-                    ViewModelProperty<bool> buttonProperty = visibilityDependsOn.Property;
-
-                    if (!buttonProperty.Value)
-                        optionView.Hidden = true;
-
-                    buttonProperty.PropertyChanged += delegate
-                    {
-                        optionView.Hidden = !buttonProperty.Value;
-                    };
+                    visibilityDependsOn.Property.PropertyChanged += (sender, eventArgs) => UpdateOptionVisible(option);
                 }
 
+                ViewModelProperty<bool>? visible = option.Visible;
+                if (visible != null)
+                {
+                    visible.PropertyChanged += (sender, eventArgs) => UpdateOptionVisible(option);
+                }
 
                 ToggleButtonOption? disablebilityDependsOn = option.DisablebilityDependsOn;
-
                 if (disablebilityDependsOn != null)
                 {
                     ViewModelProperty<bool> buttonProperty = disablebilityDependsOn.Property;
@@ -148,11 +147,24 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     };
                 }
 
-
                 optionsStackView.AddArrangedSubview(optionView);
             }
 
             return cardView;
+        }
+
+        private void UpdateOptionVisible(Option option)
+        {
+            NSView optionView = ((OptionVSMac)option.Platform).View;
+
+            ViewModelProperty<bool>? toggleButtonProperty = option.VisibilityDependsOn?.Property;
+            ViewModelProperty<bool>? visibleProperty = option.Visible;
+
+            bool visible =
+                (toggleButtonProperty == null || toggleButtonProperty.Value) &&
+                (visibleProperty == null || visibleProperty.Value);
+
+            optionView.Hidden = !visible;
         }
     }
 }
