@@ -15,7 +15,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         {
         }
 
-        public EditableComboBoxOption EditableComboBoxOption => (EditableComboBoxOption) Option;
+        public EditableComboBoxOption EditableComboBoxOption => (EditableComboBoxOption)Option;
 
         protected override NSView ControlView
         {
@@ -55,6 +55,13 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         }
         */
 
+        public override void OnEnableChanged(bool enabled)
+        {
+            base.OnEnableChanged(enabled);
+
+            _comboBox.Enabled = enabled;
+        }
+
         void UpdatePropertyFromSelection(object sender, EventArgs e)
         {
             string? match = DisplayableItemsUtil.FindMatch(EditableComboBoxOption.ItemsProperty.Value, _comboBox.SelectedValue.ToString());
@@ -92,7 +99,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
             // The intention is that null items aren't allowed - no items should be an empty list.
             // But handle this case just in case, to be safe.
-            if ((ImmutableArray<string>?) items == null)
+            if ((ImmutableArray<string>?)items == null)
                 return;
 
             foreach (string item in items)

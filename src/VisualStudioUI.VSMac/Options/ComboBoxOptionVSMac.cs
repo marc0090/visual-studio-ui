@@ -39,10 +39,26 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     _popUpButton.WidthAnchor.ConstraintEqualToConstant(198f).Active = true;
 
                     _popUpButton.Activated += UpdatePropertyFromUI;
-                    property.PropertyChanged += delegate { UpdateSelectedItemUIFromProperty(); };
-                    itemsProperty.PropertyChanged += delegate { UpdateItemChoices(); };
 
-                    UpdateItemChoices();
+                    if (ComboBoxOption.Hidden != null)
+                    {
+                        ComboBoxOption.Hidden.PropertyChanged += HidView;
+                    }
+
+                    property.PropertyChanged += delegate { UpdateSelectedItemUIFromProperty(); };
+
+                    if (ComboBoxOption.HasMultipleLevelMenu)
+                    {
+                        itemsProperty.PropertyChanged += delegate { UpdateMultipleLevelMenuItemChoices(); };
+                        UpdateMultipleLevelMenuItemChoices();
+                    }
+                    else
+                    {
+                        itemsProperty.PropertyChanged += delegate { UpdateItemChoices(); };
+
+                        UpdateItemChoices();
+                    }
+
 
                     // TODO: Handle this
                     /*
@@ -67,6 +83,14 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             base.Dispose ();
         }
         */
+
+        public override void OnEnableChanged(bool enabled)
+        {
+            base.OnEnableChanged(enabled);
+
+            if (_popUpButton != null)
+                _popUpButton.Enabled = enabled;
+        }
 
         void UpdatePropertyFromUI(object sender, EventArgs e)
         {
@@ -104,6 +128,50 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         }
 
+        void UpdateMultipleLevelMenuItemChoices()
+        {
+            _popUpButton!.RemoveAllItems();
+
+            NSMenu groupMenu = new NSMenu();
+            groupMenu.AutoEnablesItems = false;
+            bool hasIndentate = false;
+
+            foreach (var item in ComboBoxOption.ItemsProperty.Value)
+            {
+                string itemDisplayString = ComboBoxOption.ItemDisplayStringFunc(item);
+
+                if (ComboBoxOption.IsSeperator(itemDisplayString))
+                {
+                    groupMenu.AddItem(NSMenuItem.SeparatorItem);
+                    hasIndentate = false;
+                    continue;
+                }
+
+                NSMenuItem menuItem = new NSMenuItem();
+
+                if (ComboBoxOption.IsHeaderMenu(itemDisplayString))
+                {
+                    //header
+                    itemDisplayString = ComboBoxOption.GetHeaderMenuValue(itemDisplayString);
+                    menuItem.Enabled = false;
+                    hasIndentate = true;
+                }
+                else if (hasIndentate)
+                {
+                    menuItem.IndentationLevel = 1;
+                }
+
+                menuItem.Title = itemDisplayString;
+
+                groupMenu.AddItem(menuItem);
+            }
+
+            _popUpButton.Menu = groupMenu;
+            _popUpButton.TranslatesAutoresizingMaskIntoConstraints = false;
+
+            UpdateSelectedItemUIFromProperty();
+        }
+
         void UpdateSelectedItemUIFromProperty()
         {
             TItem? currentValue = ComboBoxOption.Property.Value;
@@ -116,6 +184,10 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             }
         }
 
+        private void HidView(object sender, ViewModelPropertyChangedEventArgs e)
+        {
+            _popUpButton.Hidden = ComboBoxOption.Hidden.Value;
+        }
         // TODO: Handle this    
         /*
         void UpdateSdkWarning (object sender, ViewModelPropertyChangedEventArgs e)

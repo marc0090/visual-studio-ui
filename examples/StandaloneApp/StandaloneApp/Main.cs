@@ -1,5 +1,7 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using Microsoft.VisualStudioUI.Options;
+
 using Microsoft.VisualStudioUI.Options.Models;
 
 namespace Microsoft.VisualStudioUI.StandaloneApp
@@ -48,6 +50,37 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
                 }
             );
 
+            TextOption fileEntry = new TextOption(StringProp("")) {
+                Label = "fileEntry",
+            };
+            fileEntry.MacroMenuItems = ImmutableArray.CreateRange(
+                new [] { new MacroMenuItem("Project Directory", "$(ProjectDir)"),
+                new MacroMenuItem("Solution Directory", "$(SolutionDir)"),
+                });
+            card1.AddOption(fileEntry);
+
+            OptionCards cardss = new OptionCards();
+            cardss.AddCard(card1);
+
+
+            ViewModelProperty<ImmutableArray<string>> propertyItems = new ViewModelProperty<ImmutableArray<string>>("");
+            var subMenuCombox = new ComboBoxOption<string>(StringProp("option1"), propertyItems)
+            {
+                Label = "Sub Menu",
+                HasMultipleLevelMenu = true,
+                Hint = "This is the hint for the editable combo box"
+            };
+
+            List<string> dropList = new List<string>();
+            dropList.Add(subMenuCombox.CreateHeaderMenu("Areest"));
+            dropList.Add("option1");
+            dropList.Add("option2");
+            dropList.Add(subMenuCombox.CreateSeperator());
+            dropList.Add("None");
+            propertyItems.Value = ImmutableArray.CreateRange(dropList).ToImmutableArray();
+
+            card1.AddOption(subMenuCombox);
+
             var card2 = new OptionCard()
             {
                 Label = "Second Card"
@@ -66,29 +99,77 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
 
             var card3 = new OptionCard();
             card3.AddOption(
-                new SwitchableGroupOption(BoolProp(true))
-                {
-                    Label = "Siri",
-                    Name = "Allows your application to handle Siri requests.",
-                    Hint = "Hint: Allows your application to handle Siri requests.",
-                }
+             new SwitchableGroupOption(BoolProp(true))
+             {
+                 Label = "Siri",
+                 Name = "Allows your application to handle Siri requests.",
+                 Hint = "Hint: Allows your application to handle Siri requests.",
+             }
              );
 
+            card3.AddOption(new StepperOption(new ViewModelProperty<int>("", 100))
+            {
+                Label = "Port",
+                Hint = "hint"
+            });
 
             var card4 = new OptionCard();
-            var switchableView = new SwitchableGroupOption(BoolProp(true))
+            var switchableOption = new SwitchableGroupOption(BoolProp(true))
             {
                 Label = "iCloud",
-                Name = "Allows your application to store data in the cloud and lets users share their data across devices.",
+                Name = "Allows your application to store data in the cloud and lets users share their data across devices.Allows your application to store data in the cloud and lets users share their data across devices.Allows your application to store data in the cloud and lets users share their data across devices.Allows your application to store data in the cloud and lets users share their data across devices.",
                 Hint = "Hint: Allows your application to store data in the cloud and lets users share their data across devices.",
             };
 
-            card4.AddOption(switchableView);
-
+            card4.AddOption(switchableOption);
 
             ImmutableArray<string> list = ImmutableArray.Create("test1", "test2", "test3");
 
-            card4.AddOption(new StringListOption(ListProp(list), "default string") { Label = "Containers" });
+            var KeychainAccessGroupsList = new StringListOption(new ViewModelProperty<ImmutableArray<string>>("t", list))
+            {
+                AddToolTip = "Click to add an Keychain Access Group",
+                RemoveToolTip = "Click to remove the selected Keychain Access Group",
+                Label = "Keychain Groups",
+                DefaultValue = "BundleIdentifier",
+                PrefixValue = "AppIdentifierPrefix"
+            };
+
+
+            switchableOption.AddOption(KeychainAccessGroupsList);
+
+
+            var card5 = new OptionCard();
+            var walletSwitchableOption = new SwitchableGroupOption(BoolProp(true))
+            {
+                Label = "Wallet",
+                Name = "Allows your application to manage passes, tickets, gift cards, and loyalty cards. It supports a variety of bar code formats."
+            };
+            var passTypeRadioGroup = new RadioButtonGroup();
+            var alltype = new RadioButtonOption(passTypeRadioGroup, BoolProp(false))
+            {
+                Label = "Pass Types",
+                ButtonLabel = "Allow all team pass types",
+            };
+
+            var subtype = new RadioButtonOption(passTypeRadioGroup, BoolProp(false))
+            {
+                ButtonLabel = "Allow subset of pass types",
+            };
+
+
+            ImmutableArray<CheckBoxlistItem> CheckBoxList = ImmutableArray.Create(
+                new CheckBoxlistItem("Pass types1", false),
+                new CheckBoxlistItem("Pass types2", false),
+                new CheckBoxlistItem("Pass types3", false)
+
+             );
+
+            var testCheckBoxList = new CheckBoxListOption(new ViewModelProperty<ImmutableArray<CheckBoxlistItem>>("", CheckBoxList));
+
+            walletSwitchableOption.AddOption(alltype);
+            walletSwitchableOption.AddOption(subtype);
+            walletSwitchableOption.AddOption(testCheckBoxList);
+            card5.AddOption(walletSwitchableOption);
 
             // Signing 
             var signing = new OptionCard() { Label = "Signing" };
@@ -134,11 +215,72 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             signing.AddOption(autoSigningOption1);
             signing.AddOption(autoSigningOption2);
 
-            OptionCards cards = new OptionCards();
+            var btn1 = new ButtonOption() { Name = "Hide" };
+            var btn2 = new ButtonOption() { Name = "2", Hidden = new ViewModelProperty<bool>("", false) };
+            var btn3 = new ButtonOption() { Name = "show" };
+            btn2.Hidden.Bind();
+            btn1.Clicked += (sender, e) =>
+            {
+                btn2.Hidden.Value = true;
+            };
+            btn3.Clicked += (sender, e) =>
+            {
+                btn2.Hidden.Value = false;
+            };
+            signing.AddOption(btn1);
+            signing.AddOption(btn2);
+            signing.AddOption(btn3);
 
+            LabelOption btn = new LabelOption();
+            btn.Name = "Test";
+            btn.IsBold = false;
+            ProgressIndicatorOption pro = new ProgressIndicatorOption(btn);
+            pro.ShowSpinner.Bind();
+            pro.Label = "ProgresssIndicator";
+            signing.AddOption(pro);
+
+            var iTunesArtwork = new OptionCard() { Label = "iTunes Artwork" };
+            List<ScaledImageFile> imagelist = new List<ScaledImageFile>();
+            imagelist.Add(new ScaledImageFile(512, 512, "1X") { Path = null }); ;
+            imagelist.Add(new ScaledImageFile(1024, 1024, "2X") { Path = "/Users/vstester/Projects/iOS/iOS/Assets.xcassets/AppIcon.appiconset/Icon1024.png " });
+            ViewModelProperty<ImmutableArray<ScaledImageFile>> imageArray = new ViewModelProperty<ImmutableArray<ScaledImageFile>>("", imagelist.ToImmutableArray());
+            var image = new ScaledImageFileOption(imageArray);
+            image.ImageArray.Bind();
+            image.ImageArray.PropertyChanged += (sender, e) =>
+            {
+                int a = 0;
+                a += 1;
+            };
+
+            iTunesArtwork.AddOption(image);
+
+            var signInLabel = new LabelOption()
+            {
+                Label = ("Apple ID"),
+                Name = "Sign in and select a team to enable Automatic Provisioning",
+                IsBold = true
+            };
+            iTunesArtwork.AddOption(signInLabel);
+
+            OptionCard card6 = new OptionCard()
+            {
+                Label = "test enable"
+            };
+
+            var dependOn = new CheckBoxOption(BoolProp(false)) { ButtonLabel = "enable" };
+            card6.AddOption(dependOn);
+            card6.AddOption(new CheckBoxOption(BoolProp(false)) { ButtonLabel = "test", DisablebilityDependsOn = dependOn });
+            card6.AddOption(new DocButtonOption(StringProp("test"), "test") { DisablebilityDependsOn = dependOn });
+            card6.AddOption(new TextOption(StringProp("")) { Label = "test", DisablebilityDependsOn = dependOn });
+            card6.AddOption(new StepperOption(new ViewModelProperty<int>("", 100)) { Label = "Port", DisablebilityDependsOn = dependOn });
+
+            OptionCards cards = new OptionCards();
+            cards.AddCard(card6);
+            cards.AddCard(iTunesArtwork);
             cards.AddCard(signing);
             cards.AddCard(card3);
             cards.AddCard(card4);
+            cards.AddCard(card5);
             cards.AddCard(card1);
             cards.AddCard(card2);
 
@@ -151,12 +293,16 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             prop.Bind();
             return prop;
         }
-        
+
         public static ViewModelProperty<string> StringProp(string defaultValue) =>
             new ViewModelProperty<string>("stringProp", defaultValue);
         public static ViewModelProperty<ImmutableArray<string>> StringArrayProp(string[] defaultValue) =>
             new ViewModelProperty<ImmutableArray<string>>("stringArrayProp", ImmutableArray.Create(defaultValue));
 
-        public static ViewModelProperty<ImmutableArray<string>> ListProp(ImmutableArray<string> defaultValue) => new ViewModelProperty<ImmutableArray<string>>("listProp", defaultValue);
+        public static ViewModelProperty<bool[]> BoolArrayProp(bool[] defaultValue) =>
+           new ViewModelProperty<bool[]>("boolArrayProp", defaultValue);
+
+        public static ViewModelProperty<ImmutableArray<string>> ListProp(ImmutableArray<string> defaultValue) =>
+            new ViewModelProperty<ImmutableArray<string>>("listProp", defaultValue);
     }
 }

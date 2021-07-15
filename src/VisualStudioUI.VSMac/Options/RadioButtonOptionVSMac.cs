@@ -12,7 +12,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         {
         }
 
-        public RadioButtonOption RadioButtonOption => ((RadioButtonOption) Option);
+        public RadioButtonOption RadioButtonOption => ((RadioButtonOption)Option);
 
         protected override NSView ControlView
         {
@@ -45,6 +45,13 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         private void OnRadioButtonSelected()
         {
             RadioButtonOption.RadioButtonGroup.Select(RadioButtonOption);
+        }
+
+        public override void OnEnableChanged(bool enabled)
+        {
+            base.OnEnableChanged(enabled);
+            if (_button != null)
+                _button.Enabled = enabled;
         }
     }
 }

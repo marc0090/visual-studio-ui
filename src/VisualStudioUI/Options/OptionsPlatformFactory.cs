@@ -35,11 +35,18 @@ namespace Microsoft.VisualStudioUI.Options
         public abstract OptionPlatform CreateSeparatorOptionPlatform(SeparatorOption separatorOption);
         public abstract OptionPlatform CreateSwitchableGroupOptionPlatform(SwitchableGroupOption switchableGroupOption);
         public abstract OptionPlatform CreateStringListOptionPlatform(StringListOption stringListOption);
-        public abstract OptionPlatform CreateImageViewOptionPlatform(ImageFileOption imageFileOption);
+        public abstract OptionPlatform CreateImageViewOptionPlatform(ScaledImageFileOption imageFileOption);
         public abstract OptionPlatform CreateButtonOptionPlatform(ButtonOption buttonOption);
 
         public abstract OptionPlatform CreateSwitchOptionPlatform(SwitchOption switchOption);
         public abstract OptionPlatform CreateCheckBoxOptionPlatform(CheckBoxOption checkBoxOption);
         public abstract OptionPlatform CreateRadioButtonOptionPlatform(RadioButtonOption radioButtonOption);
+
+        public abstract OptionPlatform CreateCheckBoxListOptionPlatform(CheckBoxListOption checkBoxListOption);
+        public abstract OptionPlatform CreateLabelOptionPlatform(LabelOption labelOption);
+
+        public abstract OptionPlatform CreateStepperOptionPlatform(StepperOption stepperOption);
+
+        public abstract OptionPlatform CreateProgressIndicatorOptionPlatform(ProgressIndicatorOption progressIndicatorOption);
     }
 }

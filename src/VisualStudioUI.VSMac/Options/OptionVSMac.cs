@@ -22,6 +22,11 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         {
         }
 
+        public override void OnEnableChanged(bool enabled)
+        {
+
+        }
+
         protected NSTextField? CreateLabelView()
         {
             string labelString = Option.Label ?? string.Empty;

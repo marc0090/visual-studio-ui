@@ -1,11 +1,5 @@
-﻿//
-// SwitchableGroupOptionVSMac.cs
-//
-// Author:
-//       marcbookpro19 <v-marcguo@microsoft.com>
-//
-// Copyright (c) 2021 
-//
+﻿// Licensed to the .NET Foundation under one or more agreements. The .NET Foundation licenses this file to you under the MIT license. See the LICENSE.md file in the project root for more information.
+
 using System;
 using AppKit;
 using Microsoft.VisualStudioUI.Options;
@@ -21,8 +15,12 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         private NSTextField _title;
         private NSTextField _description;
         private NSButton _helpButton;
-        private NSView _childrenView;
         private HintPopover _hintPopover;
+        private NSProgressIndicator _progressIndicator;
+        private NSStackView _childrenControl;
+
+        NSLayoutConstraint _descriptionBottomeConstrains;
+        NSLayoutConstraint _childrenControlBottomeConstrains;
 
         public SwitchableGroupOptionVSMac(SwitchableGroupOption option) : base(option)
         {
@@ -46,114 +44,169 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         private void CreateView()
         {
-            _optionView = new AppKit.NSView();
+            bool enable = ((SwitchableGroupOption)Option).IsOn.Value;
+
+            _optionView = new NSStackView() { Orientation = NSUserInterfaceLayoutOrientation.Vertical };
             _optionView.WantsLayer = true;
             _optionView.TranslatesAutoresizingMaskIntoConstraints = false;
 
-            var _optionViewWidthConstraint = _optionView.WidthAnchor.ConstraintEqualToConstant(600f);
-            _optionViewWidthConstraint.Active = true;
-            var _optionViewHeightConstraint = _optionView.HeightAnchor.ConstraintEqualToConstant(81f);
-            _optionViewHeightConstraint.Active = true;
-
-
-            _switchButton = new AppKit.NSSwitch();
+            _switchButton = new NSSwitch();
             _switchButton.ControlSize = NSControlSize.Regular;
-            _switchButton.State = ((SwitchableGroupOption)Option).IsOn.Value ? 1 : 0;
+            _switchButton.State = enable ? 1 : 0;
             _switchButton.TranslatesAutoresizingMaskIntoConstraints = false;
             _switchButton.AccessibilityHelp = "Provides a control";
 
-            _switchButton.Activated += SwitchButtonActivated; ;
+            _switchButton.Activated += SwitchButtonActivated;
 
-            ((SwitchableGroupOption)Option).IsOn.PropertyChanged += SwitchPropertyChanged;
+            SwitchableGroupOption.IsOn.PropertyChanged += SwitchPropertyChanged;
+            SwitchableGroupOption.ShowSpinner.PropertyChanged += SpinnerChanged;
 
             _optionView.AddSubview(_switchButton);
-            var _switchButtonWidthConstraint = _switchButton.WidthAnchor.ConstraintEqualToConstant(38f);
-            _switchButtonWidthConstraint.Active = true;
-
-            _switchButton.LeftAnchor.ConstraintEqualToAnchor(_optionView.LeftAnchor, 48f).Active = true;
+            _switchButton.WidthAnchor.ConstraintEqualToConstant(38f).Active = true;
+            _switchButton.HeightAnchor.ConstraintEqualToConstant(21f).Active = true;
+            _switchButton.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 68f).Active = true;
             _switchButton.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 30f).Active = true;
 
-            _title = new AppKit.NSTextField();
-            _title.Editable = false;
-            _title.Bordered = false;
-            _title.DrawsBackground = false;
-            _title.PreferredMaxLayoutWidth = 1;
-            _title.StringValue = Option.Label;
-            _title.Alignment = NSTextAlignment.Left;
-            _title.Font = AppKit.NSFont.SystemFontOfSize(AppKit.NSFont.SystemFontSize, AppKit.NSFontWeight.Bold);
-            _title.TextColor = NSColor.LabelColor;
-            _title.TranslatesAutoresizingMaskIntoConstraints = false;
 
-            _optionView.AddSubview(_title);
-            var _titleWidthConstraint = _title.WidthAnchor.ConstraintEqualToConstant(467f);
-            _titleWidthConstraint.Priority = (System.Int32)AppKit.NSLayoutPriority.DefaultLow;
-            _titleWidthConstraint.Active = true;
-            var _titleHeightConstraint = _title.HeightAnchor.ConstraintEqualToConstant(16f);
-            _titleHeightConstraint.Active = true;
+            if (!string.IsNullOrEmpty(Option.Label))
+            {
+                _title = new NSTextField();
+                _title.Editable = false;
+                _title.Bordered = false;
+                _title.DrawsBackground = false;
+                _title.StringValue = Option.Label;
+                _title.Alignment = NSTextAlignment.Left;
+                _title.Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize, NSFontWeight.Bold);
+                _title.TextColor = NSColor.LabelColor;
+                _title.TranslatesAutoresizingMaskIntoConstraints = false;
+                _title.SizeToFit();
 
-            _title.RightAnchor.ConstraintEqualToAnchor(_optionView.RightAnchor, -32f).Active = true;
-            _title.LeftAnchor.ConstraintEqualToAnchor(_optionView.LeftAnchor, 101f).Active = true;
-            _title.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 24f).Active = true;
+                _optionView.AddSubview(_title);
 
-            _description = new AppKit.NSTextField();
-            _description.Editable = false;
-            _description.Bordered = false;
-            _description.DrawsBackground = false;
-            _description.PreferredMaxLayoutWidth = 1;
-            _description.StringValue = Option.Name;
-            _description.Alignment = NSTextAlignment.Left;
-            _description.Font = AppKit.NSFont.SystemFontOfSize(AppKit.NSFont.SmallSystemFontSize);
-            _description.TextColor = NSColor.SecondaryLabelColor;
-            _description.TranslatesAutoresizingMaskIntoConstraints = false;
+                //_title.WidthAnchor.ConstraintEqualToConstant(38f).Active = true;
+                //_title.HeightAnchor.ConstraintEqualToConstant(28f).Active = true;
+                _title.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 121f).Active = true;
+                _title.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 24f).Active = true;
+            }
 
-            _optionView.AddSubview(_description);
-            var _descriptionWidthConstraint = _description.WidthAnchor.ConstraintEqualToConstant(354f);
-            _descriptionWidthConstraint.Active = true;
-            var _descriptionHeightConstraint = _description.HeightAnchor.ConstraintEqualToConstant(42f);
-            _descriptionHeightConstraint.Active = true;
+            _progressIndicator = new NSProgressIndicator(new CoreGraphics.CGRect(0, 0, 18, 18));
+            _progressIndicator.Style = NSProgressIndicatorStyle.Spinning;
+            _progressIndicator.ControlSize = NSControlSize.Small;
+            _progressIndicator.IsDisplayedWhenStopped = false;
+            _progressIndicator.TranslatesAutoresizingMaskIntoConstraints = false;
+            _optionView.AddSubview(_progressIndicator);
 
-            _description.LeftAnchor.ConstraintEqualToAnchor(_optionView.LeftAnchor, 101f).Active = true;
-            _description.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 42f).Active = true;
+            _progressIndicator.LeadingAnchor.ConstraintEqualToAnchor(_title.TrailingAnchor, 6).Active = true;
+            _progressIndicator.TopAnchor.ConstraintEqualToAnchor(_title.TopAnchor).Active = true;
+
+            if (!string.IsNullOrEmpty(Option.Label))
+            {
+                _description = new NSTextField();
+                _description.Editable = false;
+                _description.Bordered = false;
+                _description.DrawsBackground = false;
+                _description.PreferredMaxLayoutWidth = 1;
+                _description.StringValue = Option.Name;
+                _description.Alignment = NSTextAlignment.Left;
+                _description.Font = NSFont.SystemFontOfSize(NSFont.SmallSystemFontSize);
+                _description.TextColor = NSColor.SecondaryLabelColor;
+                _description.TranslatesAutoresizingMaskIntoConstraints = false;
+                _description.LineBreakMode = NSLineBreakMode.ByWordWrapping;
+                _optionView.AddSubview(_description);
+
+                _description.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 121f).Active = true;
+                _description.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 42f).Active = true;
+
+                var bestHeight = _description.Cell.CellSizeForBounds(new CoreGraphics.CGRect(0, 0, 354, 600)).Height;
+                var _descriptionHeightConstraint = _description.HeightAnchor.ConstraintEqualToConstant(bestHeight);
+                _descriptionHeightConstraint.Active = true;
+                var _descriptionWidthConstraint = _description.WidthAnchor.ConstraintEqualToConstant(354f);
+                _descriptionWidthConstraint.Active = true;
+
+                float bottomeSpace = -24;
+                if (bestHeight > 26) { bottomeSpace = -14; }
+                _descriptionBottomeConstrains = _description.BottomAnchor.ConstraintEqualToAnchor(_optionView.BottomAnchor, bottomeSpace);
+            }
 
             if (!string.IsNullOrEmpty(Option.Hint))
             {
-                _helpButton = new AppKit.NSButton();
+                _helpButton = new NSButton();
                 _helpButton.BezelStyle = NSBezelStyle.HelpButton;
                 _helpButton.Title = "";
                 _helpButton.ControlSize = NSControlSize.Regular;
-                _helpButton.Font = AppKit.NSFont.SystemFontOfSize(AppKit.NSFont.SystemFontSize);
+                _helpButton.Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize);
                 _helpButton.TranslatesAutoresizingMaskIntoConstraints = false;
 
                 _optionView.AddSubview(_helpButton);
                 var _helpButtonWidthConstraint = _helpButton.WidthAnchor.ConstraintEqualToConstant(21f);
-                _helpButtonWidthConstraint.Priority = (System.Int32)AppKit.NSLayoutPriority.DefaultLow;
+                _helpButtonWidthConstraint.Priority = (int)NSLayoutPriority.DefaultLow;
                 _helpButtonWidthConstraint.Active = true;
 
-                _helpButton.RightAnchor.ConstraintEqualToAnchor(_optionView.RightAnchor, -6f).Active = true;
+                _helpButton.TrailingAnchor.ConstraintEqualToAnchor(_optionView.TrailingAnchor, -6f).Active = true;
                 _helpButton.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 30f).Active = true;
                 _helpButton.Activated += (o, args) => ShowHintPopover(Option.Hint, _helpButton);
 
             }
 
-            _childrenView = new NSView();
+            var _optionViewWidthConstraint = _optionView.WidthAnchor.ConstraintEqualToConstant(600f);
+            _optionViewWidthConstraint.Active = true;
 
-            foreach (Option option in ((SwitchableGroupOption)Option).ChildOptions)
+            _childrenControl = new NSStackView()
             {
-                var optionVSMac = (OptionVSMac)option.Platform;
-                _optionView.AddSubview(optionVSMac.View);
+                Orientation = NSUserInterfaceLayoutOrientation.Vertical,
+                Spacing = SwitchableGroupOption.Space,
+                Distribution = NSStackViewDistribution.Fill,
+                TranslatesAutoresizingMaskIntoConstraints = false
+            };
+
+            foreach (Option option in SwitchableGroupOption.ChildrenOptions)
+            {
+                NSView optionView = ((OptionVSMac)option.Platform).View;
+                _childrenControl.AddArrangedSubview(optionView);
             }
 
-            UpdateChildOptions();
+            _optionView.AddSubview(_childrenControl);
+
+            _childrenControl.TopAnchor.ConstraintEqualToAnchor(_description.BottomAnchor, SwitchableGroupOption.Space).Active = true;
+            _childrenControl.WidthAnchor.ConstraintEqualToAnchor(_optionView.WidthAnchor).Active = true;
+            _childrenControl.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor).Active = true;
+            _childrenControlBottomeConstrains = _childrenControl.BottomAnchor.ConstraintEqualToAnchor(_optionView.BottomAnchor, -SwitchableGroupOption.Space);
+            _childrenControlBottomeConstrains.Active = true;
+
+            ShowChildrenOption(enable);
         }
 
+        public override void OnEnableChanged(bool enabled)
+        {
+            _switchButton.Enabled = enabled;
+        }
+
+        private void ShowChildrenOption(bool enable)
+        {
+            if (enable && SwitchableGroupOption.ChildrenOptions.Count > 0)
+            {
+                _childrenControl.Hidden = false;
+                _childrenControlBottomeConstrains.Active = true;
+                _descriptionBottomeConstrains.Active = false;
+            }
+            else
+            {
+                _childrenControl.Hidden = true;
+                _childrenControlBottomeConstrains.Active = false;
+                _descriptionBottomeConstrains.Active = true;
+            }
+        }
 
         private void SwitchButtonActivated(object sender, EventArgs e)
         {
+            bool enable = (_switchButton.State == 1);
+
             ((SwitchableGroupOption)Option).IsOn.PropertyChanged -= SwitchPropertyChanged;
-            ((SwitchableGroupOption)Option).IsOn.Value = (_switchButton.State == 1);
+            ((SwitchableGroupOption)Option).IsOn.Value = enable;
             ((SwitchableGroupOption)Option).SwitchChangedInvoke(sender, e);
             ((SwitchableGroupOption)Option).IsOn.PropertyChanged += SwitchPropertyChanged;
 
+            ShowChildrenOption(enable);
         }
 
         private void SwitchPropertyChanged(object sender, ViewModelPropertyChangedEventArgs e)
@@ -164,7 +217,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         }
 
-        void ShowHintPopover(string message, NSButton button)
+        private void ShowHintPopover(string message, NSButton button)
         {
             _hintPopover?.Close();
             _hintPopover?.Dispose();
@@ -177,20 +230,18 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             _hintPopover.Show(bounds, button, NSRectEdge.MaxYEdge);
         }
 
-        private void UpdateChildOptions()
+        public void SpinnerChanged(object sender, ViewModelPropertyChangedEventArgs e)
         {
-
-            _optionView.AddSubview(_childrenView);
-
-            //if (_switchButton)
-            //{
-            //    _optionView.AddSubview(_childrenView);
-            //}
-            //else
-            //{
-            //    _childrenView.RemoveFromSuperview();
-            //}
+            if (SwitchableGroupOption.ShowSpinner.Value)
+            {
+                _progressIndicator.StartAnimation(null);
+            }
+            else
+            {
+                _progressIndicator.StopAnimation(null);
+            }
         }
+
     }
 
 }

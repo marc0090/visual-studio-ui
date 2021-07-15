@@ -15,15 +15,28 @@ namespace Microsoft.VisualStudioUI.Options
 {
     public class SwitchableGroupOption : Option
     {
+        public float Space = 10;
+        public float Width = 640;
+
+        private readonly List<Option> _childrenOptions = new List<Option>();
+
+
+        public IReadOnlyList<Option> ChildrenOptions => _childrenOptions;
+
         public ViewModelProperty<bool> IsOn { get; }
+        public ViewModelProperty<bool> ShowSpinner { get; }
 
         public event EventHandler? SwitchChanged;
 
-        public readonly List<Option> _childOptions = new List<Option>();
+        public void AddOption(Option option) => _childrenOptions.Add(option);
 
-        public IReadOnlyList<Option> ChildOptions => _childOptions;
+        public void RemoveOption(Option option)
+        {
+            if (_childrenOptions.Count <= 0)
+                return;
 
-        public void AddOption(Option option) => _childOptions.Add(option);
+            _childrenOptions.Remove(option);
+        }
 
         public void SwitchChangedInvoke(object sender, EventArgs e)
         {
@@ -33,6 +46,10 @@ namespace Microsoft.VisualStudioUI.Options
         public SwitchableGroupOption(ViewModelProperty<bool> isOn)
         {
             IsOn = isOn;
+            ShowSpinner = new ViewModelProperty<bool>("showSpinner", false);
+
+            IsOn.Bind();
+            ShowSpinner.Bind();
             Platform = OptionFactoryPlatform.Instance.CreateSwitchableGroupOptionPlatform(this);
         }
     }

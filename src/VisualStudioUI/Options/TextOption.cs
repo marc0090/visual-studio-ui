@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudioUI.Options.Models;
+﻿using System.Collections.Immutable;
+using Microsoft.VisualStudioUI.Options.Models;
 
 namespace Microsoft.VisualStudioUI.Options
 {
@@ -10,6 +11,7 @@ namespace Microsoft.VisualStudioUI.Options
         public bool Editable { get; set; } = true;
         public bool Bordered { get; set; } = true;
         public bool DrawsBackground { get; set; } = true;
+        public ImmutableArray<MacroMenuItem> MacroMenuItems { get; set; }
 
         public TextOption(ViewModelProperty<string> property)
         {

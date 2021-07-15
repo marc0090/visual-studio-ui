@@ -14,7 +14,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         {
         }
 
-        public DocButtonOption DocButtonOption => ((DocButtonOption) Option);
+        public DocButtonOption DocButtonOption => ((DocButtonOption)Option);
 
         protected override NSView ControlView
         {
@@ -40,6 +40,13 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                 return _button;
             }
+        }
+
+        public override void OnEnableChanged(bool enabled)
+        {
+            base.OnEnableChanged(enabled);
+
+            _button.Enabled = enabled;
         }
 
         /*

@@ -10,5 +10,6 @@
         }
 
         public abstract void OnPropertiesChanged();
+        public abstract void OnEnableChanged(bool enabled);
     }
 }

@@ -77,7 +77,11 @@
     <Compile Include="Options\SwitchableGroupOptionVSMac.cs" />
     <Compile Include="Options\StringListOptionVSMac.cs" />
     <Compile Include="Options\ButtonOptionVSMac.cs" />
-    <Compile Include="Options\ImageFileOptionVSMac.cs" />
+    <Compile Include="Options\ScaledImageFileOptionVSMac.cs" />
+    <Compile Include="Options\CheckBoxListOptionVSMac.cs" />
+    <Compile Include="Options\LabelOptionVSMac.cs" />
+    <Compile Include="Options\StepperOptionVSMac.cs" />
+    <Compile Include="Options\ProgressIndicatorOptionVSMac.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\VisualStudioUI\VisualStudioUI.csproj">
