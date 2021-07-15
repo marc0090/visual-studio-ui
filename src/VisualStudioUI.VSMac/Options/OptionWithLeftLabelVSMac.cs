@@ -51,7 +51,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
             _optionView.AddSubview(control);
 
-            control.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 220f + IndentValue()).Active = true;
+            control.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 222f + IndentValue()).Active = true;
             control.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 5f).Active = true;
 
             UpdateHelpButton();

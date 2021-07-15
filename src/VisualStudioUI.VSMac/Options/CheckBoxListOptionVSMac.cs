@@ -74,18 +74,18 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 left.SizeToFit();
                 _optionView.AddSubview(left);
                 left.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor).Active = true;
-                left.TrailingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 120).Active = true;
+                left.WidthAnchor.ConstraintEqualToConstant(205).Active = true;
                 left.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor).Active = true;
             }
 
-            _optionView.WidthAnchor.ConstraintEqualToConstant(640f).Active = true;
+            _optionView.WidthAnchor.ConstraintEqualToConstant(640f - IndentValue()).Active = true;
 
             scrolledView.HeightAnchor.ConstraintEqualToConstant(CheckBoxListOption.Height).Active = true;
             scrolledView.WidthAnchor.ConstraintEqualToConstant(CheckBoxListOption.Width).Active = true;
 
-            _optionView.TopAnchor.ConstraintEqualToAnchor(scrolledView.TopAnchor).Active = true;
-            _optionView.LeadingAnchor.ConstraintEqualToAnchor(scrolledView.LeadingAnchor, -125).Active = true;
-            _optionView.BottomAnchor.ConstraintEqualToAnchor(scrolledView.BottomAnchor).Active = true;
+            scrolledView.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor).Active = true;
+            scrolledView.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 222 + IndentValue()).Active = true;
+            scrolledView.BottomAnchor.ConstraintEqualToAnchor(_optionView.BottomAnchor).Active = true;
 
             CheckBoxListOption.Property.PropertyChanged += OnCheckBoxListChanged;
 
