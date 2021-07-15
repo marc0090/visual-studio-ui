@@ -124,8 +124,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 left.TranslatesAutoresizingMaskIntoConstraints = false;
                 left.SizeToFit();
                 _optionView.AddSubview(left);
-                left.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor).Active = true;
-                left.TrailingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 120).Active = true;
+                left.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, IndentValue()).Active = true;
+                left.WidthAnchor.ConstraintEqualToConstant(205).Active = true;
                 left.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor).Active = true;
             }
 
@@ -142,8 +142,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             _removeButton.TopAnchor.ConstraintEqualToAnchor(_addButton.TopAnchor).Active = true;
             _removeButton.LeadingAnchor.ConstraintEqualToAnchor(_addButton.TrailingAnchor, 10).Active = true;
             _optionView.BottomAnchor.ConstraintEqualToAnchor(_addButton.BottomAnchor, 2).Active = true;
-            _optionView.TopAnchor.ConstraintEqualToAnchor(scrolledView.TopAnchor).Active = true;
-            _optionView.LeadingAnchor.ConstraintEqualToAnchor(scrolledView.LeadingAnchor, -125).Active = true;
+            scrolledView.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor).Active = true;
+            scrolledView.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 222 + IndentValue()).Active = true;
 
             StringListOption.Model.PropertyChanged += OnStringsListChanged;
 

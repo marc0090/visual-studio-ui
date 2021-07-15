@@ -125,7 +125,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
             _optionView.AddSubview(_button);
 
-            _button.LeftAnchor.ConstraintEqualToAnchor(_optionView.LeftAnchor, 220f).Active = true;
+            _button.LeftAnchor.ConstraintEqualToAnchor(_optionView.LeftAnchor, 222f).Active = true;
             _button.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 5f).Active = true;
 
             if (ButtonOption.Hidden != null)

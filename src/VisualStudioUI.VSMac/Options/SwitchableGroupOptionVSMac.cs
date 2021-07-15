@@ -168,7 +168,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             _optionView.AddSubview(_childrenControl);
 
             _childrenControl.TopAnchor.ConstraintEqualToAnchor(_description.BottomAnchor, SwitchableGroupOption.Space).Active = true;
-            _childrenControl.WidthAnchor.ConstraintEqualToAnchor(_optionView.WidthAnchor).Active = true;
+            _childrenControl.TrailingAnchor.ConstraintEqualToAnchor(_optionView.TrailingAnchor).Active = true;
             _childrenControl.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor).Active = true;
             _childrenControlBottomeConstrains = _childrenControl.BottomAnchor.ConstraintEqualToAnchor(_optionView.BottomAnchor, -SwitchableGroupOption.Space);
             _childrenControlBottomeConstrains.Active = true;

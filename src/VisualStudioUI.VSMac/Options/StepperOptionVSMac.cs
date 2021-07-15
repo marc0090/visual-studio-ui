@@ -92,14 +92,15 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                 if (_helpButton != null) _optionView!.AddArrangedSubview(_helpButton);
 
-                _leftLabel.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 6f).Active = true;
+                _leftLabel.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, IndentValue()).Active = true;
 
-                _textField.WidthAnchor.ConstraintEqualToConstant(50f).Active = true;
+                _textField.WidthAnchor.ConstraintEqualToConstant(64f).Active = true;
                 _textField.HeightAnchor.ConstraintEqualToConstant(21f).Active = true;
-                _textField.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 220).Active = true;
+                _textField.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 222 + IndentValue()).Active = true;
                 _textField.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 5).Active = true;
                 _textField.BottomAnchor.ConstraintEqualToAnchor(_optionView.BottomAnchor, 5).Active = true;
                 _stepper.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 5).Active = true;
+                _stepper.LeadingAnchor.ConstraintEqualToAnchor(_textField.TrailingAnchor, 10).Active = true;
                 _optionView.WidthAnchor.ConstraintEqualToConstant(600f).Active = true;
             }
 
