@@ -2,6 +2,13 @@
 
 namespace Microsoft.VisualStudioUI.Options
 {
+    public enum OptionIndent
+    {
+        Normal = 0,
+        SubOption = 30,
+        SubSubOption = 60,
+    }
+
     public abstract class Option
     {
         /// <summary>
@@ -57,6 +64,11 @@ namespace Microsoft.VisualStudioUI.Options
         /// toggled on.
         /// </summary>
         public ToggleButtonOption? DisablebilityDependsOn { get; set; }
+
+        /// Option have three diffrent level of indent:OptionIndent.Normal,OptionIndent.SubOption,OptionIndent.SubSubOption
+        /// </summary>
+        public OptionIndent Indent { get; set; } = OptionIndent.Normal;
+
 
     }
 }

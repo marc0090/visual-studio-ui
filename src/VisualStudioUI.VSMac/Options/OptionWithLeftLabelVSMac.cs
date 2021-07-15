@@ -32,14 +32,15 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         {
             // View:     optionView
             _optionView = new AppKit.NSView();
-            _optionView.WidthAnchor.ConstraintEqualToConstant(600f).Active = true;
+            _optionView.WidthAnchor.ConstraintEqualToConstant(600f - IndentValue()).Active = true;
 
             _label = CreateLabelView();
             if (_label != null)
             {
                 _optionView.AddSubview(_label);
 
-                _label.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 6f).Active = true;
+
+                _label.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, IndentValue()).Active = true;
                 _label.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 7f).Active = true;
             }
 
@@ -50,7 +51,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
             _optionView.AddSubview(control);
 
-            control.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 220f).Active = true;
+            control.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 220f + IndentValue()).Active = true;
             control.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 5f).Active = true;
 
             UpdateHelpButton();

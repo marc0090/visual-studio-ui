@@ -113,5 +113,21 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             var bounds = button.Bounds;
             _helpPopover.Show(bounds, button, NSRectEdge.MaxYEdge);
         }
+
+        internal float IndentValue()
+        {
+            switch (Option.Indent)
+            {
+                case OptionIndent.Normal:
+                    return 0;
+                case OptionIndent.SubOption:
+                    return 30;
+                case OptionIndent.SubSubOption:
+                    return 60;
+
+                default:
+                    return 0;
+            }
+        }
     }
 }
