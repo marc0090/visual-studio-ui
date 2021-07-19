@@ -10,169 +10,67 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
     {
         public static OptionCards CreateOptionCards()
         {
-            var card1 = new OptionCard()
+            OptionCards cards = new OptionCards();
+            cards.AddCard(TestEnableCard());
+            cards.AddCard(ITunesArtworkCard());
+            cards.AddCard(SigningCard());
+            cards.AddCard(SiriCard());
+            cards.AddCard(ICloudCard());
+            cards.AddCard(WalletCard());
+            cards.AddCard(BackgroundModesCard());
+            cards.AddCard(MyCard());
+            cards.AddCard(SecondCard());
+
+            return cards;
+        }
+
+        private static OptionCard TestEnableCard()
+        {
+            OptionCard card = new OptionCard()
             {
-                Label = "My Card"
+                Label = "Test enable"
             };
 
-            card1.AddOption(
-                new TextOption(StringProp("text1"))
-                {
-                    Label = "Text 1",
-                    Hint = "This is the hint to show!"
-                }
-            );
-            card1.AddOption(
-                new TextOption(StringProp("text2"))
-                {
-                    Label = "Text 2"
-                }
-            );
-            card1.AddOption(new SeparatorOption());
-            card1.AddOption(
-                new TextOption(StringProp("text3"))
-                {
-                    Label = "Text"
-                }
-            );
-            card1.AddOption(
-                new ComboBoxOption<string>(StringProp("option1"), StringArrayProp(new[] { "option1", "option2", "option3" }))
-                {
-                    Label = "Choices",
-                    Hint = "This is the hint for the combo box"
-                }
-            );
-            card1.AddOption(
-                new EditableComboBoxOption(StringProp("option1"), StringArrayProp(new[] { "option1", "option2", "option3" }))
-                {
-                    Label = "Editable choices",
-                    Hint = "This is the hint for the editable combo box"
-                }
-            );
+            var dependOn = new CheckBoxOption(BoolProp(false)) { ButtonLabel = "enable" };
+            card.AddOption(dependOn);
+            card.AddOption(new CheckBoxOption(BoolProp(false)) { ButtonLabel = "test", DisablebilityDependsOn = dependOn });
+            card.AddOption(new DocButtonOption(StringProp("test"), "test") { DisablebilityDependsOn = dependOn });
+            card.AddOption(new TextOption(StringProp("")) { Label = "test", DisablebilityDependsOn = dependOn });
+            card.AddOption(new StepperOption(new ViewModelProperty<int>("", 100)) { Label = "Port", DisablebilityDependsOn = dependOn });
 
-            TextOption fileEntry = new TextOption(StringProp("")) {
-                Label = "fileEntry",
-            };
-            fileEntry.MacroMenuItems = ImmutableArray.CreateRange(
-                new [] { new MacroMenuItem("Project Directory", "$(ProjectDir)"),
-                new MacroMenuItem("Solution Directory", "$(SolutionDir)"),
-                });
-            card1.AddOption(fileEntry);
+            return card;
+        }
 
-            OptionCards cardss = new OptionCards();
-            cardss.AddCard(card1);
-
-
-            ViewModelProperty<ImmutableArray<string>> propertyItems = new ViewModelProperty<ImmutableArray<string>>("");
-            var subMenuCombox = new ComboBoxOption<string>(StringProp("option1"), propertyItems)
+        private static OptionCard ITunesArtworkCard()
+        {
+            var card = new OptionCard() { Label = "iTunes Artwork" };
+            List<ScaledImageFile> imagelist = new List<ScaledImageFile>();
+            imagelist.Add(new ScaledImageFile(512, 512, "1X") { Path = null }); ;
+            imagelist.Add(new ScaledImageFile(1024, 1024, "2X") { Path = "/Users/vstester/Projects/iOS/iOS/Assets.xcassets/AppIcon.appiconset/Icon1024.png " });
+            ViewModelProperty<ImmutableArray<ScaledImageFile>> imageArray = new ViewModelProperty<ImmutableArray<ScaledImageFile>>("", imagelist.ToImmutableArray());
+            var image = new ScaledImageFileOption(imageArray);
+            image.ImageArray.Bind();
+            image.ImageArray.PropertyChanged += (sender, e) =>
             {
-                Label = "Sub Menu",
-                HasMultipleLevelMenu = true,
-                Hint = "This is the hint for the editable combo box"
+                int a = 0;
+                a += 1;
             };
 
-            List<string> dropList = new List<string>();
-            dropList.Add(subMenuCombox.CreateHeaderMenu("Areest"));
-            dropList.Add("option1");
-            dropList.Add("option2");
-            dropList.Add(subMenuCombox.CreateSeperator());
-            dropList.Add("None");
-            propertyItems.Value = ImmutableArray.CreateRange(dropList).ToImmutableArray();
+            card.AddOption(image);
 
-            card1.AddOption(subMenuCombox);
-
-            var card2 = new OptionCard()
+            var signInLabel = new LabelOption()
             {
-                Label = "Second Card"
+                Label = ("Apple ID"),
+                Name = "Sign in and select a team to enable Automatic Provisioning",
+                IsBold = true
             };
-            card2.AddOption(new TextOption(StringProp("text1")));
-            card2.AddOption(new TextOption(StringProp("text2")));
-            card2.AddOption(new TextOption(StringProp("text3")));
-            card2.AddOption(new TextOption(StringProp("text4")));
-            card2.AddOption(new TextOption(StringProp("text4")));
-            card2.AddOption(
-                new DocButtonOption(StringProp("https://www.microsoft.com"), "Launch Browser for Doc")
-                {
-                    Label = "Learn more"
-                }
-            );
+            card.AddOption(signInLabel);
+            return card;
+        }
 
-            var card3 = new OptionCard();
-            card3.AddOption(
-             new SwitchableGroupOption(BoolProp(true))
-             {
-                 Label = "Siri",
-                 Name = "Allows your application to handle Siri requests.",
-                 Hint = "Hint: Allows your application to handle Siri requests.",
-             }
-             );
-
-            card3.AddOption(new StepperOption(new ViewModelProperty<int>("", 100))
-            {
-                Label = "Port",
-                Hint = "hint"
-            });
-
-            var card4 = new OptionCard();
-            var switchableOption = new SwitchableGroupOption(BoolProp(true))
-            {
-                Label = "iCloud",
-                Name = "Allows your application to store data in the cloud and lets users share their data across devices.Allows your application to store data in the cloud and lets users share their data across devices.Allows your application to store data in the cloud and lets users share their data across devices.Allows your application to store data in the cloud and lets users share their data across devices.",
-                Hint = "Hint: Allows your application to store data in the cloud and lets users share their data across devices.",
-            };
-
-            card4.AddOption(switchableOption);
-
-            ImmutableArray<string> list = ImmutableArray.Create("test1", "test2", "test3");
-
-            var KeychainAccessGroupsList = new StringListOption(new ViewModelProperty<ImmutableArray<string>>("t", list))
-            {
-                AddToolTip = "Click to add an Keychain Access Group",
-                RemoveToolTip = "Click to remove the selected Keychain Access Group",
-                Label = "Keychain Groups",
-                DefaultValue = "BundleIdentifier",
-                PrefixValue = "AppIdentifierPrefix"
-            };
-
-
-            switchableOption.AddOption(KeychainAccessGroupsList);
-
-
-            var card5 = new OptionCard();
-            var walletSwitchableOption = new SwitchableGroupOption(BoolProp(true))
-            {
-                Label = "Wallet",
-                Name = "Allows your application to manage passes, tickets, gift cards, and loyalty cards. It supports a variety of bar code formats."
-            };
-            var passTypeRadioGroup = new RadioButtonGroup();
-            var alltype = new RadioButtonOption(passTypeRadioGroup, BoolProp(false))
-            {
-                Label = "Pass Types",
-                ButtonLabel = "Allow all team pass types",
-            };
-
-            var subtype = new RadioButtonOption(passTypeRadioGroup, BoolProp(false))
-            {
-                ButtonLabel = "Allow subset of pass types",
-            };
-
-
-            ImmutableArray<CheckBoxlistItem> CheckBoxList = ImmutableArray.Create(
-                new CheckBoxlistItem("Pass types1", false),
-                new CheckBoxlistItem("Pass types2", false),
-                new CheckBoxlistItem("Pass types3", false)
-
-             );
-
-            var testCheckBoxList = new CheckBoxListOption(new ViewModelProperty<ImmutableArray<CheckBoxlistItem>>("", CheckBoxList));
-
-            walletSwitchableOption.AddOption(alltype);
-            walletSwitchableOption.AddOption(subtype);
-            walletSwitchableOption.AddOption(testCheckBoxList);
-            card5.AddOption(walletSwitchableOption);
-
-            // Signing 
-            var signing = new OptionCard() { Label = "Signing" };
+        private static OptionCard SigningCard()
+        {
+            var card = new OptionCard() { Label = "Signing" };
 
             ViewModelProperty<bool> automaticSigningEnabled = BoolProp(false);
             ViewModelProperty<bool> manualSigningEnabled = BoolProp(!automaticSigningEnabled.Value);
@@ -191,15 +89,15 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
                 Description = "Set provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioningSet provisioning"
             };
 
-            signing.AddOption(manual);
-            signing.AddOption(auto);
+            card.AddOption(manual);
+            card.AddOption(auto);
 
             var manualSigningOption1 = new CheckBoxOption(BoolProp(false))
             {
                 ButtonLabel = "Some option for manual signing",
                 VisibilityDependsOn = manual
             };
-            signing.AddOption(manualSigningOption1);
+            card.AddOption(manualSigningOption1);
 
 
             var autoSigningOption1 = new CheckBoxOption(BoolProp(false))
@@ -212,8 +110,8 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
                 ButtonLabel = "Another option for automatic signing",
                 VisibilityDependsOn = auto
             };
-            signing.AddOption(autoSigningOption1);
-            signing.AddOption(autoSigningOption2);
+            card.AddOption(autoSigningOption1);
+            card.AddOption(autoSigningOption2);
 
             var btn1 = new ButtonOption() { Name = "Hide" };
             var btn2 = new ButtonOption() { Name = "2", Hidden = new ViewModelProperty<bool>("", false) };
@@ -227,9 +125,9 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             {
                 btn2.Hidden.Value = false;
             };
-            signing.AddOption(btn1);
-            signing.AddOption(btn2);
-            signing.AddOption(btn3);
+            card.AddOption(btn1);
+            card.AddOption(btn2);
+            card.AddOption(btn3);
 
             LabelOption btn = new LabelOption();
             btn.Name = "Test";
@@ -237,54 +135,221 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             ProgressIndicatorOption pro = new ProgressIndicatorOption(btn);
             pro.ShowSpinner.Bind();
             pro.Label = "ProgresssIndicator";
-            signing.AddOption(pro);
+            card.AddOption(pro);
 
-            var iTunesArtwork = new OptionCard() { Label = "iTunes Artwork" };
-            List<ScaledImageFile> imagelist = new List<ScaledImageFile>();
-            imagelist.Add(new ScaledImageFile(512, 512, "1X") { Path = null }); ;
-            imagelist.Add(new ScaledImageFile(1024, 1024, "2X") { Path = "/Users/vstester/Projects/iOS/iOS/Assets.xcassets/AppIcon.appiconset/Icon1024.png " });
-            ViewModelProperty<ImmutableArray<ScaledImageFile>> imageArray = new ViewModelProperty<ImmutableArray<ScaledImageFile>>("", imagelist.ToImmutableArray());
-            var image = new ScaledImageFileOption(imageArray);
-            image.ImageArray.Bind();
-            image.ImageArray.PropertyChanged += (sender, e) =>
+            return card;
+        }
+
+        private static OptionCard SiriCard()
+        {
+            var card = new OptionCard();
+            card.AddOption(
+                new SwitchableGroupOption(BoolProp(true))
+                {
+                    ButtonLabel = "Siri",
+                    Description = "Allows your application to handle Siri requests.",
+                    Hint = "Hint: Allows your application to handle Siri requests.",
+                }
+            );
+
+            card.AddOption(new StepperOption(new ViewModelProperty<int>("", 100))
             {
-                int a = 0;
-                a += 1;
+                Label = "Port",
+                Hint = "hint"
+            });
+
+            return card;
+        }
+
+        private static OptionCard ICloudCard()
+        {
+            var card = new OptionCard();
+            var switchableOption = new SwitchableGroupOption(BoolProp(true))
+            {
+                ButtonLabel = "iCloud",
+                Description = "Allows your application to store data in the cloud and lets users share their data across devices.Allows your application to store data in the cloud and lets users share their data across devices.Allows your application to store data in the cloud and lets users share their data across devices.Allows your application to store data in the cloud and lets users share their data across devices.",
+                Hint = "Hint: Allows your application to store data in the cloud and lets users share their data across devices.",
             };
 
-            iTunesArtwork.AddOption(image);
+            card.AddOption(switchableOption);
 
-            var signInLabel = new LabelOption()
-            {
-                Label = ("Apple ID"),
-                Name = "Sign in and select a team to enable Automatic Provisioning",
-                IsBold = true
-            };
-            iTunesArtwork.AddOption(signInLabel);
+            ImmutableArray<string> list = ImmutableArray.Create("test1", "test2", "test3");
 
-            OptionCard card6 = new OptionCard()
+            var keychainAccessGroupsList = new StringListOption(new ViewModelProperty<ImmutableArray<string>>("t", list))
             {
-                Label = "test enable"
+                AddToolTip = "Click to add an Keychain Access Group",
+                RemoveToolTip = "Click to remove the selected Keychain Access Group",
+                Label = "Keychain Groups",
+                DefaultValue = "BundleIdentifier",
+                PrefixValue = "AppIdentifierPrefix"
             };
 
-            var dependOn = new CheckBoxOption(BoolProp(false)) { ButtonLabel = "enable" };
-            card6.AddOption(dependOn);
-            card6.AddOption(new CheckBoxOption(BoolProp(false)) { ButtonLabel = "test", DisablebilityDependsOn = dependOn });
-            card6.AddOption(new DocButtonOption(StringProp("test"), "test") { DisablebilityDependsOn = dependOn });
-            card6.AddOption(new TextOption(StringProp("")) { Label = "test", DisablebilityDependsOn = dependOn });
-            card6.AddOption(new StepperOption(new ViewModelProperty<int>("", 100)) { Label = "Port", DisablebilityDependsOn = dependOn });
+            switchableOption.AddOption(keychainAccessGroupsList);
 
-            OptionCards cards = new OptionCards();
-            cards.AddCard(card6);
-            cards.AddCard(iTunesArtwork);
-            cards.AddCard(signing);
-            cards.AddCard(card3);
-            cards.AddCard(card4);
-            cards.AddCard(card5);
-            cards.AddCard(card1);
-            cards.AddCard(card2);
+            return card;
+        }
 
-            return cards;
+        private static OptionCard WalletCard()
+        {
+            var card = new OptionCard();
+            var walletSwitchableOption = new SwitchableGroupOption(BoolProp(true))
+            {
+                ButtonLabel = "Wallet",
+                Description = "Allows your application to manage passes, tickets, gift cards, and loyalty cards. It supports a variety of bar code formats."
+            };
+            var passTypeRadioGroup = new RadioButtonGroup();
+            var alltype = new RadioButtonOption(passTypeRadioGroup, BoolProp(false))
+            {
+                Label = "Pass Types",
+                ButtonLabel = "Allow all team pass types",
+            };
+
+            var subtype = new RadioButtonOption(passTypeRadioGroup, BoolProp(false))
+            {
+                ButtonLabel = "Allow subset of pass types",
+            };
+
+            ImmutableArray<CheckBoxlistItem> CheckBoxList = ImmutableArray.Create(
+                new CheckBoxlistItem("Pass types1", false),
+                new CheckBoxlistItem("Pass types2", false),
+                new CheckBoxlistItem("Pass types3", false)
+            );
+
+            var testCheckBoxList = new CheckBoxListOption(new ViewModelProperty<ImmutableArray<CheckBoxlistItem>>("", CheckBoxList));
+
+            walletSwitchableOption.AddOption(alltype);
+            walletSwitchableOption.AddOption(subtype);
+            walletSwitchableOption.AddOption(testCheckBoxList);
+            card.AddOption(walletSwitchableOption);
+
+            return card;
+        }
+
+        private static OptionCard BackgroundModesCard()
+        {
+            var card = new OptionCard();
+            var backgroundModesSwitch = new SwitchableGroupOption(BoolProp(true))
+            {
+                ButtonLabel = "Background Modes",
+                Description = "Set allowed background modes.",
+                Hint = "This is the hint"
+            };
+            card.AddOption(backgroundModesSwitch);
+
+            card.AddOption(BackgroundModeCheckBox(backgroundModesSwitch, "Audio, AirPlay and Picture in Picture"));
+            card.AddOption(BackgroundModeCheckBox(backgroundModesSwitch, "Location updates"));
+            card.AddOption(BackgroundModeCheckBox(backgroundModesSwitch, "Voice over IP"));
+            card.AddOption(BackgroundModeCheckBox(backgroundModesSwitch, "External accessory communication"));
+            card.AddOption(BackgroundModeCheckBox(backgroundModesSwitch, "Uses Bluetooth LE accessories"));
+            card.AddOption(BackgroundModeCheckBox(backgroundModesSwitch, "Acts as Bluetooth LE accessory"));
+            card.AddOption(BackgroundModeCheckBox(backgroundModesSwitch, "Background fetch"));
+            card.AddOption(BackgroundModeCheckBox(backgroundModesSwitch, "Remote notifications"));
+            card.AddOption(BackgroundModeCheckBox(backgroundModesSwitch, "Background processing"));
+
+            return card;
+        }
+
+        private static CheckBoxOption BackgroundModeCheckBox(SwitchableGroupOption backgroundModeSwitch, string label)
+        {
+            return new CheckBoxOption(BoolProp(false))
+            {
+                ButtonLabel = label,
+                VisibilityDependsOn = backgroundModeSwitch
+            };
+        }
+
+        private static OptionCard MyCard()
+        {
+            var card = new OptionCard()
+            {
+                Label = "My Card"
+            };
+
+            card.AddOption(
+                new TextOption(StringProp("text1"))
+                {
+                    Label = "Text 1",
+                    Hint = "This is the hint to show!"
+                }
+            );
+            card.AddOption(
+                new TextOption(StringProp("text2"))
+                {
+                    Label = "Text 2"
+                }
+            );
+            card.AddOption(new SeparatorOption());
+            card.AddOption(
+                new TextOption(StringProp("text3"))
+                {
+                    Label = "Text"
+                }
+            );
+            card.AddOption(
+                new ComboBoxOption<string>(StringProp("option1"), StringArrayProp(new[] { "option1", "option2", "option3" }))
+                {
+                    Label = "Choices",
+                    Hint = "This is the hint for the combo box"
+                }
+            );
+            card.AddOption(
+                new EditableComboBoxOption(StringProp("option1"), StringArrayProp(new[] { "option1", "option2", "option3" }))
+                {
+                    Label = "Editable choices",
+                    Hint = "This is the hint for the editable combo box"
+                }
+            );
+
+            TextOption fileEntry = new TextOption(StringProp(""))
+            {
+                Label = "fileEntry",
+            };
+            fileEntry.MacroMenuItems = ImmutableArray.CreateRange(
+                new[] { new MacroMenuItem("Project Directory", "$(ProjectDir)"),
+                new MacroMenuItem("Solution Directory", "$(SolutionDir)"),
+                });
+            card.AddOption(fileEntry);
+
+            ViewModelProperty<ImmutableArray<string>> propertyItems = new ViewModelProperty<ImmutableArray<string>>("");
+            var subMenuCombox = new ComboBoxOption<string>(StringProp("option1"), propertyItems)
+            {
+                Label = "Sub Menu",
+                HasMultipleLevelMenu = true,
+                Hint = "This is the hint for the editable combo box"
+            };
+
+            List<string> dropList = new List<string>();
+            dropList.Add(subMenuCombox.CreateHeaderMenu("Areest"));
+            dropList.Add("option1");
+            dropList.Add("option2");
+            dropList.Add(subMenuCombox.CreateSeperator());
+            dropList.Add("None");
+            propertyItems.Value = ImmutableArray.CreateRange(dropList).ToImmutableArray();
+
+            card.AddOption(subMenuCombox);
+
+            return card;
+        }
+
+        private static OptionCard SecondCard()
+        {
+            var card = new OptionCard()
+            {
+                Label = "Second Card"
+            };
+            card.AddOption(new TextOption(StringProp("text1")));
+            card.AddOption(new TextOption(StringProp("text2")));
+            card.AddOption(new TextOption(StringProp("text3")));
+            card.AddOption(new TextOption(StringProp("text4")));
+            card.AddOption(new TextOption(StringProp("text4")));
+            card.AddOption(
+                new DocButtonOption(StringProp("https://www.microsoft.com"), "Launch Browser for Doc")
+                {
+                    Label = "Learn more"
+                }
+            );
+
+            return card;
         }
 
         public static ViewModelProperty<bool> BoolProp(bool defaultValue)
