@@ -13,17 +13,20 @@ using Microsoft.VisualStudioUI.Options.Models;
 
 namespace Microsoft.VisualStudioUI.Options
 {
-    public class SwitchableGroupOption : Option
+    public class SwitchableGroupOption : ToggleButtonOption
     {
         public float Space = 10;
         public float Width = 640;
 
         private readonly List<Option> _childrenOptions = new List<Option>();
 
-
         public IReadOnlyList<Option> ChildrenOptions => _childrenOptions;
 
-        public ViewModelProperty<bool> IsOn { get; }
+        /// <summary>
+        /// Deprecated - use Property instead
+        /// </summary>
+        public ViewModelProperty<bool> IsOn => Property;
+
         public ViewModelProperty<bool> ShowSpinner { get; }
 
         public event EventHandler? SwitchChanged;
@@ -43,12 +46,11 @@ namespace Microsoft.VisualStudioUI.Options
             SwitchChanged?.Invoke(sender, e);
         }
 
-        public SwitchableGroupOption(ViewModelProperty<bool> isOn)
+        public SwitchableGroupOption(ViewModelProperty<bool> isOn) : base(isOn)
         {
-            IsOn = isOn;
             ShowSpinner = new ViewModelProperty<bool>("showSpinner", false);
 
-            IsOn.Bind();
+            isOn.Bind();
             ShowSpinner.Bind();
             Platform = OptionFactoryPlatform.Instance.CreateSwitchableGroupOptionPlatform(this);
         }

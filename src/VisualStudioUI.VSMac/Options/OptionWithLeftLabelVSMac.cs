@@ -7,7 +7,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
     {
         private NSView? _optionView;
         private NSButton? _helpButton;
-        private NSTextField? _label;
 
         public OptionWithLeftLabelVSMac(Option option) : base(option)
         {
@@ -34,14 +33,14 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             _optionView = new AppKit.NSView();
             _optionView.WidthAnchor.ConstraintEqualToConstant(600f - IndentValue()).Active = true;
 
-            _label = CreateLabelView();
-            if (_label != null)
+            var label = CreateLabelView();
+            if (label != null)
             {
-                _optionView.AddSubview(_label);
+                _optionView.AddSubview(label);
 
 
-                _label.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, IndentValue()).Active = true;
-                _label.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 7f).Active = true;
+                label.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, IndentValue()).Active = true;
+                label.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 7f).Active = true;
             }
 
             var control = ControlView;
@@ -74,7 +73,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         public override void OnEnableChanged(bool enabled)
         {
-
         }
 
         protected override void UpdateHelpButton()

@@ -5,11 +5,9 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 {
     public class StepperOptionVSMac : OptionVSMac
     {
-
         private NSStackView _optionView;
         private NSTextField _textField;
         private NSStepper _stepper;
-
         private NSButton? _helpButton;
         private NSTextField? _leftLabel;
 
