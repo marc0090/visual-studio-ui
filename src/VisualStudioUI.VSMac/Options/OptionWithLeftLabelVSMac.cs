@@ -7,7 +7,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
     {
         private NSView? _optionView;
         private NSButton? _helpButton;
-
+        private NSView _control;
         public OptionWithLeftLabelVSMac(Option option) : base(option)
         {
         }
@@ -43,15 +43,15 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 label.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 7f).Active = true;
             }
 
-            var control = ControlView;
+            _control = ControlView;
             // TODO: Set a11y info properly
-            control.AccessibilityLabel = "Control";
-            control.AccessibilityHelp = "Provides a control";
+            _control.AccessibilityLabel = "Control";
+            _control.AccessibilityHelp = "Provides a control";
 
-            _optionView.AddSubview(control);
+            _optionView.AddSubview(_control);
 
-            control.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 222f + IndentValue()).Active = true;
-            control.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 5f).Active = true;
+            _control.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 222f + IndentValue()).Active = true;
+            _control.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 5f).Active = true;
 
             UpdateHelpButton();
 
@@ -60,14 +60,14 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             {
                 _optionView.AddSubview(descriptionView);
 
-                descriptionView.LeadingAnchor.ConstraintEqualToAnchor(control.LeadingAnchor, 0f).Active = true;
-                descriptionView.TopAnchor.ConstraintEqualToAnchor(control.BottomAnchor, 0f).Active = true;
+                descriptionView.LeadingAnchor.ConstraintEqualToAnchor(_control.LeadingAnchor, 0f).Active = true;
+                descriptionView.TopAnchor.ConstraintEqualToAnchor(_control.BottomAnchor, 0f).Active = true;
 
                 _optionView.BottomAnchor.ConstraintEqualToAnchor(descriptionView.BottomAnchor).Active = true;
             }
             else
             {
-                _optionView.BottomAnchor.ConstraintEqualToAnchor(control.BottomAnchor).Active = true;
+                _optionView.BottomAnchor.ConstraintEqualToAnchor(_control.BottomAnchor).Active = true;
             }
         }
 
@@ -91,8 +91,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
             _optionView!.AddSubview(_helpButton);
 
-            _helpButton.TrailingAnchor.ConstraintEqualToAnchor(_optionView.TrailingAnchor, -6f).Active = true;
-            _helpButton.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 5f).Active = true;
+            _helpButton.LeadingAnchor.ConstraintEqualToAnchor(_control.TrailingAnchor, 11f).Active = true;
+            _helpButton.CenterYAnchor.ConstraintEqualToAnchor(_control.CenterYAnchor).Active = true;
         }
     }
 }

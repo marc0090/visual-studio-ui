@@ -24,8 +24,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             clipView.TranslatesAutoresizingMaskIntoConstraints = false;
 
             clipView.TopAnchor.ConstraintEqualToAnchor(_scrollView.TopAnchor).Active = true;
-            clipView.LeftAnchor.ConstraintEqualToAnchor(_scrollView.LeftAnchor).Active = true;
-            clipView.RightAnchor.ConstraintEqualToAnchor(_scrollView.RightAnchor).Active = true;
+            clipView.LeadingAnchor.ConstraintEqualToAnchor(_scrollView.LeadingAnchor).Active = true;
+            clipView.TrailingAnchor.ConstraintEqualToAnchor(_scrollView.TrailingAnchor).Active = true;
             clipView.BottomAnchor.ConstraintEqualToAnchor(_scrollView.BottomAnchor).Active = true;
 
             var documentView = new NSStackView();
@@ -33,7 +33,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             _scrollView.DocumentView = documentView;
 
             documentView.TopAnchor.ConstraintEqualToAnchor(clipView.TopAnchor).Active = true;
-            documentView.LeftAnchor.ConstraintEqualToAnchor(clipView.LeftAnchor).Active = true;
+            documentView.LeadingAnchor.ConstraintEqualToAnchor(clipView.LeadingAnchor).Active = true;
 
             documentView.EdgeInsets = new NSEdgeInsets(24f, 24f, 24f, 24f);
 

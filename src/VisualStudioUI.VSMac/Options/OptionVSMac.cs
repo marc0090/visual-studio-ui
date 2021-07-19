@@ -79,26 +79,48 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         protected NSButton? CreateHelpButton()
         {
+            var hintButton = new NSButton();
+
             Message? validationMessage = Option.ValidationMessage?.Value;
             string? messageText = validationMessage?.Text ?? Option.Hint;
             if (messageText == null)
                 return null;
 
-            // View:     helpButton
-            var helpButton = new AppKit.NSButton();
-            helpButton.BezelStyle = NSBezelStyle.HelpButton;
-            helpButton.Title = "";
-            helpButton.ControlSize = NSControlSize.Regular;
-            helpButton.Font = AppKit.NSFont.SystemFontOfSize(AppKit.NSFont.SystemFontSize);
-            helpButton.TranslatesAutoresizingMaskIntoConstraints = false;
+            if (validationMessage != null)
+            {
+                hintButton.BezelStyle = NSBezelStyle.RoundRect;
+                hintButton.Bordered = false;
+                hintButton.ImagePosition = NSCellImagePosition.ImageOnly;
+                hintButton.ImageScaling = NSImageScale.ProportionallyUpOrDown;
+                hintButton.TranslatesAutoresizingMaskIntoConstraints = false;
+                switch (validationMessage.Severity)
+                {
+                    case MessageSeverity.Warning:
+                        hintButton.Image = NSImage.ImageNamed("NSCaution");
+                        break;
+                    case MessageSeverity.Error:
+                        hintButton.Image = NSImage.GetSystemSymbol("xmark.octagon.fill", null);
+                        hintButton.ContentTintColor = NSColor.Red;
+                        break;
 
-            var hintButtonWidthConstraint = helpButton.WidthAnchor.ConstraintEqualToConstant(21f);
-            hintButtonWidthConstraint.Priority = (System.Int32)AppKit.NSLayoutPriority.DefaultLow;
-            hintButtonWidthConstraint.Active = true;
+                }
+            }
+            else if (Option.Hint != null)
+            {
+                hintButton = new NSButton();
+                hintButton.BezelStyle = NSBezelStyle.HelpButton;
+                hintButton.Title = "";
+                hintButton.ControlSize = NSControlSize.Regular;
+                hintButton.Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize);
+                hintButton.TranslatesAutoresizingMaskIntoConstraints = false;
+            }
 
-            helpButton.Activated += (o, args) => ShowHelpPopover(messageText, helpButton);
+            hintButton.HeightAnchor.ConstraintEqualToConstant(19f).Active = true;
+            hintButton.WidthAnchor.ConstraintEqualToConstant(19f).Active = true;
 
-            return helpButton;
+            hintButton.Activated += (o, args) => ShowHelpPopover(messageText, hintButton);
+
+            return hintButton;
         }
 
         private void ShowHelpPopover(string message, NSButton button)
