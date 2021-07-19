@@ -36,7 +36,7 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             card.AddOption(new CheckBoxOption(BoolProp(false)) { ButtonLabel = "test", DisablebilityDependsOn = dependOn });
             card.AddOption(new DocButtonOption(StringProp("test"), "test") { DisablebilityDependsOn = dependOn });
             card.AddOption(new TextOption(StringProp("")) { Label = "test", DisablebilityDependsOn = dependOn });
-            card.AddOption(new StepperOption(new ViewModelProperty<int>("", 100)) { Label = "Port", DisablebilityDependsOn = dependOn });
+            card.AddOption(new StepperOption(new ViewModelProperty<int>("", 100)) { Label = "Port", DisablebilityDependsOn = dependOn, Hint = "test" });
 
             return card;
         }
