@@ -1,5 +1,5 @@
 ﻿//
-// SwitchableGroupOption.cs
+// CheckBoxlistItem.cs
 //
 // Author:
 //       marcbookpro19 <v-marcguo@microsoft.com>

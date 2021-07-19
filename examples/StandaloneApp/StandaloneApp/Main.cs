@@ -144,7 +144,7 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
         {
             var card = new OptionCard();
             card.AddOption(
-                new SwitchableGroupOption(BoolProp(true))
+                new SwitchOption(BoolProp(true))
                 {
                     ButtonLabel = "Siri",
                     Description = "Allows your application to handle Siri requests.",
@@ -164,7 +164,7 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
         private static OptionCard ICloudCard()
         {
             var card = new OptionCard();
-            var switchableOption = new SwitchableGroupOption(BoolProp(true))
+            var switchableOption = new SwitchOption(BoolProp(true))
             {
                 ButtonLabel = "iCloud",
                 Description = "Allows your application to store data in the cloud and lets users share their data across devices.Allows your application to store data in the cloud and lets users share their data across devices.Allows your application to store data in the cloud and lets users share their data across devices.Allows your application to store data in the cloud and lets users share their data across devices.",
@@ -192,7 +192,7 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
         private static OptionCard WalletCard()
         {
             var card = new OptionCard();
-            var walletSwitchableOption = new SwitchableGroupOption(BoolProp(true))
+            var walletSwitchableOption = new SwitchOption(BoolProp(true))
             {
                 ButtonLabel = "Wallet",
                 Description = "Allows your application to manage passes, tickets, gift cards, and loyalty cards. It supports a variety of bar code formats."
@@ -228,7 +228,7 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
         private static OptionCard BackgroundModesCard()
         {
             var card = new OptionCard();
-            var backgroundModesSwitch = new SwitchableGroupOption(BoolProp(true))
+            var backgroundModesSwitch = new SwitchOption(BoolProp(true))
             {
                 ButtonLabel = "Background Modes",
                 Description = "Set allowed background modes.",
@@ -249,7 +249,7 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             return card;
         }
 
-        private static CheckBoxOption BackgroundModeCheckBox(SwitchableGroupOption backgroundModeSwitch, string label)
+        private static CheckBoxOption BackgroundModeCheckBox(SwitchOption backgroundModeSwitch, string label)
         {
             return new CheckBoxOption(BoolProp(false))
             {

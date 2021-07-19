@@ -5,7 +5,7 @@ using Microsoft.VisualStudioUI.Options.Models;
 
 namespace Microsoft.VisualStudioUI.VSMac.Options
 {
-    public class SwitchableGroupOptionVSMac : OptionVSMac
+    public class SwitchOptionVSMac : OptionVSMac
     {
         private NSView? _optionView;
         private NSSwitch? _switchButton;
@@ -15,11 +15,11 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         private NSLayoutConstraint? _descriptionBottomConstraints;
         private NSLayoutConstraint? _childrenControlBottomConstraints;
 
-        public SwitchableGroupOptionVSMac(SwitchableGroupOption option) : base(option)
+        public SwitchOptionVSMac(SwitchOption option) : base(option)
         {
         }
 
-        public SwitchableGroupOption SwitchableGroupOption => ((SwitchableGroupOption)Option);
+        public SwitchOption SwitchOption => ((SwitchOption)Option);
 
         public override NSView View
         {
@@ -36,7 +36,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         private void CreateView()
         {
-            bool enable = ((SwitchableGroupOption)Option).IsOn.Value;
+            bool enable = ((SwitchOption)Option).IsOn.Value;
 
             _optionView = new NSStackView() { Orientation = NSUserInterfaceLayoutOrientation.Vertical };
             _optionView.WantsLayer = true;
@@ -50,8 +50,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
             _switchButton.Activated += SwitchButtonActivated;
 
-            SwitchableGroupOption.IsOn.PropertyChanged += SwitchPropertyChanged;
-            SwitchableGroupOption.ShowSpinner.PropertyChanged += SpinnerChanged;
+            SwitchOption.IsOn.PropertyChanged += SwitchPropertyChanged;
+            SwitchOption.ShowSpinner.PropertyChanged += SpinnerChanged;
 
             _optionView.AddSubview(_switchButton);
             _switchButton.WidthAnchor.ConstraintEqualToConstant(38f).Active = true;
@@ -59,10 +59,10 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             _switchButton.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 68f).Active = true;
             _switchButton.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 30f).Active = true;
 
-            string? buttonLabel = SwitchableGroupOption.ButtonLabel;
+            string? buttonLabel = SwitchOption.ButtonLabel;
             // Temporarily use Label as a fallback; remove when no longer needed
             if (string.IsNullOrEmpty(buttonLabel))
-                buttonLabel = SwitchableGroupOption.Label;
+                buttonLabel = SwitchOption.Label;
             if (buttonLabel == null)
                 buttonLabel = "";
 
@@ -153,12 +153,12 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             _childrenControl = new NSStackView()
             {
                 Orientation = NSUserInterfaceLayoutOrientation.Vertical,
-                Spacing = SwitchableGroupOption.Space,
+                Spacing = SwitchOption.Space,
                 Distribution = NSStackViewDistribution.Fill,
                 TranslatesAutoresizingMaskIntoConstraints = false
             };
 
-            foreach (Option option in SwitchableGroupOption.ChildrenOptions)
+            foreach (Option option in SwitchOption.ChildrenOptions)
             {
                 NSView optionView = ((OptionVSMac)option.Platform).View;
                 _childrenControl.AddArrangedSubview(optionView);
@@ -169,12 +169,12 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             // TODO: Need an else here?
             if (description != null)
             {
-                _childrenControl.TopAnchor.ConstraintEqualToAnchor(description.BottomAnchor, SwitchableGroupOption.Space).Active = true;
+                _childrenControl.TopAnchor.ConstraintEqualToAnchor(description.BottomAnchor, SwitchOption.Space).Active = true;
             }
 
             _childrenControl.TrailingAnchor.ConstraintEqualToAnchor(_optionView.TrailingAnchor).Active = true;
             _childrenControl.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor).Active = true;
-            _childrenControlBottomConstraints = _childrenControl.BottomAnchor.ConstraintEqualToAnchor(_optionView.BottomAnchor, -SwitchableGroupOption.Space);
+            _childrenControlBottomConstraints = _childrenControl.BottomAnchor.ConstraintEqualToAnchor(_optionView.BottomAnchor, -SwitchOption.Space);
             _childrenControlBottomConstraints.Active = true;
 
             ShowChildrenOption(enable);
@@ -187,7 +187,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         private void ShowChildrenOption(bool enable)
         {
-            if (enable && SwitchableGroupOption.ChildrenOptions.Count > 0)
+            if (enable && SwitchOption.ChildrenOptions.Count > 0)
             {
                 _childrenControl!.Hidden = false;
                 _childrenControlBottomConstraints!.Active = true;
@@ -205,10 +205,10 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         {
             bool enable = (_switchButton!.State == 1);
 
-            ((SwitchableGroupOption)Option).IsOn.PropertyChanged -= SwitchPropertyChanged;
-            ((SwitchableGroupOption)Option).IsOn.Value = enable;
-            ((SwitchableGroupOption)Option).SwitchChangedInvoke(sender, e);
-            ((SwitchableGroupOption)Option).IsOn.PropertyChanged += SwitchPropertyChanged;
+            ((SwitchOption)Option).IsOn.PropertyChanged -= SwitchPropertyChanged;
+            ((SwitchOption)Option).IsOn.Value = enable;
+            ((SwitchOption)Option).SwitchChangedInvoke(sender, e);
+            ((SwitchOption)Option).IsOn.PropertyChanged += SwitchPropertyChanged;
 
             ShowChildrenOption(enable);
         }
@@ -216,7 +216,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         private void SwitchPropertyChanged(object sender, ViewModelPropertyChangedEventArgs e)
         {
             _switchButton!.Activated -= SwitchButtonActivated;
-            _switchButton.State = ((SwitchableGroupOption)Option).IsOn.Value ? 1 : 0;
+            _switchButton.State = ((SwitchOption)Option).IsOn.Value ? 1 : 0;
             _switchButton.Activated += SwitchButtonActivated;
 
         }
@@ -236,7 +236,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         public void SpinnerChanged(object sender, ViewModelPropertyChangedEventArgs e)
         {
-            if (SwitchableGroupOption.ShowSpinner.Value)
+            if (SwitchOption.ShowSpinner.Value)
             {
                 _progressIndicator!.StartAnimation(null);
             }
