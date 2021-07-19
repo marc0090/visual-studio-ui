@@ -40,10 +40,11 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     _controlView.AddSubview(_textField);
 
                     _textField.WidthAnchor.ConstraintEqualToConstant(196f).Active = true;
+                    _textField.HeightAnchor.ConstraintEqualToConstant(21).Active = true;
                     _textField.LeadingAnchor.ConstraintEqualToAnchor(_controlView.LeadingAnchor).Active = true;
                     _textField.TopAnchor.ConstraintEqualToAnchor(_controlView.TopAnchor).Active = true;
 
-                    _controlView.HeightAnchor.ConstraintEqualToConstant(_textField.FittingSize.Height).Active = true;
+                    _controlView.HeightAnchor.ConstraintEqualToConstant(21).Active = true;
 
                     property.PropertyChanged += delegate (object o, ViewModelPropertyChangedEventArgs args)
                     {

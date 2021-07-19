@@ -33,16 +33,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             _optionView = new AppKit.NSView();
             _optionView.WidthAnchor.ConstraintEqualToConstant(600f - IndentValue()).Active = true;
 
-            var label = CreateLabelView();
-            if (label != null)
-            {
-                _optionView.AddSubview(label);
-
-
-                label.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, IndentValue()).Active = true;
-                label.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 7f).Active = true;
-            }
-
             _control = ControlView;
             // TODO: Set a11y info properly
             _control.AccessibilityLabel = "Control";
@@ -54,6 +44,15 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             _control.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 5f).Active = true;
 
             UpdateHelpButton();
+
+            var label = CreateLabelView();
+            if (label != null)
+            {
+                _optionView.AddSubview(label);
+
+                label.TrailingAnchor.ConstraintEqualToAnchor(_control.LeadingAnchor, -8f).Active = true;
+                label.CenterYAnchor.ConstraintEqualToAnchor(_control.CenterYAnchor).Active = true;
+            }
 
             NSTextField? descriptionView = CreateDescriptionView();
             if (descriptionView != null)
@@ -67,7 +66,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             }
             else
             {
-                _optionView.BottomAnchor.ConstraintEqualToAnchor(_control.BottomAnchor).Active = true;
+                _optionView.HeightAnchor.ConstraintEqualToConstant(26f).Active = true;
             }
         }
 
