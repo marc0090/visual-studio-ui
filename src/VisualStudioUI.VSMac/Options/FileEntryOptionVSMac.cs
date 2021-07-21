@@ -7,7 +7,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 {
     public class FileEntryOptionVSMac : OptionWithLeftLabelVSMac
     {
-        private NSView _controlView;
+        private NSStackView _controlView;
         private NSTextField? _textField;
         private NSButton _button;
 
@@ -23,8 +23,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             {
                 if (_controlView == null)
                 {
-                    _controlView = new NSView();
-                    _controlView.WantsLayer = true;
+                    _controlView = new NSStackView();
+                    _controlView.Orientation = NSUserInterfaceLayoutOrientation.Horizontal;
                     _controlView.TranslatesAutoresizingMaskIntoConstraints = false;
 
                     ViewModelProperty<string> property = FileEntryOption.Property;
@@ -39,12 +39,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                         DrawsBackground = FileEntryOption.DrawsBackground
                     };
 
-                    _controlView.AddSubview(_textField);
-
-                    _textField.WidthAnchor.ConstraintEqualToConstant(196f).Active = true;
-                    _textField.HeightAnchor.ConstraintEqualToConstant(21).Active = true;
-                    _textField.LeadingAnchor.ConstraintEqualToAnchor(_controlView.LeadingAnchor).Active = true;
-                    _textField.TopAnchor.ConstraintEqualToAnchor(_controlView.TopAnchor).Active = true;
+                    _controlView.AddArrangedSubview(_textField);
 
 
                     property.PropertyChanged += delegate (object o, ViewModelPropertyChangedEventArgs args)
@@ -54,10 +49,15 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                     _textField.Changed += delegate { property.Value = _textField.StringValue; };
 
-                    _button = new NSButton();
-                    _button.BezelStyle = NSBezelStyle.RoundRect;
-                    _button.Title = FileEntryOption.ButtonLabel;
+                    _button = new NSButton
+                    {
+                        BezelStyle = NSBezelStyle.RoundRect,
+                        Bordered = true,
+                        LineBreakMode = NSLineBreakMode.TruncatingTail,
+                        Title = FileEntryOption.ButtonLabel
+                    };
                     _button.SizeToFit();
+
                     _button.Activated += (s, e) =>
                     {
                         var openPanel = new NSOpenPanel();
@@ -68,12 +68,23 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                             _textField.StringValue = openPanel.Url.AbsoluteString;
                         }
                     };
-                    _controlView.AddSubview(_button);
 
-                    _button.CenterYAnchor.ConstraintEqualToAnchor(_textField.CenterYAnchor).Active = true;
-                    _button.LeadingAnchor.ConstraintEqualToAnchor(_textField.TrailingAnchor, 5f).Active = true;
-                    _controlView.WidthAnchor.ConstraintEqualToConstant(226f).Active = true;
-                    _controlView.HeightAnchor.ConstraintEqualToAnchor(_textField.HeightAnchor).Active = true;
+                    _controlView.AddArrangedSubview(_button);
+
+                    //_controlView.WidthAnchor.ConstraintEqualToConstant(266f).Active = true;
+                    _controlView.HeightAnchor.ConstraintEqualToConstant(21f).Active = true;
+
+                    _textField.WidthAnchor.ConstraintEqualToConstant(196f).Active = true;
+                    _textField.HeightAnchor.ConstraintEqualToConstant(21).Active = true;
+                    _textField.LeadingAnchor.ConstraintEqualToAnchor(_controlView.LeadingAnchor).Active = true;
+                    _textField.TopAnchor.ConstraintEqualToAnchor(_controlView.TopAnchor).Active = true;
+
+                    // _button.WidthAnchor.ConstraintEqualToConstant(40).Active = true;
+                    _button.HeightAnchor.ConstraintEqualToConstant(21).Active = true;
+                    //_button.CenterYAnchor.ConstraintEqualToAnchor(_controlView.CenterYAnchor).Active = true;
+                    _button.TrailingAnchor.ConstraintEqualToAnchor(_controlView.TrailingAnchor).Active = true;
+
+
 
                 }
                 return _controlView;
@@ -84,7 +95,10 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         {
             base.OnEnableChanged(enabled);
             if (_textField != null)
+            {
                 _textField.Enabled = enabled;
+                _button.Enabled = enabled;
+            }
         }
     }
 }

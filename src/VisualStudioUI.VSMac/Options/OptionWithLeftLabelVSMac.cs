@@ -66,7 +66,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             }
             else
             {
-                _control.BottomAnchor.ConstraintEqualToAnchor(_optionView.BottomAnchor, -5f).Active = true;
+                _optionView.BottomAnchor.ConstraintEqualToAnchor(_control.BottomAnchor, 5f).Active = true;
 
             }
         }
