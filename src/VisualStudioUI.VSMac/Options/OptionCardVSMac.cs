@@ -36,8 +36,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             //cardHeightConstraint.Active = true;
 
             /*
-            cardView.RightAnchor.ConstraintEqualToAnchor (this.RightAnchor, 0f).Active = true;
-            cardView.LeftAnchor.ConstraintEqualToAnchor (this.LeftAnchor, 0f).Active = true;
+            cardView.TrailingAnchor.ConstraintEqualToAnchor (this.TrailingAnchor, 0f).Active = true;
+            cardView.LeadingAnchor.ConstraintEqualToAnchor (this.LeadingAnchor, 0f).Active = true;
             cardView.BottomAnchor.ConstraintEqualToAnchor (this.BottomAnchor, 0f).Active = true;
             cardView.TopAnchor.ConstraintEqualToAnchor (this.TopAnchor, 0f).Active = true;
             */
@@ -62,8 +62,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             backgroundHeightConstraint.Active = true;
             */
 
-            background.RightAnchor.ConstraintEqualToAnchor(cardView.RightAnchor, 0f).Active = true;
-            background.LeftAnchor.ConstraintEqualToAnchor(cardView.LeftAnchor, 0f).Active = true;
+            background.TrailingAnchor.ConstraintEqualToAnchor(cardView.TrailingAnchor, 0f).Active = true;
+            background.LeadingAnchor.ConstraintEqualToAnchor(cardView.LeadingAnchor, 0f).Active = true;
             background.BottomAnchor.ConstraintEqualToAnchor(cardView.BottomAnchor, 0f).Active = true;
             background.TopAnchor.ConstraintEqualToAnchor(cardView.TopAnchor, 0f).Active = true;
 
@@ -89,7 +89,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 var titleLabelHeightConstraint = titleLabel.HeightAnchor.ConstraintEqualToConstant(16f);
                 titleLabelHeightConstraint.Active = true;
 
-                titleLabel.LeftAnchor.ConstraintEqualToAnchor(cardView.LeftAnchor, 24f).Active = true;
+                titleLabel.LeadingAnchor.ConstraintEqualToAnchor(cardView.LeadingAnchor, 24f).Active = true;
                 titleLabel.TopAnchor.ConstraintEqualToAnchor(cardView.TopAnchor, 17f).Active = true;
 
                 //top position offset for card with a title

@@ -51,8 +51,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             var boxViewHeightConstraint = boxView.HeightAnchor.ConstraintEqualToConstant(1f);
             boxViewHeightConstraint.Active = true;
 
-            boxView.RightAnchor.ConstraintEqualToAnchor(separatorView.RightAnchor, 0f).Active = true;
-            boxView.LeftAnchor.ConstraintEqualToAnchor(separatorView.LeftAnchor, 0f).Active = true;
+            boxView.TrailingAnchor.ConstraintEqualToAnchor(separatorView.TrailingAnchor, 0f).Active = true;
+            boxView.LeadingAnchor.ConstraintEqualToAnchor(separatorView.LeadingAnchor, 0f).Active = true;
             boxView.TopAnchor.ConstraintEqualToAnchor(separatorView.CenterYAnchor, -0.5f).Active = true;
 
             return separatorView;

@@ -6,13 +6,13 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 {
     public abstract class OptionVSMac : OptionPlatform
     {
-        private HintPopover? _helpPopover;
+        private HintPopover? _hintPopover;
 
         public OptionVSMac(Option option) : base(option)
         {
             if (Option.ValidationMessage != null)
             {
-                Option.ValidationMessage.PropertyChanged += (sender, args) => UpdateHelpButton();
+                Option.ValidationMessage.PropertyChanged += (sender, args) => UpdateHintButton();
             }
         }
 
@@ -75,43 +75,65 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             return description;
         }
 
-        protected virtual void UpdateHelpButton() { }
+        protected virtual void UpdateHintButton() { }
 
-        protected NSButton? CreateHelpButton()
+        protected NSButton? CreateHintButton()
         {
+            var hintButton = new NSButton();
+
             Message? validationMessage = Option.ValidationMessage?.Value;
             string? messageText = validationMessage?.Text ?? Option.Hint;
             if (messageText == null)
                 return null;
 
-            // View:     helpButton
-            var helpButton = new AppKit.NSButton();
-            helpButton.BezelStyle = NSBezelStyle.HelpButton;
-            helpButton.Title = "";
-            helpButton.ControlSize = NSControlSize.Regular;
-            helpButton.Font = AppKit.NSFont.SystemFontOfSize(AppKit.NSFont.SystemFontSize);
-            helpButton.TranslatesAutoresizingMaskIntoConstraints = false;
+            if (validationMessage != null)
+            {
+                hintButton.BezelStyle = NSBezelStyle.RoundRect;
+                hintButton.Bordered = false;
+                hintButton.ImagePosition = NSCellImagePosition.ImageOnly;
+                hintButton.ImageScaling = NSImageScale.ProportionallyUpOrDown;
+                hintButton.TranslatesAutoresizingMaskIntoConstraints = false;
+                switch (validationMessage.Severity)
+                {
+                    case MessageSeverity.Warning:
+                        hintButton.Image = NSImage.ImageNamed("NSCaution");
+                        break;
+                    case MessageSeverity.Error:
+                        hintButton.Image = NSImage.GetSystemSymbol("xmark.octagon.fill", null);
+                        hintButton.ContentTintColor = NSColor.Red;
+                        break;
 
-            var hintButtonWidthConstraint = helpButton.WidthAnchor.ConstraintEqualToConstant(21f);
-            hintButtonWidthConstraint.Priority = (System.Int32)AppKit.NSLayoutPriority.DefaultLow;
-            hintButtonWidthConstraint.Active = true;
+                }
+            }
+            else if (Option.Hint != null)
+            {
+                hintButton = new NSButton();
+                hintButton.BezelStyle = NSBezelStyle.HelpButton;
+                hintButton.Title = "";
+                hintButton.ControlSize = NSControlSize.Regular;
+                hintButton.Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize);
+                hintButton.TranslatesAutoresizingMaskIntoConstraints = false;
+            }
 
-            helpButton.Activated += (o, args) => ShowHelpPopover(messageText, helpButton);
+            hintButton.HeightAnchor.ConstraintEqualToConstant(19f).Active = true;
+            hintButton.WidthAnchor.ConstraintEqualToConstant(19f).Active = true;
 
-            return helpButton;
+            hintButton.Activated += (o, args) => ShowHintPopover(messageText, hintButton);
+
+            return hintButton;
         }
 
-        private void ShowHelpPopover(string message, NSButton button)
+        private void ShowHintPopover(string message, NSButton button)
         {
-            _helpPopover?.Close();
-            _helpPopover?.Dispose();
-            _helpPopover = new HintPopover(message, null);
-            _helpPopover.MaxWidth = 256;
+            _hintPopover?.Close();
+            _hintPopover?.Dispose();
+            _hintPopover = new HintPopover(message, null);
+            _hintPopover.MaxWidth = 256;
             //TODO:
             //popover.SetAppearance (Appearance);
 
             var bounds = button.Bounds;
-            _helpPopover.Show(bounds, button, NSRectEdge.MaxYEdge);
+            _hintPopover.Show(bounds, button, NSRectEdge.MaxYEdge);
         }
 
         internal float IndentValue()

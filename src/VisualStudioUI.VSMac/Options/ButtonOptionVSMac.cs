@@ -71,7 +71,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 label.WidthAnchor.ConstraintEqualToConstant(205f).Active = true;
                 label.HeightAnchor.ConstraintEqualToConstant(16f).Active = true;
 
-                label.LeftAnchor.ConstraintEqualToAnchor(_optionView.LeftAnchor, 6f).Active = true;
+                label.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 6f).Active = true;
                 label.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 7f).Active = true;
             }
 
@@ -90,7 +90,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 helpButtonWidthConstraint.Priority = (System.Int32)NSLayoutPriority.DefaultLow;
                 helpButtonWidthConstraint.Active = true;
 
-                _helpButton.RightAnchor.ConstraintEqualToAnchor(_optionView.RightAnchor, -6f).Active = true;
+                _helpButton.TrailingAnchor.ConstraintEqualToAnchor(_optionView.TrailingAnchor, -6f).Active = true;
                 _helpButton.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 5f).Active = true;
 
                 _helpButton.Activated += (o, args) => ShowHintPopover(Option.Hint, _helpButton);
@@ -125,7 +125,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
             _optionView.AddSubview(_button);
 
-            _button.LeftAnchor.ConstraintEqualToAnchor(_optionView.LeftAnchor, 222f).Active = true;
+            _button.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 222f).Active = true;
             _button.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 5f).Active = true;
 
             if (ButtonOption.Hidden != null)
@@ -159,7 +159,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 var _descriptionHeightConstraint = _description.HeightAnchor.ConstraintEqualToConstant(354f);
                 _descriptionHeightConstraint.Active = true;
 
-                _description.LeftAnchor.ConstraintEqualToAnchor(_button.LeftAnchor, 0f).Active = true;
+                _description.LeadingAnchor.ConstraintEqualToAnchor(_button.LeadingAnchor, 0f).Active = true;
                 _description.TopAnchor.ConstraintEqualToAnchor(_button.BottomAnchor, 0f).Active = true;
             }
         }

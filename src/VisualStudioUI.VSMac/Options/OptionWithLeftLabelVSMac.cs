@@ -6,8 +6,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
     public abstract class OptionWithLeftLabelVSMac : OptionVSMac
     {
         private NSView? _optionView;
-        private NSButton? _helpButton;
-
+        private NSButton? _hintButton;
+        private NSView _control;
         public OptionWithLeftLabelVSMac(Option option) : base(option)
         {
         }
@@ -33,41 +33,41 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             _optionView = new AppKit.NSView();
             _optionView.WidthAnchor.ConstraintEqualToConstant(600f - IndentValue()).Active = true;
 
+            _control = ControlView;
+            // TODO: Set a11y info properly
+            _control.AccessibilityLabel = "Control";
+            _control.AccessibilityHelp = "Provides a control";
+
+            _optionView.AddSubview(_control);
+
+            _control.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 222f + IndentValue()).Active = true;
+            _control.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 5f).Active = true;
+
+            UpdateHintButton();
+
             var label = CreateLabelView();
             if (label != null)
             {
                 _optionView.AddSubview(label);
 
-
-                label.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, IndentValue()).Active = true;
-                label.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 7f).Active = true;
+                label.TrailingAnchor.ConstraintEqualToAnchor(_control.LeadingAnchor, -8f).Active = true;
+                label.CenterYAnchor.ConstraintEqualToAnchor(_control.CenterYAnchor).Active = true;
             }
-
-            var control = ControlView;
-            // TODO: Set a11y info properly
-            control.AccessibilityLabel = "Control";
-            control.AccessibilityHelp = "Provides a control";
-
-            _optionView.AddSubview(control);
-
-            control.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 222f + IndentValue()).Active = true;
-            control.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 5f).Active = true;
-
-            UpdateHelpButton();
 
             NSTextField? descriptionView = CreateDescriptionView();
             if (descriptionView != null)
             {
                 _optionView.AddSubview(descriptionView);
 
-                descriptionView.LeadingAnchor.ConstraintEqualToAnchor(control.LeadingAnchor, 0f).Active = true;
-                descriptionView.TopAnchor.ConstraintEqualToAnchor(control.BottomAnchor, 0f).Active = true;
+                descriptionView.LeadingAnchor.ConstraintEqualToAnchor(_control.LeadingAnchor, 0f).Active = true;
+                descriptionView.TopAnchor.ConstraintEqualToAnchor(_control.BottomAnchor, 0f).Active = true;
+                descriptionView.BottomAnchor.ConstraintEqualToAnchor(_optionView.BottomAnchor).Active = true;
 
-                _optionView.BottomAnchor.ConstraintEqualToAnchor(descriptionView.BottomAnchor).Active = true;
             }
             else
             {
-                _optionView.BottomAnchor.ConstraintEqualToAnchor(control.BottomAnchor).Active = true;
+                _control.BottomAnchor.ConstraintEqualToAnchor(_optionView.BottomAnchor, -5f).Active = true;
+
             }
         }
 
@@ -75,24 +75,24 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         {
         }
 
-        protected override void UpdateHelpButton()
+        protected override void UpdateHintButton()
         {
-            if (_helpButton != null)
+            if (_hintButton != null)
             {
-                _helpButton.RemoveFromSuperview();
-                _helpButton.Dispose(); // TODO: Is this needed?
-                _helpButton = null;
+                _hintButton.RemoveFromSuperview();
+                _hintButton.Dispose(); // TODO: Is this needed?
+                _hintButton = null;
             }
 
-            _helpButton = CreateHelpButton();
+            _hintButton = CreateHintButton();
 
-            if (_helpButton == null)
+            if (_hintButton == null)
                 return;
 
-            _optionView!.AddSubview(_helpButton);
+            _optionView!.AddSubview(_hintButton);
 
-            _helpButton.TrailingAnchor.ConstraintEqualToAnchor(_optionView.TrailingAnchor, -6f).Active = true;
-            _helpButton.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 5f).Active = true;
+            _hintButton.LeadingAnchor.ConstraintEqualToAnchor(_control.TrailingAnchor, 11f).Active = true;
+            _hintButton.CenterYAnchor.ConstraintEqualToAnchor(_control.CenterYAnchor).Active = true;
         }
     }
 }

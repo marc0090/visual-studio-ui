@@ -58,7 +58,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 label.WidthAnchor.ConstraintEqualToConstant(205f).Active = true;
                 label.HeightAnchor.ConstraintEqualToConstant(16f).Active = true;
 
-                label.LeftAnchor.ConstraintEqualToAnchor(_optionView.LeftAnchor, 6f).Active = true;
+                label.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 6f).Active = true;
                 label.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 7f).Active = true;
             }
 
@@ -70,7 +70,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             _progressIndicator.SizeToFit();
             _optionView.AddSubview(_progressIndicator);
 
-            _progressIndicator.LeftAnchor.ConstraintEqualToAnchor(_optionView.LeftAnchor, 215f).Active = true;
+            _progressIndicator.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 215f).Active = true;
             _progressIndicator.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 5f).Active = true;
 
             // Default is start
@@ -86,7 +86,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 TranslatesAutoresizingMaskIntoConstraints = false,
             };
 
-            if ( ProgressIndicatorOption.Element != null)
+            if (ProgressIndicatorOption.Element != null)
             {
                 NSView optionView = ((OptionVSMac)ProgressIndicatorOption.Element.Platform).View;
                 _childrenControl.AddArrangedSubview(optionView);
