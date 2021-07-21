@@ -36,7 +36,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                         TranslatesAutoresizingMaskIntoConstraints = false,
                         Editable = FileEntryOption.Editable,
                         Bordered = FileEntryOption.Bordered,
-                        DrawsBackground = FileEntryOption.DrawsBackground
+                        DrawsBackground = FileEntryOption.DrawsBackground,
+                        UsesSingleLineMode = true
                     };
 
                     _controlView.AddArrangedSubview(_textField);
@@ -60,18 +61,18 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                     _button.Activated += (s, e) =>
                     {
-                        var openPanel = new NSOpenPanel();
-                        openPanel.CanChooseFiles = true;
-                        var response = openPanel.RunModal();
-                        if (response == 1 && openPanel.Url != null)
-                        {
-                            _textField.StringValue = openPanel.Url.AbsoluteString;
-                        }
+                        FileEntryOption.ButtonClicked(s, e);
+
+                        //var openPanel = new NSOpenPanel();
+                        //openPanel.CanChooseDirectories = true;
+                        //var response = openPanel.RunModal();
+                        //if (response == 1 && openPanel.Url != null)
+                        //{
+                        //    _textField.StringValue = openPanel.Url.AbsoluteString;
+                        //}
                     };
 
                     _controlView.AddArrangedSubview(_button);
-
-                    //_controlView.WidthAnchor.ConstraintEqualToConstant(266f).Active = true;
                     _controlView.HeightAnchor.ConstraintEqualToConstant(21f).Active = true;
 
                     _textField.WidthAnchor.ConstraintEqualToConstant(196f).Active = true;

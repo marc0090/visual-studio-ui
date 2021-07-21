@@ -1,4 +1,5 @@
 ﻿
+using System;
 using Microsoft.VisualStudioUI.Options.Models;
 
 namespace Microsoft.VisualStudioUI.Options
@@ -10,6 +11,9 @@ namespace Microsoft.VisualStudioUI.Options
         public bool Bordered { get; set; } = true;
         public bool DrawsBackground { get; set; } = true;
         public string ButtonLabel { get; set; } = "Browse...";
+
+        public event EventHandler Clicked;
+
         public FileEntryOption(ViewModelProperty<string> property)
         {
             Property = property;
@@ -17,6 +21,11 @@ namespace Microsoft.VisualStudioUI.Options
         }
 
         public ViewModelProperty<string> Property { get; }
+
+        public void ButtonClicked(object sender, EventArgs e)
+        {
+            Clicked?.Invoke(sender, e);
+        }
     }
 
 }
