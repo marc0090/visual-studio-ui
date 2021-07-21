@@ -34,34 +34,19 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         public override OptionPlatform CreateSwitchOptionPlatform(SwitchOption switchOption) =>
             new SwitchOptionVSMac(switchOption);
 
-        public override OptionPlatform CreateStringListOptionPlatform(StringListOption stringListOption) =>
-            new StringListOptionVSMac(stringListOption);
+        public override OptionPlatform CreateStringListOptionPlatform(StringListOption stringListOption) => new StringListOptionVSMac(stringListOption);
+        public override OptionPlatform CreateImageViewOptionPlatform(ScaledImageFileOption imageFileOption) => new ScaledImageFileOptionVSMac(imageFileOption);
+        public override OptionPlatform CreateButtonOptionPlatform(ButtonOption buttonOption) => new ButtonOptionVSMac(buttonOption);
 
-        public override OptionPlatform CreateImageViewOptionPlatform(ScaledImageFileOption imageFileOption) =>
-            new ScaledImageFileOptionVSMac(imageFileOption);
+        public override OptionPlatform CreateCheckBoxOptionPlatform(CheckBoxOption checkBoxOption) => new CheckBoxOptionVSMac(checkBoxOption);
+        public override OptionPlatform CreateRadioButtonOptionPlatform(RadioButtonOption radioButtonOption) => new RadioButtonOptionVSMac(radioButtonOption);
 
-        public override OptionPlatform CreateButtonOptionPlatform(ButtonOption buttonOption) =>
-            new ButtonOptionVSMac(buttonOption);
+        public override OptionPlatform CreateCheckBoxListOptionPlatform(CheckBoxListOption checkBoxListOption) => new CheckBoxListOptionVSMac(checkBoxListOption);
 
-        public override OptionPlatform CreateCheckBoxOptionPlatform(CheckBoxOption checkBoxOption) =>
-            new CheckBoxOptionVSMac(checkBoxOption);
+        public override OptionPlatform CreateLabelOptionPlatform(LabelOption labelOption) => new LabelOptionVSMac(labelOption);
 
-        public override OptionPlatform CreateRadioButtonOptionPlatform(RadioButtonOption radioButtonOption) =>
-            new RadioButtonOptionVSMac(radioButtonOption);
+        public override OptionPlatform CreateStepperOptionPlatform(StepperOption stepperOption) => new StepperOptionVSMac(stepperOption);
 
-        public override OptionPlatform CreateCheckBoxListOptionPlatform(CheckBoxListOption checkBoxListOption) =>
-            new CheckBoxListOptionVSMac(checkBoxListOption);
-
-        public override OptionPlatform CreateLabelOptionPlatform(LabelOption labelOption) =>
-            new LabelOptionVSMac(labelOption);
-
-        public override OptionPlatform CreateStepperOptionPlatform(StepperOption stepperOption) =>
-            new StepperOptionVSMac(stepperOption);
-
-        public override OptionPlatform CreateProgressIndicatorOptionPlatform(ProgressIndicatorOption progressIndicatorOption) =>
-            new ProgressIndicatorOptionVSMac(progressIndicatorOption);
-
-        public override OptionPlatform CreateCreateFileEntryOptionlatform(FileEntryOption fileEntryOption) =>
-            new FileEntryOptionVSMac(fileEntryOption);
+        public override OptionPlatform CreateProgressIndicatorOptionPlatform(ProgressIndicatorOption progressIndicatorOption) => new ProgressIndicatorOptionVSMac(progressIndicatorOption);
     }
 }
