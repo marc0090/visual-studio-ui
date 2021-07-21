@@ -6,7 +6,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
     public abstract class OptionWithLeftLabelVSMac : OptionVSMac
     {
         private NSView? _optionView;
-        private NSButton? _helpButton;
+        private NSButton? _hintButton;
         private NSView _control;
         public OptionWithLeftLabelVSMac(Option option) : base(option)
         {
@@ -43,7 +43,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             _control.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 222f + IndentValue()).Active = true;
             _control.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 5f).Active = true;
 
-            UpdateHelpButton();
+            UpdateHintButton();
 
             var label = CreateLabelView();
             if (label != null)
@@ -75,24 +75,24 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         {
         }
 
-        protected override void UpdateHelpButton()
+        protected override void UpdateHintButton()
         {
-            if (_helpButton != null)
+            if (_hintButton != null)
             {
-                _helpButton.RemoveFromSuperview();
-                _helpButton.Dispose(); // TODO: Is this needed?
-                _helpButton = null;
+                _hintButton.RemoveFromSuperview();
+                _hintButton.Dispose(); // TODO: Is this needed?
+                _hintButton = null;
             }
 
-            _helpButton = CreateHelpButton();
+            _hintButton = CreateHintButton();
 
-            if (_helpButton == null)
+            if (_hintButton == null)
                 return;
 
-            _optionView!.AddSubview(_helpButton);
+            _optionView!.AddSubview(_hintButton);
 
-            _helpButton.LeadingAnchor.ConstraintEqualToAnchor(_control.TrailingAnchor, 11f).Active = true;
-            _helpButton.CenterYAnchor.ConstraintEqualToAnchor(_control.CenterYAnchor).Active = true;
+            _hintButton.LeadingAnchor.ConstraintEqualToAnchor(_control.TrailingAnchor, 11f).Active = true;
+            _hintButton.CenterYAnchor.ConstraintEqualToAnchor(_control.CenterYAnchor).Active = true;
         }
     }
 }

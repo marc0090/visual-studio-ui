@@ -6,13 +6,13 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 {
     public abstract class OptionVSMac : OptionPlatform
     {
-        private HintPopover? _helpPopover;
+        private HintPopover? _hintPopover;
 
         public OptionVSMac(Option option) : base(option)
         {
             if (Option.ValidationMessage != null)
             {
-                Option.ValidationMessage.PropertyChanged += (sender, args) => UpdateHelpButton();
+                Option.ValidationMessage.PropertyChanged += (sender, args) => UpdateHintButton();
             }
         }
 
@@ -75,9 +75,9 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             return description;
         }
 
-        protected virtual void UpdateHelpButton() { }
+        protected virtual void UpdateHintButton() { }
 
-        protected NSButton? CreateHelpButton()
+        protected NSButton? CreateHintButton()
         {
             var hintButton = new NSButton();
 
@@ -118,22 +118,22 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             hintButton.HeightAnchor.ConstraintEqualToConstant(19f).Active = true;
             hintButton.WidthAnchor.ConstraintEqualToConstant(19f).Active = true;
 
-            hintButton.Activated += (o, args) => ShowHelpPopover(messageText, hintButton);
+            hintButton.Activated += (o, args) => ShowHintPopover(messageText, hintButton);
 
             return hintButton;
         }
 
-        private void ShowHelpPopover(string message, NSButton button)
+        private void ShowHintPopover(string message, NSButton button)
         {
-            _helpPopover?.Close();
-            _helpPopover?.Dispose();
-            _helpPopover = new HintPopover(message, null);
-            _helpPopover.MaxWidth = 256;
+            _hintPopover?.Close();
+            _hintPopover?.Dispose();
+            _hintPopover = new HintPopover(message, null);
+            _hintPopover.MaxWidth = 256;
             //TODO:
             //popover.SetAppearance (Appearance);
 
             var bounds = button.Bounds;
-            _helpPopover.Show(bounds, button, NSRectEdge.MaxYEdge);
+            _hintPopover.Show(bounds, button, NSRectEdge.MaxYEdge);
         }
 
         internal float IndentValue()
