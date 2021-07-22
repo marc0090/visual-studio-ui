@@ -53,7 +53,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                         BezelStyle = NSBezelStyle.RoundRect,
                         Bordered = true,
                         LineBreakMode = NSLineBreakMode.TruncatingTail,
-                        Title = "..."
+                        Title = "···"
                     };
                     _button.SizeToFit();
 
@@ -61,6 +61,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     {
                         var openPanel = new NSOpenPanel();
                         openPanel.CanChooseDirectories = true;
+                        openPanel.CanChooseFiles = false;
                         var response = openPanel.RunModal();
                         if (response == 1 && openPanel.Url != null)
                         {
