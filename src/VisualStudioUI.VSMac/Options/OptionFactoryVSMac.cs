@@ -63,5 +63,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         public override OptionPlatform CreateCreateFileChooseOptionlatform(FileChooseOption fileChooseOption) =>
             new FileChooseOptionVSMac(fileChooseOption);
+
     }
 }
