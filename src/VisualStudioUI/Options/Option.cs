@@ -65,6 +65,14 @@ namespace Microsoft.VisualStudioUI.Options
         /// </summary>
         public ToggleButtonOption? DisablebilityDependsOn { get; set; }
 
+        /// <summary>
+        /// When set, this option will only be enabled/disabled if the specified property is true.
+        /// If visibility just depends on a button state, then using DisablebilityDependsOn
+        /// instead is preferred. If DisablebilityDependsOn and Disable are both set then
+        /// both must be valid for the option to show.
+        /// </summary>
+        public ViewModelProperty<bool>? Disable { get; set; }
+
         /// Option have three diffrent level of indent:OptionIndent.Normal,OptionIndent.SubOption,OptionIndent.SubSubOption
         /// </summary>
         public OptionIndent Indent { get; set; } = OptionIndent.Normal;
