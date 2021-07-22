@@ -4,7 +4,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{D5152AC5-BF5B-4DA7-B8E0-57D55BE297AC}</ProjectGuid>
-    <ProjectTypeGuids>{A3F8F2AB-B479-4A4A-A458-A89E7DC349F1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectTypeGuids>{A3F8F2AB-B479-4A4A-A458-A89E7DC349F1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC};{9A19103F-16F7-4668-BE54-9A1E7A4F7556}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <RootNamespace>Microsoft.VisualStudioUI.VSMac</RootNamespace>
     <AssemblyName>Microsoft.VisualStudioUI.VSMac</AssemblyName>
@@ -82,12 +82,13 @@
     <Compile Include="Options\LabelOptionVSMac.cs" />
     <Compile Include="Options\StepperOptionVSMac.cs" />
     <Compile Include="Options\ProgressIndicatorOptionVSMac.cs" />
-    <Compile Include="Options\FileChooseOptionVSMac.cs" />
+    <Compile Include="Options\DirectoryOptionVSMac.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\VisualStudioUI\VisualStudioUI.csproj">
       <Project>{F08A99F8-D704-40F4-8B59-73B54D16AA7C}</Project>
       <Name>VisualStudioUI</Name>
+      <ReferenceSourceTarget></ReferenceSourceTarget>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

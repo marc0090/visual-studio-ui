@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Microsoft.VisualStudioUI.Options;
 using Microsoft.VisualStudioUI.Options.Models;
 
@@ -61,8 +61,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         public override OptionPlatform CreateProgressIndicatorOptionPlatform(ProgressIndicatorOption progressIndicatorOption) =>
             new ProgressIndicatorOptionVSMac(progressIndicatorOption);
 
-        public override OptionPlatform CreateCreateFileChooseOptionlatform(FileChooseOption fileChooseOption) =>
-            new FileChooseOptionVSMac(fileChooseOption);
+        public override OptionPlatform CreateCreateDirectoryOptionlatform(DirectoryOption directoryOption) =>
+            new DirectoryOptionVSMac(directoryOption);
 
     }
 }
