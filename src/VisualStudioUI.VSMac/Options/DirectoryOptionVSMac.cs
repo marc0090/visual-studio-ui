@@ -53,14 +53,12 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                         BezelStyle = NSBezelStyle.RoundRect,
                         Bordered = true,
                         LineBreakMode = NSLineBreakMode.TruncatingTail,
-                        Title = DirectoryOption.ButtonLabel
+                        Title = "..."
                     };
                     _button.SizeToFit();
 
                     _button.Activated += (s, e) =>
                     {
-                        DirectoryOption.ButtonClicked(s, e);
-
                         var openPanel = new NSOpenPanel();
                         openPanel.CanChooseDirectories = true;
                         var response = openPanel.RunModal();
