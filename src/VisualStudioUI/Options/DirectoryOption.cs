@@ -6,8 +6,6 @@ namespace Microsoft.VisualStudioUI.Options
     public class DirectoryOption : Option
     {
 
-        public event EventHandler Clicked;
-
         public DirectoryOption(ViewModelProperty<string> property)
         {
             Property = property;
@@ -15,10 +13,7 @@ namespace Microsoft.VisualStudioUI.Options
         }
 
         public ViewModelProperty<string> Property { get; }
-        public void ButtonClicked(object sender, EventArgs e)
-        {
-            Clicked?.Invoke(sender, e);
-        }
+
     }
 
 }

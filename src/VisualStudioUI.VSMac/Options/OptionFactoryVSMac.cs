@@ -64,5 +64,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         public override OptionPlatform CreateCreateDirectoryOptionlatform(DirectoryOption directoryOption) =>
             new DirectoryOptionVSMac(directoryOption);
 
+        public override OptionPlatform CreateCreateProjectFileOptionlatform(ProjectFileOption projectFileOption) =>
+            new ProjectFileOptionVSMac(projectFileOption);
+
     }
 }
