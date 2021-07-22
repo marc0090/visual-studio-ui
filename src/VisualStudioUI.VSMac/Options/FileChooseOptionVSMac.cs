@@ -1,21 +1,20 @@
-﻿using System;
-using AppKit;
+﻿using AppKit;
 using Microsoft.VisualStudioUI.Options;
 using Microsoft.VisualStudioUI.Options.Models;
 
 namespace Microsoft.VisualStudioUI.VSMac.Options
 {
-    public class FileEntryOptionVSMac : OptionWithLeftLabelVSMac
+    public class FileChooseOptionVSMac : OptionWithLeftLabelVSMac
     {
         private NSStackView _controlView;
-        private NSTextField? _textField;
+        private NSTextField _textField;
         private NSButton _button;
 
-        public FileEntryOptionVSMac(FileEntryOption option) : base(option)
+        public FileChooseOptionVSMac(FileChooseOption option) : base(option)
         {
         }
 
-        public FileEntryOption FileEntryOption => ((FileEntryOption)Option);
+        public FileChooseOption FileChooseOption => ((FileChooseOption)Option);
 
         protected override NSView ControlView
         {
@@ -27,16 +26,16 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     _controlView.Orientation = NSUserInterfaceLayoutOrientation.Horizontal;
                     _controlView.TranslatesAutoresizingMaskIntoConstraints = false;
 
-                    ViewModelProperty<string> property = FileEntryOption.Property;
+                    ViewModelProperty<string> property = FileChooseOption.Property;
 
                     _textField = new NSTextField
                     {
                         Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize),
                         StringValue = property.Value ?? string.Empty,
                         TranslatesAutoresizingMaskIntoConstraints = false,
-                        Editable = FileEntryOption.Editable,
-                        Bordered = FileEntryOption.Bordered,
-                        DrawsBackground = FileEntryOption.DrawsBackground,
+                        Editable = FileChooseOption.Editable,
+                        Bordered = FileChooseOption.Bordered,
+                        DrawsBackground = FileChooseOption.DrawsBackground,
                         UsesSingleLineMode = true
                     };
 
@@ -55,13 +54,13 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                         BezelStyle = NSBezelStyle.RoundRect,
                         Bordered = true,
                         LineBreakMode = NSLineBreakMode.TruncatingTail,
-                        Title = FileEntryOption.ButtonLabel
+                        Title = FileChooseOption.ButtonLabel
                     };
                     _button.SizeToFit();
 
                     _button.Activated += (s, e) =>
                     {
-                        FileEntryOption.ButtonClicked(s, e);
+                        FileChooseOption.ButtonClicked(s, e);
 
                         //var openPanel = new NSOpenPanel();
                         //openPanel.CanChooseDirectories = true;
@@ -80,9 +79,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     _textField.LeadingAnchor.ConstraintEqualToAnchor(_controlView.LeadingAnchor).Active = true;
                     _textField.TopAnchor.ConstraintEqualToAnchor(_controlView.TopAnchor).Active = true;
 
-                    // _button.WidthAnchor.ConstraintEqualToConstant(40).Active = true;
                     _button.HeightAnchor.ConstraintEqualToConstant(21).Active = true;
-                    //_button.CenterYAnchor.ConstraintEqualToAnchor(_controlView.CenterYAnchor).Active = true;
                     _button.TrailingAnchor.ConstraintEqualToAnchor(_controlView.TrailingAnchor).Active = true;
 
 
@@ -95,11 +92,10 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         public override void OnEnableChanged(bool enabled)
         {
             base.OnEnableChanged(enabled);
-            if (_textField != null)
-            {
-                _textField.Enabled = enabled;
-                _button.Enabled = enabled;
-            }
+
+            _textField.Enabled = enabled;
+
+            _button.Enabled = enabled;
         }
     }
 }

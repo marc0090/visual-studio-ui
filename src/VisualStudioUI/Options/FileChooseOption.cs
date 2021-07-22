@@ -1,10 +1,9 @@
-﻿
-using System;
+﻿using System;
 using Microsoft.VisualStudioUI.Options.Models;
 
 namespace Microsoft.VisualStudioUI.Options
 {
-    public class FileEntryOption : Option
+    public class FileChooseOption : Option
     {
 
         public bool Editable { get; set; } = true;
@@ -14,14 +13,13 @@ namespace Microsoft.VisualStudioUI.Options
 
         public event EventHandler Clicked;
 
-        public FileEntryOption(ViewModelProperty<string> property)
+        public FileChooseOption(ViewModelProperty<string> property)
         {
             Property = property;
-            Platform = OptionFactoryPlatform.Instance.CreateCreateFileEntryOptionlatform(this);
+            Platform = OptionFactoryPlatform.Instance.CreateCreateFileChooseOptionlatform(this);
         }
 
         public ViewModelProperty<string> Property { get; }
-
         public void ButtonClicked(object sender, EventArgs e)
         {
             Clicked?.Invoke(sender, e);

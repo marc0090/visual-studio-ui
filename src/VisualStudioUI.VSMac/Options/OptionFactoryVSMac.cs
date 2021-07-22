@@ -61,7 +61,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         public override OptionPlatform CreateProgressIndicatorOptionPlatform(ProgressIndicatorOption progressIndicatorOption) =>
             new ProgressIndicatorOptionVSMac(progressIndicatorOption);
 
-        public override OptionPlatform CreateCreateFileEntryOptionlatform(FileEntryOption fileEntryOption) =>
-            new FileEntryOptionVSMac(fileEntryOption);
+        public override OptionPlatform CreateCreateFileChooseOptionlatform(FileChooseOption fileChooseOption) =>
+            new FileChooseOptionVSMac(fileChooseOption);
     }
 }
