@@ -147,15 +147,15 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     };
                 }
 
-                ViewModelProperty<bool>? disable = option.Enable;
-                if (disable != null)
+                ViewModelProperty<bool>? enable = option.Enable;
+                if (enable != null)
                 {
-                    if (!disable.Value)
-                        option.Platform.OnEnableChanged(disable.Value);
+                    if (!enable.Value)
+                        option.Platform.OnEnableChanged(enable.Value);
 
-                    disable.PropertyChanged += delegate
+                    enable.PropertyChanged += delegate
                     {
-                        option.Platform.OnEnableChanged(disable.Value);
+                        option.Platform.OnEnableChanged(enable.Value);
                     };
                 }
 
