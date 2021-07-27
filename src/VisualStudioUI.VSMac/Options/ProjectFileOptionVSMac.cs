@@ -54,7 +54,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                         BezelStyle = NSBezelStyle.RoundRect,
                         Bordered = true,
                         LineBreakMode = NSLineBreakMode.TruncatingTail,
-                        Title = "···"
+                        Title = ProjectFileOption.Name ?? "···"
                     };
                     _button.SizeToFit();
 
