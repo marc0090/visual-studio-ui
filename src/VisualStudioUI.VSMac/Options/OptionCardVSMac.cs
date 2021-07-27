@@ -147,6 +147,18 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     };
                 }
 
+                ViewModelProperty<bool>? enable = option.Enable;
+                if (enable != null)
+                {
+                    if (!enable.Value)
+                        option.Platform.OnEnableChanged(enable.Value);
+
+                    enable.PropertyChanged += delegate
+                    {
+                        option.Platform.OnEnableChanged(enable.Value);
+                    };
+                }
+
                 optionsStackView.AddArrangedSubview(optionView);
             }
 

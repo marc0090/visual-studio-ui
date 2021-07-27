@@ -42,6 +42,14 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             card.AddOption(new TextOption(StringProp("")) { Label = "test error", ValidationMessage = error, DisablebilityDependsOn = dependOn });
             card.AddOption(new StepperOption(new ViewModelProperty<int>("", 100)) { Label = "Port", DisablebilityDependsOn = dependOn, Hint = "test" });
 
+            var disable = new CheckBoxOption(BoolProp(false)) { ButtonLabel = "Disable", Enable = BoolProp(true) };
+            var disableBtn = new ButtonOption() { Label = "Test Disable", Name = "test"};
+            disableBtn.Clicked += (sender, e)=> {
+                disable.Enable.Value = !disable.Enable.Value;
+            };
+            card.AddOption(disableBtn);
+            card.AddOption(disable);
+
             return card;
         }
 
