@@ -147,7 +147,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     };
                 }
 
-                ViewModelProperty<bool>? disable = option.Disable;
+                ViewModelProperty<bool>? disable = option.Enable;
                 if (disable != null)
                 {
                     if (!disable.Value)

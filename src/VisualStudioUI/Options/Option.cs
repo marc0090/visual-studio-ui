@@ -71,7 +71,7 @@ namespace Microsoft.VisualStudioUI.Options
         /// instead is preferred. If DisablebilityDependsOn and Disable are both set then
         /// both must be valid for the option to show.
         /// </summary>
-        public ViewModelProperty<bool>? Disable { get; set; }
+        public ViewModelProperty<bool>? Enable { get; set; }
 
         /// Option have three diffrent level of indent:OptionIndent.Normal,OptionIndent.SubOption,OptionIndent.SubSubOption
         /// </summary>
