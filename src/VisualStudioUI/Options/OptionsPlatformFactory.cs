@@ -43,9 +43,10 @@ namespace Microsoft.VisualStudioUI.Options
 
         public abstract OptionPlatform CreateCheckBoxListOptionPlatform(CheckBoxListOption checkBoxListOption);
         public abstract OptionPlatform CreateLabelOptionPlatform(LabelOption labelOption);
-
         public abstract OptionPlatform CreateStepperOptionPlatform(StepperOption stepperOption);
-
         public abstract OptionPlatform CreateProgressIndicatorOptionPlatform(ProgressIndicatorOption progressIndicatorOption);
+        public abstract OptionPlatform CreateCreateDirectoryOptionlatform(DirectoryOption directoryOption);
+        public abstract OptionPlatform CreateCreateProjectFileOptionlatform(ProjectFileOption projectFileOption);
+
     }
 }
