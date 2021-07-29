@@ -40,7 +40,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                     _controlView.AddArrangedSubview(_textField);
 
-
                     property.PropertyChanged += delegate (object o, ViewModelPropertyChangedEventArgs args)
                     {
                         _textField.StringValue = ((string)args.NewValue) ?? string.Empty;
@@ -79,9 +78,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                     _button.HeightAnchor.ConstraintEqualToConstant(21).Active = true;
                     _button.TrailingAnchor.ConstraintEqualToAnchor(_controlView.TrailingAnchor).Active = true;
-
-
-
                 }
                 return _controlView;
             }

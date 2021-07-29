@@ -5,7 +5,6 @@ namespace Microsoft.VisualStudioUI.Options
 {
     public class ProjectFileOption : Option
     {
-
         public event EventHandler Clicked;
 
         public ProjectFileOption(ViewModelProperty<string> property)
@@ -20,5 +19,4 @@ namespace Microsoft.VisualStudioUI.Options
             Clicked?.Invoke(sender, e);
         }
     }
-
 }
