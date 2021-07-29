@@ -55,12 +55,11 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                     if (TextOption.MacroMenuItems != null)
                     {
-                        NSButton menuBtn = new NSButton() { Title = ">" };
-                        // menuBtn.BezelStyle = NSBezelStyle.;
+                        NSButton menuBtn = new NSButton() { Image = NSImage.ImageNamed("NSGoRightTemplate") };
+                        menuBtn.BezelStyle = NSBezelStyle.RoundRect;
                         menuBtn.TranslatesAutoresizingMaskIntoConstraints = false;
                         menuBtn.Activated += (sender, e) =>
                         {
-
                             NSEvent events = NSApplication.SharedApplication.CurrentEvent;
                             NSMenu.PopUpContextMenu(CreateMenu(), events, events.Window.ContentView);
 
