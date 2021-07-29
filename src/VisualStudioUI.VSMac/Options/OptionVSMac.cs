@@ -76,15 +76,19 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         protected NSButton? CreateHintButton()
         {
-            var hintButton = new NSButton();
+            NSButton hintButton = null;
+
+            if(Option.ValidationMessage != null)
+            {
+                Option.ValidationMessage.PropertyChanged += delegate { UpdateHintButton(); };
+            }
 
             Message? validationMessage = Option.ValidationMessage?.Value;
             string? messageText = validationMessage?.Text ?? Option.Hint;
-            if (messageText == null)
-                return null;
 
             if (validationMessage != null)
             {
+                hintButton = new NSButton();
                 hintButton.BezelStyle = NSBezelStyle.RoundRect;
                 hintButton.Bordered = false;
                 hintButton.ImagePosition = NSCellImagePosition.ImageOnly;
@@ -102,7 +106,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                 }
 
-                Option.ValidationMessage.PropertyChanged += delegate {UpdateHintButton();}; 
             }
             else if (Option.Hint != null)
             {
@@ -113,6 +116,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 hintButton.Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize);
                 hintButton.TranslatesAutoresizingMaskIntoConstraints = false;
             }
+            if(hintButton == null) { return null; }
 
             hintButton.HeightAnchor.ConstraintEqualToConstant(19f).Active = true;
             hintButton.WidthAnchor.ConstraintEqualToConstant(19f).Active = true;
