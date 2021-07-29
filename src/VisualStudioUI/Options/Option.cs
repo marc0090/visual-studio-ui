@@ -73,10 +73,18 @@ namespace Microsoft.VisualStudioUI.Options
         /// </summary>
         public ViewModelProperty<bool>? Enable { get; set; }
 
+        /// <summary>
         /// Option have three diffrent level of indent:OptionIndent.Normal,OptionIndent.SubOption,OptionIndent.SubSubOption
         /// </summary>
         public OptionIndent Indent { get; set; } = OptionIndent.Normal;
 
-
+        /// <summary>
+        /// For options that allow a Label (most of them), the label appears on the left.
+        /// Even when the label isn't present, these options are normally indented so they
+        /// are all left aligned with each other. Set this to false to not indent, which
+        /// can be useful for options with long text and no need to align with other labeled
+        /// options on the card. In practice, it's often used for checkboxes with long text after.
+        /// </summary>
+        public bool AllowSpaceForLabel { get; set; } = true;
     }
 }

@@ -84,7 +84,9 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             scrolledView.WidthAnchor.ConstraintEqualToConstant(CheckBoxListOption.Width).Active = true;
 
             scrolledView.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor).Active = true;
-            scrolledView.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 222 + IndentValue()).Active = true;
+
+            float leftSpace = Option.AllowSpaceForLabel ? 222f:20f;
+            scrolledView.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, leftSpace + IndentValue()).Active = true;
             scrolledView.BottomAnchor.ConstraintEqualToAnchor(_optionView.BottomAnchor).Active = true;
 
             CheckBoxListOption.Property.PropertyChanged += OnCheckBoxListChanged;

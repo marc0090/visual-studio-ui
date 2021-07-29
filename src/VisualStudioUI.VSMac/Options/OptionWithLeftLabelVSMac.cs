@@ -8,6 +8,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         private NSView? _optionView;
         private NSButton? _hintButton;
         private NSView _control;
+
         public OptionWithLeftLabelVSMac(Option option) : base(option)
         {
         }
@@ -40,9 +41,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
             _optionView.AddSubview(_control);
 
-            _control.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 222f + IndentValue()).Active = true;
-            _control.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 5f).Active = true;
-
             UpdateHintButton();
 
             var label = CreateLabelView();
@@ -62,13 +60,17 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 descriptionView.LeadingAnchor.ConstraintEqualToAnchor(_control.LeadingAnchor, 0f).Active = true;
                 descriptionView.TopAnchor.ConstraintEqualToAnchor(_control.BottomAnchor, 0f).Active = true;
                 descriptionView.BottomAnchor.ConstraintEqualToAnchor(_optionView.BottomAnchor).Active = true;
-
             }
             else
             {
                 _control.BottomAnchor.ConstraintEqualToAnchor(_optionView.BottomAnchor, -5f).Active = true;
-
             }
+
+            float leftSpace = (Option.AllowSpaceForLabel||label != null) ? 222f : 20f;
+            _control.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, leftSpace + IndentValue()).Active = true;
+
+            _control.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 5f).Active = true;
+
         }
 
         public override void OnEnableChanged(bool enabled)
