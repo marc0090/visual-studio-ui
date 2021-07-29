@@ -65,6 +65,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                         if (response == 1 && openPanel.Url != null)
                         {
                             _textField.StringValue = openPanel.DirectoryUrl.AbsoluteString;
+                            property.Value = _textField.StringValue;
                         }
                     };
 

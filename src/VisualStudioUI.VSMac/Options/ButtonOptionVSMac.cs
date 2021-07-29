@@ -100,7 +100,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             _button = new NSButton();
             if (ButtonOption.Type == ButtonOption.ButtonType.Normal)
             {
-                _button.BezelStyle = NSBezelStyle.RegularSquare;
+                _button.BezelStyle = NSBezelStyle.RoundRect;
                 _button.Activated += ButtonOption.ButtonClicked;
 
             }
@@ -113,7 +113,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             if (ButtonOption.Active != null)
             {
                 _button.Activated += UpdatePropertyFromUI;
-                // ButtonOption.IsSelected.PropertyChanged += UpdateUIFromProperty;
             }
 
             _button.ControlSize = NSControlSize.Regular;
