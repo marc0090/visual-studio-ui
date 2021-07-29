@@ -102,7 +102,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                 }
 
-                Option.ValidationMessage.PropertyChanged += (sender, args) => UpdateHintButton();
+                Option.ValidationMessage.PropertyChanged += delegate {UpdateHintButton();}; 
             }
             else if (Option.Hint != null)
             {
