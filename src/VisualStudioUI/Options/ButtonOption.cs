@@ -19,7 +19,6 @@ namespace Microsoft.VisualStudioUI.Options
 
         public ViewModelProperty<bool> Active { get; set; }
         public ViewModelProperty<bool> Hidden { get; set; }
-        public ViewModelProperty<bool> Enable { get; set; }
 
         public event EventHandler Actived;
         public event EventHandler Clicked;

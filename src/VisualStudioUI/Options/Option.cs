@@ -73,10 +73,15 @@ namespace Microsoft.VisualStudioUI.Options
         /// </summary>
         public ViewModelProperty<bool>? Enable { get; set; }
 
+        /// <summary>
         /// Option have three diffrent level of indent:OptionIndent.Normal,OptionIndent.SubOption,OptionIndent.SubSubOption
         /// </summary>
         public OptionIndent Indent { get; set; } = OptionIndent.Normal;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool AllowSpaceForLabel = true;
 
     }
 }
