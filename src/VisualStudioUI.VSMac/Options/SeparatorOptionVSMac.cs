@@ -35,7 +35,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             separatorView.WantsLayer = true;
             separatorView.TranslatesAutoresizingMaskIntoConstraints = false;
 
-            var separatorViewWidthConstraint = separatorView.WidthAnchor.ConstraintEqualToConstant(SeparatorOption.Width);
+            var separatorViewWidthConstraint = separatorView.WidthAnchor.ConstraintEqualToConstant(600f);
             separatorViewWidthConstraint.Active = true;
             var separatorViewHeightConstraint = separatorView.HeightAnchor.ConstraintEqualToConstant(31f);
             separatorViewHeightConstraint.Active = true;
@@ -47,7 +47,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             boxView.TranslatesAutoresizingMaskIntoConstraints = false;
 
             separatorView.AddSubview(boxView);
-            var boxViewWidthConstraint = boxView.WidthAnchor.ConstraintEqualToConstant(SeparatorOption.Width);
+            var boxViewWidthConstraint = boxView.WidthAnchor.ConstraintEqualToConstant(600f);
             boxViewWidthConstraint.Priority = (System.Int32) AppKit.NSLayoutPriority.DefaultLow;
             boxViewWidthConstraint.Active = true;
             var boxViewHeightConstraint = boxView.HeightAnchor.ConstraintEqualToConstant(1f);
