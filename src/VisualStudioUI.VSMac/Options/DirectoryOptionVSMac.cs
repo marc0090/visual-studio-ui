@@ -65,6 +65,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                         if (response == 1 && openPanel.Url != null)
                         {
                             _textField.StringValue = openPanel.DirectoryUrl.AbsoluteString;
+                            property.Value = _textField.StringValue;
                         }
                     };
 
@@ -75,7 +76,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     _textField.HeightAnchor.ConstraintEqualToConstant(21).Active = true;
                     _textField.LeadingAnchor.ConstraintEqualToAnchor(_controlView.LeadingAnchor).Active = true;
                     _textField.TopAnchor.ConstraintEqualToAnchor(_controlView.TopAnchor).Active = true;
-
+                    _button.WidthAnchor.ConstraintEqualToConstant(24f).Active = true;
                     _button.HeightAnchor.ConstraintEqualToConstant(21).Active = true;
                     _button.TrailingAnchor.ConstraintEqualToAnchor(_controlView.TrailingAnchor).Active = true;
                 }

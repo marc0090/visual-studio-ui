@@ -30,10 +30,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     _button.ControlSize = NSControlSize.Regular;
                     _button.Font = AppKit.NSFont.SystemFontOfSize(AppKit.NSFont.SystemFontSize);
                     _button.TranslatesAutoresizingMaskIntoConstraints = false;
-
-                    _button.WidthAnchor.ConstraintEqualToConstant(196f).Active = true;
-                    //_button.HeightAnchor.ConstraintEqualToConstant(18f).Active = true;
-
+                    _button.SizeToFit();
                     string url = DocButtonOption.UrlProperty.Value;
                     _button.Activated += (o, args) => NSWorkspace.SharedWorkspace.OpenUrl(new NSUrl(url));
                 }

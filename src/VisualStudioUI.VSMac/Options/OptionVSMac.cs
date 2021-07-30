@@ -12,7 +12,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         {
             if (Option.ValidationMessage != null)
             {
-                Option.ValidationMessage.PropertyChanged += (sender, args) => UpdateHintButton();
+                Option.ValidationMessage.PropertyChanged += delegate { UpdateHintButton(); };
             }
         }
 
@@ -79,15 +79,13 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         protected NSButton? CreateHintButton()
         {
-            var hintButton = new NSButton();
-
             Message? validationMessage = Option.ValidationMessage?.Value;
             string? messageText = validationMessage?.Text ?? Option.Hint;
-            if (messageText == null)
-                return null;
 
+            NSButton? hintButton = null;
             if (validationMessage != null)
             {
+                hintButton = new NSButton();
                 hintButton.BezelStyle = NSBezelStyle.RoundRect;
                 hintButton.Bordered = false;
                 hintButton.ImagePosition = NSCellImagePosition.ImageOnly;
@@ -114,11 +112,15 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 hintButton.Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize);
                 hintButton.TranslatesAutoresizingMaskIntoConstraints = false;
             }
+            else
+            {
+                return null;
+            }
 
             hintButton.HeightAnchor.ConstraintEqualToConstant(19f).Active = true;
             hintButton.WidthAnchor.ConstraintEqualToConstant(19f).Active = true;
 
-            hintButton.Activated += (o, args) => ShowHintPopover(messageText, hintButton);
+            hintButton.Activated += (o, args) => ShowHintPopover(messageText!, hintButton);
 
             return hintButton;
         }

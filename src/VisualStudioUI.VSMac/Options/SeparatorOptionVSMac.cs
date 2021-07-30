@@ -13,6 +13,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         {
         }
 
+        public SeparatorOption SeparatorOption => ((SeparatorOption)Option);
+
         public override NSView View
         {
             get

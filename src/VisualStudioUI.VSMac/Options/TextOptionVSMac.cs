@@ -10,6 +10,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
     {
         NSView _controlView;
         private NSTextField? _textField;
+        private NSButton _menuBtn;
 
         public TextOptionVSMac(TextOption option) : base(option)
         {
@@ -39,13 +40,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                     _controlView.AddSubview(_textField);
 
-                    _textField.WidthAnchor.ConstraintEqualToConstant(196f).Active = true;
-                    _textField.HeightAnchor.ConstraintEqualToConstant(21).Active = true;
-                    _textField.LeadingAnchor.ConstraintEqualToAnchor(_controlView.LeadingAnchor).Active = true;
-                    _textField.TopAnchor.ConstraintEqualToAnchor(_controlView.TopAnchor).Active = true;
-
-                    _controlView.HeightAnchor.ConstraintEqualToConstant(21).Active = true;
-
                     property.PropertyChanged += delegate (object o, ViewModelPropertyChangedEventArgs args)
                     {
                         _textField.StringValue = ((string)args.NewValue) ?? string.Empty;
@@ -55,25 +49,24 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                     if (TextOption.MacroMenuItems != null)
                     {
-                        NSButton menuBtn = new NSButton() { Title = ">" };
-                        // menuBtn.BezelStyle = NSBezelStyle.;
-                        menuBtn.TranslatesAutoresizingMaskIntoConstraints = false;
-                        menuBtn.Activated += (sender, e) =>
-                        {
-
-                            NSEvent events = NSApplication.SharedApplication.CurrentEvent;
-                            NSMenu.PopUpContextMenu(CreateMenu(), events, events.Window.ContentView);
-
-                            //var location = NSEvent.CurrentMouseLocation;
-                            //nSMenu.PopUpMenu(nSMenu.ItemAt(0), location/*btn.Window.MouseLocationOutsideOfEventStream*/, btn.Window.ContentView);
+                        _menuBtn = new NSButton() {
+                            BezelStyle = NSBezelStyle.RoundRect,
+                            Image = NSImage.ImageNamed("NSGoRightTemplate"),
+                            TranslatesAutoresizingMaskIntoConstraints = false
                         };
 
-                        _controlView.AddSubview(menuBtn);
-                        menuBtn.WidthAnchor.ConstraintEqualToConstant(19f).Active = true;
-                        menuBtn.LeadingAnchor.ConstraintEqualToAnchor(_textField.TrailingAnchor, 5f).Active = true;
-                        menuBtn.CenterYAnchor.ConstraintEqualToAnchor(_controlView.CenterYAnchor).Active = true;
+                        _menuBtn.Activated += (sender, e) =>
+                        {
+                            NSEvent events = NSApplication.SharedApplication.CurrentEvent;
+                            NSMenu.PopUpContextMenu(CreateMenu(), events, events.Window.ContentView);
+                        };
+                        _controlView.AddSubview(_menuBtn);
 
-                        _controlView.WidthAnchor.ConstraintEqualToConstant(226f).Active = true;
+                        _menuBtn.WidthAnchor.ConstraintEqualToConstant(24f).Active = true;
+                        _menuBtn.HeightAnchor.ConstraintEqualToConstant(21f).Active = true;
+                        _menuBtn.TrailingAnchor.ConstraintEqualToAnchor(_controlView.TrailingAnchor).Active = true;
+                        _menuBtn.CenterYAnchor.ConstraintEqualToAnchor(_controlView.CenterYAnchor).Active = true;
+                        _controlView.WidthAnchor.ConstraintEqualToConstant(228f).Active = true;
 
                     }
                     else
@@ -81,6 +74,12 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                         _controlView.WidthAnchor.ConstraintEqualToConstant(196f).Active = true;
 
                     }
+
+                    _controlView.HeightAnchor.ConstraintEqualToConstant(21).Active = true;
+                    _textField.WidthAnchor.ConstraintEqualToConstant(196f).Active = true;
+                    _textField.HeightAnchor.ConstraintEqualToConstant(21).Active = true;
+                    _textField.LeadingAnchor.ConstraintEqualToAnchor(_controlView.LeadingAnchor).Active = true;
+                    _textField.TopAnchor.ConstraintEqualToAnchor(_controlView.TopAnchor).Active = true;
                 }
 
                 return _controlView;
@@ -121,6 +120,9 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             base.OnEnableChanged(enabled);
             if (_textField != null)
                 _textField.Enabled = enabled;
+
+            if (_menuBtn!= null)
+                _menuBtn.Enabled = enabled;
         }
 
         /*

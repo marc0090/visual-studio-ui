@@ -8,6 +8,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         private NSView? _optionView;
         private NSButton? _hintButton;
         private NSView _control;
+        private NSTextField? _label;
 
         public OptionWithLeftLabelVSMac(Option option) : base(option)
         {
@@ -43,13 +44,13 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
             UpdateHintButton();
 
-            var label = CreateLabelView();
-            if (label != null)
+            _label = CreateLabelView();
+            if (_label != null)
             {
-                _optionView.AddSubview(label);
+                _optionView.AddSubview(_label);
 
-                label.TrailingAnchor.ConstraintEqualToAnchor(_control.LeadingAnchor, -8f).Active = true;
-                label.CenterYAnchor.ConstraintEqualToAnchor(_control.CenterYAnchor).Active = true;
+                _label.TrailingAnchor.ConstraintEqualToAnchor(_control.LeadingAnchor, -8f).Active = true;
+                _label.CenterYAnchor.ConstraintEqualToAnchor(_control.CenterYAnchor).Active = true;
             }
 
             NSTextField? descriptionView = CreateDescriptionView();
@@ -66,15 +67,18 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 _control.BottomAnchor.ConstraintEqualToAnchor(_optionView.BottomAnchor, -5f).Active = true;
             }
 
-            float leftSpace = (Option.AllowSpaceForLabel||label != null) ? 222f : 20f;
+            float leftSpace = (Option.AllowSpaceForLabel||_label != null) ? 222f : 20f;
             _control.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, leftSpace + IndentValue()).Active = true;
-
             _control.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 5f).Active = true;
 
         }
 
         public override void OnEnableChanged(bool enabled)
         {
+            if (_label != null)
+            {
+                _label.TextColor = enabled ? NSColor.LabelColor : NSColor.DisabledControlText;
+            }
         }
 
         protected override void UpdateHintButton()
