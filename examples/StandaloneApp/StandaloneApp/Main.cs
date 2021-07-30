@@ -56,16 +56,6 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
                 });
             card.AddOption(fileEntry);
             card.AddOption(new StepperOption(new ViewModelProperty<int>("", 100)) { Label = "Port", DisablebilityDependsOn = dependOn, Hint = "test" });
-            //dependOn.Property.PropertyChanged += delegate {
-            //    if (dependOn.Property.Value)
-            //    {
-            //        warning.Value = null;
-            //    }
-            //    else
-            //    {
-            //        warning.Value = new Message("warning", MessageSeverity.Warning);
-            //    }
-            //};
             card.AddOption(new SeparatorOption());
 
             var disable = new CheckBoxOption(BoolProp(false)) { ButtonLabel = "Disable", Enable = BoolProp(true) };
