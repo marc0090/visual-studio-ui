@@ -32,18 +32,32 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             };
 
             var dependOn = new CheckBoxOption(BoolProp(false)) { ButtonLabel = "enable" };
+
             var warning = new ViewModelProperty<Message?>("", new Message("warning", MessageSeverity.Warning));
+            warning.Bind();
             var error = new ViewModelProperty<Message?>("", new Message("warning", MessageSeverity.Error));
 
             card.AddOption(dependOn);
+            card.AddOption(new SeparatorOption() { Width = 400 });
             card.AddOption(new CheckBoxOption(BoolProp(false)) { ButtonLabel = "test", DisablebilityDependsOn = dependOn });
             card.AddOption(new DocButtonOption(StringProp("test"), "test") { DisablebilityDependsOn = dependOn });
             card.AddOption(new TextOption(StringProp("")) { Label = "test warning", ValidationMessage = warning, DisablebilityDependsOn = dependOn });
             card.AddOption(new TextOption(StringProp("")) { Label = "test error", ValidationMessage = error, DisablebilityDependsOn = dependOn });
-            card.AddOption(new DirectoryOption(StringProp("")) { Label = "choose directory", Hint = "hint", DisablebilityDependsOn = dependOn });
-            card.AddOption(new ProjectFileOption(StringProp("")) { Label = "choose file", Hint = "hint", Name = "Browser..." , DisablebilityDependsOn = dependOn });
+            card.AddOption(new DirectoryOption(StringProp("")) { Label = "Choose Firectory", Hint = "hint", DisablebilityDependsOn = dependOn });
+            card.AddOption(new ProjectFileOption(StringProp("")) { Label = "Choose File", Hint = "hint", Name = "..." , DisablebilityDependsOn = dependOn });
 
             card.AddOption(new StepperOption(new ViewModelProperty<int>("", 100)) { Label = "Port", DisablebilityDependsOn = dependOn, Hint = "test" });
+            //dependOn.Property.PropertyChanged += delegate {
+            //    if (dependOn.Property.Value)
+            //    {
+            //        warning.Value = null;
+            //    }
+            //    else
+            //    {
+            //        warning.Value = new Message("warning", MessageSeverity.Warning);
+            //    }
+            //};
+            card.AddOption(new SeparatorOption());
 
             var disable = new CheckBoxOption(BoolProp(false)) { ButtonLabel = "Disable", Enable = BoolProp(true) };
             var disableBtn = new ButtonOption() { Label = "Test Disable", Name = "test"};
