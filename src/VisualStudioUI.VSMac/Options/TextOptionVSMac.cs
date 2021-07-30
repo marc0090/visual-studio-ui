@@ -40,9 +40,9 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                     _controlView.AddSubview(_textField);
 
-                    property.PropertyChanged += delegate (object o, ViewModelPropertyChangedEventArgs args)
+                    property.PropertyChanged += delegate
                     {
-                        _textField.StringValue = ((string)args.NewValue) ?? string.Empty;
+                        _textField.StringValue = TextOption.Property.Value;
                     };
 
                     _textField.Changed += delegate { property.Value = _textField.StringValue; };
@@ -106,6 +106,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     menuItem.Activated += (sender, e) =>
                     {
                         _textField.StringValue = item?.MacroName + _textField.StringValue; // New value insert to head
+                        TextOption.Property.Value = _textField.StringValue;
                     };
 
                     groupMenu.AddItem(menuItem);
