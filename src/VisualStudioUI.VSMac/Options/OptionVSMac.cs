@@ -10,7 +10,10 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         public OptionVSMac(Option option) : base(option)
         {
-
+            if (Option.ValidationMessage != null)
+            {
+                Option.ValidationMessage.PropertyChanged += delegate { UpdateHintButton(); };
+            }
         }
 
         public abstract NSView View { get; }
@@ -76,16 +79,10 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         protected NSButton? CreateHintButton()
         {
-            NSButton hintButton = null;
-
-            if(Option.ValidationMessage != null)
-            {
-                Option.ValidationMessage.PropertyChanged += delegate { UpdateHintButton(); };
-            }
-
             Message? validationMessage = Option.ValidationMessage?.Value;
             string? messageText = validationMessage?.Text ?? Option.Hint;
 
+            NSButton? hintButton = null;
             if (validationMessage != null)
             {
                 hintButton = new NSButton();
@@ -105,7 +102,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                         break;
 
                 }
-
             }
             else if (Option.Hint != null)
             {
@@ -116,12 +112,15 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 hintButton.Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize);
                 hintButton.TranslatesAutoresizingMaskIntoConstraints = false;
             }
-            if(hintButton == null) { return null; }
+            else
+            {
+                return null;
+            }
 
             hintButton.HeightAnchor.ConstraintEqualToConstant(19f).Active = true;
             hintButton.WidthAnchor.ConstraintEqualToConstant(19f).Active = true;
 
-            hintButton.Activated += (o, args) => ShowHintPopover(messageText, hintButton);
+            hintButton.Activated += (o, args) => ShowHintPopover(messageText!, hintButton);
 
             return hintButton;
         }
