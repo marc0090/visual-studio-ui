@@ -39,13 +39,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                     _controlView.AddSubview(_textField);
 
-                    _textField.WidthAnchor.ConstraintEqualToConstant(196f).Active = true;
-                    _textField.HeightAnchor.ConstraintEqualToConstant(21).Active = true;
-                    _textField.LeadingAnchor.ConstraintEqualToAnchor(_controlView.LeadingAnchor).Active = true;
-                    _textField.TopAnchor.ConstraintEqualToAnchor(_controlView.TopAnchor).Active = true;
-
-                    _controlView.HeightAnchor.ConstraintEqualToConstant(21).Active = true;
-
                     property.PropertyChanged += delegate (object o, ViewModelPropertyChangedEventArgs args)
                     {
                         _textField.StringValue = ((string)args.NewValue) ?? string.Empty;
@@ -55,23 +48,23 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                     if (TextOption.MacroMenuItems != null)
                     {
-                        NSButton menuBtn = new NSButton() { Image = NSImage.ImageNamed("NSGoRightTemplate") };
-                        menuBtn.BezelStyle = NSBezelStyle.RoundRect;
-                        menuBtn.TranslatesAutoresizingMaskIntoConstraints = false;
+                        NSButton menuBtn = new NSButton() {
+                            BezelStyle = NSBezelStyle.RoundRect,
+                            Image = NSImage.ImageNamed("NSGoRightTemplate"),
+                            TranslatesAutoresizingMaskIntoConstraints = false
+                        };
+
                         menuBtn.Activated += (sender, e) =>
                         {
                             NSEvent events = NSApplication.SharedApplication.CurrentEvent;
                             NSMenu.PopUpContextMenu(CreateMenu(), events, events.Window.ContentView);
-
-                            //var location = NSEvent.CurrentMouseLocation;
-                            //nSMenu.PopUpMenu(nSMenu.ItemAt(0), location/*btn.Window.MouseLocationOutsideOfEventStream*/, btn.Window.ContentView);
                         };
-
                         _controlView.AddSubview(menuBtn);
-                        menuBtn.WidthAnchor.ConstraintEqualToConstant(19f).Active = true;
-                        menuBtn.LeadingAnchor.ConstraintEqualToAnchor(_textField.TrailingAnchor, 5f).Active = true;
-                        menuBtn.CenterYAnchor.ConstraintEqualToAnchor(_controlView.CenterYAnchor).Active = true;
 
+                        menuBtn.WidthAnchor.ConstraintEqualToConstant(25f).Active = true;
+                        menuBtn.HeightAnchor.ConstraintEqualToConstant(21f).Active = true;
+                        menuBtn.TrailingAnchor.ConstraintEqualToAnchor(_controlView.TrailingAnchor).Active = true;
+                        menuBtn.CenterYAnchor.ConstraintEqualToAnchor(_controlView.CenterYAnchor).Active = true;
                         _controlView.WidthAnchor.ConstraintEqualToConstant(226f).Active = true;
 
                     }
@@ -80,6 +73,12 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                         _controlView.WidthAnchor.ConstraintEqualToConstant(196f).Active = true;
 
                     }
+
+                    _controlView.HeightAnchor.ConstraintEqualToConstant(21).Active = true;
+                    _textField.WidthAnchor.ConstraintEqualToConstant(196f).Active = true;
+                    _textField.HeightAnchor.ConstraintEqualToConstant(21).Active = true;
+                    _textField.LeadingAnchor.ConstraintEqualToAnchor(_controlView.LeadingAnchor).Active = true;
+                    _textField.TopAnchor.ConstraintEqualToAnchor(_controlView.TopAnchor).Active = true;
                 }
 
                 return _controlView;
