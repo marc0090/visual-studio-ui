@@ -62,11 +62,11 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                         };
                         _controlView.AddSubview(_menuBtn);
 
-                        _menuBtn.WidthAnchor.ConstraintEqualToConstant(25f).Active = true;
+                        _menuBtn.WidthAnchor.ConstraintEqualToConstant(24f).Active = true;
                         _menuBtn.HeightAnchor.ConstraintEqualToConstant(21f).Active = true;
                         _menuBtn.TrailingAnchor.ConstraintEqualToAnchor(_controlView.TrailingAnchor).Active = true;
                         _menuBtn.CenterYAnchor.ConstraintEqualToAnchor(_controlView.CenterYAnchor).Active = true;
-                        _controlView.WidthAnchor.ConstraintEqualToConstant(230f).Active = true;
+                        _controlView.WidthAnchor.ConstraintEqualToConstant(228f).Active = true;
 
                     }
                     else

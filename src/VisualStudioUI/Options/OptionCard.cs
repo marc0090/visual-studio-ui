@@ -11,8 +11,6 @@ namespace Microsoft.VisualStudioUI.Options
     {
         private readonly List<Option> _options = new List<Option>();
 
-        public float Width { get; set; } = 640f;
-
         public OptionCardPlatform Platform { get; }
 
         public OptionCard()

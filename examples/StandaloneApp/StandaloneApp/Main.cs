@@ -44,7 +44,7 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             card.AddOption(new TextOption(StringProp("")) { Label = "test warning", ValidationMessage = warning, DisablebilityDependsOn = dependOn });
             card.AddOption(new TextOption(StringProp("")) { Label = "test error", ValidationMessage = error, DisablebilityDependsOn = dependOn });
             card.AddOption(new DirectoryOption(StringProp("")) { Label = "Choose Firectory", Hint = "hint", DisablebilityDependsOn = dependOn });
-            card.AddOption(new ProjectFileOption(StringProp("")) { Label = "Choose File", Hint = "hint", Name = "..." , DisablebilityDependsOn = dependOn });
+            card.AddOption(new ProjectFileOption(StringProp("")) { Label = "Choose File", Hint = "hint" , DisablebilityDependsOn = dependOn });
             TextOption fileEntry = new TextOption(StringProp(""))
             {
                 Label = "FileEntry",

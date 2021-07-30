@@ -30,7 +30,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             cardView.WantsLayer = true;
             cardView.TranslatesAutoresizingMaskIntoConstraints = false;
 
-            var cardWidthConstraint = cardView.WidthAnchor.ConstraintEqualToConstant(OptionCard.Width);
+            var cardWidthConstraint = cardView.WidthAnchor.ConstraintEqualToConstant(640f);
             cardWidthConstraint.Active = true;
             //var cardHeightConstraint = cardView.HeightAnchor.ConstraintEqualToConstant (367f);
             //cardHeightConstraint.Active = true;
@@ -105,7 +105,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             optionsStackView.Distribution = NSStackViewDistribution.Fill;
 
             cardView.AddSubview(optionsStackView);
-            optionsStackView.WidthAnchor.ConstraintEqualToConstant(OptionCard.Width - 40).Active = true;
+            optionsStackView.WidthAnchor.ConstraintEqualToConstant(600f).Active = true;
 
             optionsStackView.LeadingAnchor.ConstraintEqualToAnchor(cardView.LeadingAnchor, 20f).Active = true;
             optionsStackView.BottomAnchor.ConstraintEqualToAnchor(cardView.BottomAnchor, -20f).Active = true;
