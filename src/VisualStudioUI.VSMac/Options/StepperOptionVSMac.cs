@@ -68,6 +68,11 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                         _stepper.IntValue = _textField.IntValue;
                     };
 
+                    StepperOption.Property.PropertyChanged += delegate {
+                        _textField.IntValue = StepperOption.Property.Value;
+                        _stepper.IntValue = StepperOption.Property.Value;
+                    };
+
                     _controlView.AddSubview(_textField);
                     _controlView.AddSubview(_stepper);
 
