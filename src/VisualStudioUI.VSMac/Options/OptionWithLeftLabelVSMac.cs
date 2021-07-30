@@ -8,7 +8,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         private NSView? _optionView;
         private NSButton? _hintButton;
         private NSView _control;
-        private NSTextField _label;
+        private NSTextField? _label;
 
         public OptionWithLeftLabelVSMac(Option option) : base(option)
         {
@@ -75,7 +75,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         public override void OnEnableChanged(bool enabled)
         {
-            if(_label != null)
+            if (_label != null)
             {
                 _label.TextColor = enabled ? NSColor.LabelColor : NSColor.DisabledControlText;
             }
