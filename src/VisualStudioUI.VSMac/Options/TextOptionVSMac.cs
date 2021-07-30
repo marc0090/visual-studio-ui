@@ -65,7 +65,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                         menuBtn.HeightAnchor.ConstraintEqualToConstant(21f).Active = true;
                         menuBtn.TrailingAnchor.ConstraintEqualToAnchor(_controlView.TrailingAnchor).Active = true;
                         menuBtn.CenterYAnchor.ConstraintEqualToAnchor(_controlView.CenterYAnchor).Active = true;
-                        _controlView.WidthAnchor.ConstraintEqualToConstant(226f).Active = true;
+                        _controlView.WidthAnchor.ConstraintEqualToConstant(230f).Active = true;
 
                     }
                     else

@@ -45,7 +45,16 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             card.AddOption(new TextOption(StringProp("")) { Label = "test error", ValidationMessage = error, DisablebilityDependsOn = dependOn });
             card.AddOption(new DirectoryOption(StringProp("")) { Label = "Choose Firectory", Hint = "hint", DisablebilityDependsOn = dependOn });
             card.AddOption(new ProjectFileOption(StringProp("")) { Label = "Choose File", Hint = "hint", Name = "..." , DisablebilityDependsOn = dependOn });
-
+            TextOption fileEntry = new TextOption(StringProp(""))
+            {
+                Label = "FileEntry",
+                DisablebilityDependsOn = dependOn
+            };
+            fileEntry.MacroMenuItems = ImmutableArray.CreateRange(
+                new[] { new MacroMenuItem("Project Directory", "$(ProjectDir)"),
+                new MacroMenuItem("Solution Directory", "$(SolutionDir)"),
+                });
+            card.AddOption(fileEntry);
             card.AddOption(new StepperOption(new ViewModelProperty<int>("", 100)) { Label = "Port", DisablebilityDependsOn = dependOn, Hint = "test" });
             //dependOn.Property.PropertyChanged += delegate {
             //    if (dependOn.Property.Value)
