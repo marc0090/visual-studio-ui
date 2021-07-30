@@ -55,7 +55,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                         LineBreakMode = NSLineBreakMode.TruncatingTail,
                         Title = ProjectFileOption.Name ?? "···"
                     };
-                    _button.SizeToFit();
 
                     _button.Activated += (s, e) =>
                     {
@@ -69,8 +68,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     _textField.HeightAnchor.ConstraintEqualToConstant(21).Active = true;
                     _textField.LeadingAnchor.ConstraintEqualToAnchor(_controlView.LeadingAnchor).Active = true;
                     _textField.TopAnchor.ConstraintEqualToAnchor(_controlView.TopAnchor).Active = true;
-
                     _button.HeightAnchor.ConstraintEqualToConstant(21).Active = true;
+                    _button.WidthAnchor.ConstraintEqualToConstant(24).Active = true;
                     _button.TrailingAnchor.ConstraintEqualToAnchor(_controlView.TrailingAnchor).Active = true;
                 }
                 return _controlView;
