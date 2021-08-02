@@ -38,7 +38,7 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             var error = new ViewModelProperty<Message?>("", new Message("warning", MessageSeverity.Error));
 
             card.AddOption(dependOn);
-            card.AddOption(new SeparatorOption();
+            card.AddOption(new SeparatorOption());
             card.AddOption(new CheckBoxOption(BoolProp(false)) { ButtonLabel = "test", DisablebilityDependsOn = dependOn });
             card.AddOption(new DocButtonOption(StringProp("test"), "test") { DisablebilityDependsOn = dependOn });
             card.AddOption(new TextOption(StringProp("")) { Label = "test warning", ValidationMessage = warning, DisablebilityDependsOn = dependOn });
@@ -55,7 +55,7 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
                 new MacroMenuItem("Solution Directory", "$(SolutionDir)"),
                 });
             card.AddOption(fileEntry);
-            card.AddOption(new StepperOption(new ViewModelProperty<int>("", 100)) { Label = "Port", DisablebilityDependsOn = dependOn, Hint = "test" });
+            card.AddOption(new StepperOption(new ViewModelProperty<int>("", 1000000)) { Label = "Port", DisablebilityDependsOn = dependOn, Hint = "test",Maximum = 10000000,Minimum = 0 });
             card.AddOption(new SeparatorOption());
 
             var disable = new CheckBoxOption(BoolProp(false)) { ButtonLabel = "Disable", Enable = BoolProp(true) };
