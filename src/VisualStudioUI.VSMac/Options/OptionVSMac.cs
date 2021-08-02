@@ -10,10 +10,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         public OptionVSMac(Option option) : base(option)
         {
-            if (Option.ValidationMessage != null)
-            {
-                Option.ValidationMessage.PropertyChanged += delegate { UpdateHintButton(); };
-            }
+
         }
 
         public abstract NSView View { get; }

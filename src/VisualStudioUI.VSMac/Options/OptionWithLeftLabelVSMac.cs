@@ -42,6 +42,10 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
             _optionView.AddSubview(_control);
 
+            if (Option.ValidationMessage != null)
+            {
+                Option.ValidationMessage.PropertyChanged += delegate { UpdateHintButton(); };
+            }
             UpdateHintButton();
 
             _label = CreateLabelView();
@@ -86,7 +90,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             if (_hintButton != null)
             {
                 _hintButton.RemoveFromSuperview();
-                _hintButton.Dispose(); // TODO: Is this needed?
                 _hintButton = null;
             }
 
