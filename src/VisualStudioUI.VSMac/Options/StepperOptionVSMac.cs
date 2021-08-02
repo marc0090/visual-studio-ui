@@ -1,4 +1,5 @@
 ﻿using AppKit;
+using Foundation;
 using Microsoft.VisualStudioUI.Options;
 
 namespace Microsoft.VisualStudioUI.VSMac.Options
@@ -48,10 +49,14 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                     _textField = new NSTextField()
                     {
+                       
                         StringValue = StepperOption.Property.Value.ToString(),
                         Alignment = NSTextAlignment.Right,
                         TranslatesAutoresizingMaskIntoConstraints = false
                     };
+                    var format = new NSNumberFormatter();
+                    format.NumberStyle = NSNumberFormatterStyle.None;
+                    _textField.Formatter = format;
 
                     _textField.Changed += (s, e) =>
                     {
