@@ -8,6 +8,7 @@
 //
 
 using Microsoft.VisualStudioUI.Options.Models;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 
 namespace Microsoft.VisualStudioUI.Options
@@ -24,6 +25,7 @@ namespace Microsoft.VisualStudioUI.Options
     {
         public ViewModelProperty<TItem?> Property { get; }
         public ViewModelProperty<ImmutableArray<TItem>> ItemsProperty { get; }
+        public List<TItem> BoldItemsProperty { get; private set; }
         public ItemDisplayStringFunc<TItem> ItemDisplayStringFunc { get; }
         public ViewModelProperty<bool> Hidden { get; set; }
         /// <summary>
@@ -94,6 +96,18 @@ namespace Microsoft.VisualStudioUI.Options
             item = item.Trim();
 
             return item.Equals("-");
+        }
+
+        public TItem CreateBoldMenu(TItem item)
+        {
+            if (BoldItemsProperty == null)
+            {
+                BoldItemsProperty = new List<TItem>();
+            }
+
+            BoldItemsProperty.Add(item);
+
+            return item;
         }
     }
 }
