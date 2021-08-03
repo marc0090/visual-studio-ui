@@ -101,7 +101,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             ComboBoxOption.Property.Value = match;
         }
 
-        void UpdateItemChoices()
+        private void UpdateItemChoices()
         {
             _popUpButton!.RemoveAllItems();
 
@@ -129,7 +129,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         }
 
-        void UpdateMultipleLevelMenuItemChoices()
+        private void UpdateMultipleLevelMenuItemChoices()
         {
             _popUpButton!.RemoveAllItems();
 
@@ -137,6 +137,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             groupMenu.AutoEnablesItems = false;
             bool hasIndentate = false;
 
+            ItemIsBoldFunc<TItem>? itemIsBoldFunc = ComboBoxOption.ItemIsBoldFunc;
             foreach (var item in ComboBoxOption.ItemsProperty.Value)
             {
                 string itemDisplayString = ComboBoxOption.ItemDisplayStringFunc(item).Trim();
@@ -163,9 +164,9 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 }
 
                 menuItem.Title = itemDisplayString;
-                if (ComboBoxOption.ItemIsBoldFunc != null && ComboBoxOption.ItemIsBoldFunc(item))
+                if (itemIsBoldFunc != null && itemIsBoldFunc(item))
                 {
-                    NSAttributedString attr = new NSAttributedString(menuItem.Title, font:NSFont.BoldSystemFontOfSize(NSFont.SystemFontSize));
+                    NSAttributedString attr = new NSAttributedString(menuItem.Title, font: NSFont.BoldSystemFontOfSize(NSFont.SystemFontSize));
                     menuItem.AttributedTitle = attr;
                 }
 
