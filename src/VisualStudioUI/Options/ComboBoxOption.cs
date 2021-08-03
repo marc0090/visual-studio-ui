@@ -25,8 +25,8 @@ namespace Microsoft.VisualStudioUI.Options
     {
         public ViewModelProperty<TItem?> Property { get; }
         public ViewModelProperty<ImmutableArray<TItem>> ItemsProperty { get; }
-        public List<TItem> BoldItemsProperty { get; private set; }
         public ItemDisplayStringFunc<TItem> ItemDisplayStringFunc { get; }
+        public ItemIsBoldFunc<TItem>? ItemIsBoldFunc { get; }
         public ViewModelProperty<bool> Hidden { get; set; }
         /// <summary>
         /// draw seperator or header menu 
@@ -96,18 +96,6 @@ namespace Microsoft.VisualStudioUI.Options
             item = item.Trim();
 
             return item.Equals("-");
-        }
-
-        public TItem CreateBoldMenu(TItem item)
-        {
-            if (BoldItemsProperty == null)
-            {
-                BoldItemsProperty = new List<TItem>();
-            }
-
-            BoldItemsProperty.Add(item);
-
-            return item;
         }
     }
 }

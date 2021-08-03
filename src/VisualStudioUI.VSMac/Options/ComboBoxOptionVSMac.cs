@@ -163,7 +163,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 }
 
                 menuItem.Title = itemDisplayString;
-                if (ComboBoxOption.BoldItemsProperty.IndexOf(item) != -1)
+                if (ComboBoxOption.ItemIsBoldFunc != null && ComboBoxOption.ItemIsBoldFunc(item))
                 {
                     NSAttributedString attr = new NSAttributedString(menuItem.Title, font:NSFont.BoldSystemFontOfSize(NSFont.SystemFontSize));
                     menuItem.AttributedTitle = attr;
