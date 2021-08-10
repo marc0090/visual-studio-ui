@@ -94,20 +94,9 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         void UpdatePropertyFromUI(object sender, EventArgs e)
         {
-
-            // TItem? match = DisplayableItemsUtil.FindMatch(ComboBoxOption.ItemsProperty.Value,
-            //_popUpButton!.TitleOfSelectedItem,
-            //ComboBoxOption.ItemDisplayStringFunc);
-
-            //support when the title of items are the same string,it can't find the correct match,change to use IndexOfSelectedItem to find the match item
-            int index = (int)_popUpButton.IndexOfSelectedItem;
-            if(index < 0 || index >= ComboBoxOption.ItemsProperty.Value.Length)
-            {
-                ComboBoxOption.Property.Value = null;
-                return;
-            }
-            TItem? match = ComboBoxOption.ItemsProperty.Value[index];
-
+            TItem? match = DisplayableItemsUtil.FindMatch(ComboBoxOption.ItemsProperty.Value,
+                _popUpButton!.TitleOfSelectedItem,
+                ComboBoxOption.ItemDisplayStringFunc);
             ComboBoxOption.Property.Value = match;
         }
 
