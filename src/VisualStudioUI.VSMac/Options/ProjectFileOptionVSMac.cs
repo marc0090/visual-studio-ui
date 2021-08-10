@@ -80,8 +80,17 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     _button.Activated += (s, e) =>
                     {
                         var openPanel = new NSOpenPanel();
-                        string ProjectFolder = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.FullName;
-                        openPanel.Directory = ProjectFolder;
+                        string p = (AppDomain.CurrentDomain.BaseDirectory);
+                        string path = p;
+                        int i = 0;
+                        for (int counter_slash = 0; counter_slash < 6; counter_slash++)
+                        {
+                            i = path.LastIndexOf(@"/");
+                            if (i < 0) break;
+                            path = path.Substring(0, i);
+                        }
+
+                        openPanel.Directory = path;
                         openPanel.CanChooseDirectories = false;
                         openPanel.CanChooseFiles = true;
                         openPanel.AllowedFileTypes =new string[] { "plist"};
