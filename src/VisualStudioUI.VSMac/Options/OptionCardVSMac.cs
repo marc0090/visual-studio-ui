@@ -124,13 +124,13 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 ToggleButtonOption? visibilityDependsOn = option.VisibilityDependsOn;
                 if (visibilityDependsOn != null)
                 {
-                    visibilityDependsOn.Property.PropertyChanged += (sender, eventArgs) => UpdateOptionVisible(option);
+                    visibilityDependsOn.Property.PropertyChanged += delegate { UpdateOptionVisible(option); };
                 }
 
                 ViewModelProperty<bool>? visible = option.Visible;
                 if (visible != null)
                 {
-                    visible.PropertyChanged += (sender, eventArgs) => UpdateOptionVisible(option);
+                    visible.PropertyChanged += delegate { UpdateOptionVisible(option); };
                 }
 
                 ToggleButtonOption? disablebilityDependsOn = option.DisablebilityDependsOn;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using AppKit;
 using Microsoft.VisualStudioUI.Options;
 using Microsoft.VisualStudioUI.Options.Models;
@@ -16,6 +17,19 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         }
 
         public ProjectFileOption ProjectFileOption => ((ProjectFileOption)Option);
+
+        private string DirProject()
+        {
+            string DirDebug = System.IO.Directory.GetCurrentDirectory();
+            string DirProject = DirDebug;
+
+            for (int counter_slash = 0; counter_slash < 4; counter_slash++)
+            {
+                DirProject = DirProject.Substring(0, DirProject.LastIndexOf(@"/"));
+            }
+
+            return DirProject;
+        }
 
         protected override NSView ControlView
         {
@@ -58,7 +72,19 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                     _button.Activated += (s, e) =>
                     {
-                        ProjectFileOption.ButtonClicked(s, e);
+                        var openPanel = new NSOpenPanel();
+                        string ProjectFolder = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.FullName;
+                        openPanel.Directory = ProjectFolder;
+                        openPanel.CanChooseDirectories = false;
+                        openPanel.CanChooseFiles = true;
+                        openPanel.AllowedFileTypes =new string[] { "plist"};
+                        var response = openPanel.RunModal();
+                        if (response == 1 && openPanel.Url != null)
+                        {
+                            _textField.StringValue = openPanel.Filename;
+                            property.Value = _textField.StringValue;
+                        }
+                       // ProjectFileOption.ButtonClicked(s, e);
                     };
 
                     _controlView.AddArrangedSubview(_button);

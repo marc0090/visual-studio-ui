@@ -212,7 +212,7 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
                 PrefixValue = "AppIdentifierPrefix"
             };
 
-            switchableOption.AddOption(keychainAccessGroupsList);
+            card.AddOption(keychainAccessGroupsList);
 
             return card;
         }
@@ -230,11 +230,13 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             {
                 Label = "Pass Types",
                 ButtonLabel = "Allow all team pass types",
+                VisibilityDependsOn = walletSwitchableOption
             };
 
             var subtype = new RadioButtonOption(passTypeRadioGroup, BoolProp(false))
             {
                 ButtonLabel = "Allow subset of pass types",
+                VisibilityDependsOn = walletSwitchableOption
             };
 
             ImmutableArray<CheckBoxlistItem> CheckBoxList = ImmutableArray.Create(
@@ -243,12 +245,12 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
                 new CheckBoxlistItem("Pass types3", false)
             );
 
-            var testCheckBoxList = new CheckBoxListOption(new ViewModelProperty<ImmutableArray<CheckBoxlistItem>>("", CheckBoxList));
-
-            walletSwitchableOption.AddOption(alltype);
-            walletSwitchableOption.AddOption(subtype);
-            walletSwitchableOption.AddOption(testCheckBoxList);
+            var testCheckBoxList = new CheckBoxListOption(new ViewModelProperty<ImmutableArray<CheckBoxlistItem>>("", CheckBoxList)) { VisibilityDependsOn = walletSwitchableOption };
             card.AddOption(walletSwitchableOption);
+            card.AddOption(alltype);
+            card.AddOption(subtype);
+            card.AddOption(testCheckBoxList);
+            
 
             return card;
         }
