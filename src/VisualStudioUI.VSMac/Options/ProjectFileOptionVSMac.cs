@@ -55,9 +55,16 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                     _controlView.AddArrangedSubview(_textField);
 
-                    property.PropertyChanged += delegate (object o, ViewModelPropertyChangedEventArgs args)
+                    property.PropertyChanged += delegate
                     {
-                        _textField.StringValue = ((string)args.NewValue) ?? string.Empty;
+                        var fullPath = property.Value;
+                        if (string.IsNullOrEmpty(fullPath))
+                        {
+                            _textField.StringValue = "";
+                            return;
+                        }
+                        int i = fullPath.LastIndexOf(@"/")+1;
+                        _textField.StringValue = fullPath.Substring(i, fullPath.Length - i);
                     };
 
                     _textField.Changed += delegate { property.Value = _textField.StringValue; };
@@ -81,8 +88,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                         var response = openPanel.RunModal();
                         if (response == 1 && openPanel.Url != null)
                         {
-                            _textField.StringValue = openPanel.Filename;
-                            property.Value = _textField.StringValue;
+                            property.Value = openPanel.Filename;
                         }
                        // ProjectFileOption.ButtonClicked(s, e);
                     };
