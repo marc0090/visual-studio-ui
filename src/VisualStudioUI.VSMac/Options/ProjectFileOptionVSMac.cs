@@ -18,19 +18,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         public ProjectFileOption ProjectFileOption => ((ProjectFileOption)Option);
 
-        private string DirProject()
-        {
-            string DirDebug = System.IO.Directory.GetCurrentDirectory();
-            string DirProject = DirDebug;
-
-            for (int counter_slash = 0; counter_slash < 4; counter_slash++)
-            {
-                DirProject = DirProject.Substring(0, DirProject.LastIndexOf(@"/"));
-            }
-
-            return DirProject;
-        }
-
         protected override NSView ControlView
         {
             get
@@ -80,15 +67,10 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     _button.Activated += (s, e) =>
                     {
                         var openPanel = new NSOpenPanel();
-                        string p = (AppDomain.CurrentDomain.BaseDirectory);
-                        string path = p;
-                        int i = 0;
-                        for (int counter_slash = 0; counter_slash < 6; counter_slash++)
-                        {
-                            i = path.LastIndexOf(@"/");
-                            if (i < 0) break;
-                            path = path.Substring(0, i);
-                        }
+                        string path = AppDomain.CurrentDomain.BaseDirectory;
+                        //string p = Environment.CurrentDirectory;
+                        //string p = Directory.GetCurrentDirectory();
+                        path = Directory.GetParent(path).Parent.Parent.Parent.Parent.Parent.FullName;
 
                         openPanel.Directory = path;
                         openPanel.CanChooseDirectories = false;
@@ -99,7 +81,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                         {
                             property.Value = openPanel.Filename;
                         }
-                       // ProjectFileOption.ButtonClicked(s, e);
                     };
 
                     _controlView.AddArrangedSubview(_button);
