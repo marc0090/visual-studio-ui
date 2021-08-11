@@ -60,11 +60,11 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     {
                         var openPanel = new NSOpenPanel();
                         openPanel.CanChooseDirectories = true;
-                        openPanel.CanChooseFiles = false;
+                        openPanel.CanChooseFiles = true;
                         var response = openPanel.RunModal();
                         if (response == 1 && openPanel.Url != null)
                         {
-                            _textField.StringValue = openPanel.DirectoryUrl.AbsoluteString;
+                            _textField.StringValue = openPanel.Filename;
                             property.Value = _textField.StringValue;
                         }
                     };
