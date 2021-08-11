@@ -61,10 +61,10 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             if (descriptionView != null)
             {
                 _optionView.AddSubview(descriptionView);
-
-                descriptionView.LeadingAnchor.ConstraintEqualToAnchor(_control.LeadingAnchor, 0f).Active = true;
+                descriptionView.TopAnchor.ConstraintEqualToAnchor(_control.BottomAnchor, 15f).Active = true;
+                descriptionView.LeadingAnchor.ConstraintEqualToAnchor(_control.LeadingAnchor).Active = true;
                 descriptionView.TopAnchor.ConstraintEqualToAnchor(_control.BottomAnchor, 0f).Active = true;
-                descriptionView.BottomAnchor.ConstraintEqualToAnchor(_optionView.BottomAnchor).Active = true;
+                descriptionView.BottomAnchor.ConstraintEqualToAnchor(_optionView.BottomAnchor,-5).Active = true;
             }
             else
             {

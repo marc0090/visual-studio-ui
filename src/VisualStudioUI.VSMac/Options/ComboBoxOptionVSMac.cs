@@ -94,6 +94,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         void UpdatePropertyFromUI(object sender, EventArgs e)
         {
+            //when the item titles are equal value,it won't find the right match,so replaced with itemindex to find the right match.
+            //
             //TItem? match = DisplayableItemsUtil.FindMatch(ComboBoxOption.ItemsProperty.Value,
             //    _popUpButton!.TitleOfSelectedItem,
             //    ComboBoxOption.ItemDisplayStringFunc);
