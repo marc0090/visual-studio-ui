@@ -1,7 +1,5 @@
-﻿using System;
-using AppKit;
+﻿using AppKit;
 using Microsoft.VisualStudioUI.Options;
-using Microsoft.VisualStudioUI.Options.Models;
 
 namespace Microsoft.VisualStudioUI.VSMac.Options
 {
@@ -11,9 +9,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         private NSSwitch? _switchButton;
         private HintPopover? _hintPopover;
         private NSProgressIndicator? _progressIndicator;
-        private NSStackView? _childrenControl;
         private NSLayoutConstraint? _descriptionBottomConstraints;
-        private NSLayoutConstraint? _childrenControlBottomConstraints;
 
         public SwitchOptionVSMac(SwitchOption option) : base(option)
         {
@@ -36,7 +32,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         private void CreateView()
         {
-            bool enable = ((SwitchOption)Option).IsOn.Value;
+            bool enable = ((SwitchOption)Option).Property.Value;
 
             _optionView = new NSStackView() { Orientation = NSUserInterfaceLayoutOrientation.Vertical };
             _optionView.WantsLayer = true;
@@ -48,10 +44,25 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             _switchButton.TranslatesAutoresizingMaskIntoConstraints = false;
             _switchButton.AccessibilityHelp = "Provides a control";
 
-            _switchButton.Activated += SwitchButtonActivated;
+            _switchButton.Activated += (s, e) => {
+                ((SwitchOption)Option).Property.Value = (_switchButton.State == 1);
+            };
 
-            SwitchOption.IsOn.PropertyChanged += SwitchPropertyChanged;
-            SwitchOption.ShowSpinner.PropertyChanged += SpinnerChanged;
+            SwitchOption.Property.PropertyChanged += delegate {
+                _switchButton.State = ((SwitchOption)Option).Property.Value ? 1 : 0;
+            };
+
+            SwitchOption.ShowSpinner.PropertyChanged += delegate {
+
+                if (SwitchOption.ShowSpinner.Value)
+                {
+                    _progressIndicator!.StartAnimation(null);
+                }
+                else
+                {
+                    _progressIndicator!.StopAnimation(null);
+                }
+            };
 
             _optionView.AddSubview(_switchButton);
             _switchButton.WidthAnchor.ConstraintEqualToConstant(38f).Active = true;
@@ -79,8 +90,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
             _optionView.AddSubview(title);
 
-            //_title.WidthAnchor.ConstraintEqualToConstant(38f).Active = true;
-            //_title.HeightAnchor.ConstraintEqualToConstant(28f).Active = true;
             title.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, 121f).Active = true;
             title.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 24f).Active = true;
 
@@ -123,9 +132,10 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 var _descriptionWidthConstraint = description.WidthAnchor.ConstraintEqualToConstant(354f);
                 _descriptionWidthConstraint.Active = true;
 
-                float bottomeSpace = -24;
+                float bottomeSpace = -28;
                 if (bestHeight > 26) { bottomeSpace = -14; }
                 _descriptionBottomConstraints = description.BottomAnchor.ConstraintEqualToAnchor(_optionView.BottomAnchor, bottomeSpace);
+                _descriptionBottomConstraints.Active = true;
             }
 
             if (!string.IsNullOrEmpty(Option.Hint))
@@ -150,34 +160,11 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             var _optionViewWidthConstraint = _optionView.WidthAnchor.ConstraintEqualToConstant(600f);
             _optionViewWidthConstraint.Active = true;
 
-            _childrenControl = new NSStackView()
-            {
-                Orientation = NSUserInterfaceLayoutOrientation.Vertical,
-                Spacing = SwitchOption.Space,
-                Distribution = NSStackViewDistribution.Fill,
-                TranslatesAutoresizingMaskIntoConstraints = false
-            };
+        }
 
-            foreach (Option option in SwitchOption.ChildrenOptions)
-            {
-                NSView optionView = ((OptionVSMac)option.Platform).View;
-                _childrenControl.AddArrangedSubview(optionView);
-            }
-
-            _optionView.AddSubview(_childrenControl);
-
-            // TODO: Need an else here?
-            if (description != null)
-            {
-                _childrenControl.TopAnchor.ConstraintEqualToAnchor(description.BottomAnchor, SwitchOption.Space).Active = true;
-            }
-
-            _childrenControl.TrailingAnchor.ConstraintEqualToAnchor(_optionView.TrailingAnchor).Active = true;
-            _childrenControl.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor).Active = true;
-            _childrenControlBottomConstraints = _childrenControl.BottomAnchor.ConstraintEqualToAnchor(_optionView.BottomAnchor, -SwitchOption.Space);
-            _childrenControlBottomConstraints.Active = true;
-
-            ShowChildrenOption(enable);
+        private void _switchButton_Activated(object sender, System.EventArgs e)
+        {
+            throw new System.NotImplementedException();
         }
 
         public override void OnEnableChanged(bool enabled)
@@ -185,41 +172,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             _switchButton!.Enabled = enabled;
         }
 
-        private void ShowChildrenOption(bool enable)
-        {
-            if (enable && SwitchOption.ChildrenOptions.Count > 0)
-            {
-                _childrenControl!.Hidden = false;
-                _childrenControlBottomConstraints!.Active = true;
-                _descriptionBottomConstraints!.Active = false;
-            }
-            else
-            {
-                _childrenControl!.Hidden = true;
-                _childrenControlBottomConstraints!.Active = false;
-                _descriptionBottomConstraints!.Active = true;
-            }
-        }
-
-        private void SwitchButtonActivated(object sender, EventArgs e)
-        {
-            bool enable = (_switchButton!.State == 1);
-
-            ((SwitchOption)Option).IsOn.PropertyChanged -= SwitchPropertyChanged;
-            ((SwitchOption)Option).IsOn.Value = enable;
-            ((SwitchOption)Option).SwitchChangedInvoke(sender, e);
-            ((SwitchOption)Option).IsOn.PropertyChanged += SwitchPropertyChanged;
-
-            ShowChildrenOption(enable);
-        }
-
-        private void SwitchPropertyChanged(object sender, ViewModelPropertyChangedEventArgs e)
-        {
-            _switchButton!.Activated -= SwitchButtonActivated;
-            _switchButton.State = ((SwitchOption)Option).IsOn.Value ? 1 : 0;
-            _switchButton.Activated += SwitchButtonActivated;
-
-        }
 
         private void ShowHintPopover(string message, NSButton button)
         {
@@ -232,18 +184,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
             var bounds = button.Bounds;
             _hintPopover.Show(bounds, button, NSRectEdge.MaxYEdge);
-        }
-
-        public void SpinnerChanged(object sender, ViewModelPropertyChangedEventArgs e)
-        {
-            if (SwitchOption.ShowSpinner.Value)
-            {
-                _progressIndicator!.StartAnimation(null);
-            }
-            else
-            {
-                _progressIndicator!.StopAnimation(null);
-            }
         }
     }
 }

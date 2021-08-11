@@ -5,7 +5,6 @@ namespace Microsoft.VisualStudioUI.Options
 {
     public class DirectoryOption : Option
     {
-
         public DirectoryOption(ViewModelProperty<string> property)
         {
             Property = property;

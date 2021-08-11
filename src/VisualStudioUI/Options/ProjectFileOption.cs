@@ -10,6 +10,7 @@ namespace Microsoft.VisualStudioUI.Options
         public ProjectFileOption(ViewModelProperty<string> property)
         {
             Property = property;
+            Property.Bind();
             Platform = OptionFactoryPlatform.Instance.CreateCreateProjectFileOptionlatform(this);
         }
 

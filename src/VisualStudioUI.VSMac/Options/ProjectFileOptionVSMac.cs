@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using AppKit;
 using Microsoft.VisualStudioUI.Options;
 using Microsoft.VisualStudioUI.Options.Models;
@@ -41,9 +42,16 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                     _controlView.AddArrangedSubview(_textField);
 
-                    property.PropertyChanged += delegate (object o, ViewModelPropertyChangedEventArgs args)
+                    property.PropertyChanged += delegate
                     {
-                        _textField.StringValue = ((string)args.NewValue) ?? string.Empty;
+                        var fullPath = property.Value;
+                        if (string.IsNullOrEmpty(fullPath))
+                        {
+                            _textField.StringValue = "";
+                            return;
+                        }
+                        int i = fullPath.LastIndexOf(@"/")+1;
+                        _textField.StringValue = fullPath.Substring(i, fullPath.Length - i);
                     };
 
                     _textField.Changed += delegate { property.Value = _textField.StringValue; };
@@ -58,7 +66,21 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                     _button.Activated += (s, e) =>
                     {
-                        ProjectFileOption.ButtonClicked(s, e);
+                        var openPanel = new NSOpenPanel();
+                        string path = AppDomain.CurrentDomain.BaseDirectory;
+                        //string p = Environment.CurrentDirectory;
+                        //string p = Directory.GetCurrentDirectory();
+                        path = Directory.GetParent(path).Parent.Parent.Parent.Parent.Parent.FullName;
+
+                        openPanel.Directory = path;
+                        openPanel.CanChooseDirectories = false;
+                        openPanel.CanChooseFiles = true;
+                        openPanel.AllowedFileTypes =new string[] { "plist"};
+                        var response = openPanel.RunModal();
+                        if (response == 1 && openPanel.Url != null)
+                        {
+                            property.Value = openPanel.Filename;
+                        }
                     };
 
                     _controlView.AddArrangedSubview(_button);

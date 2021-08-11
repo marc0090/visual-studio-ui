@@ -34,8 +34,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         public void CreateView()
         {
-            _optionView = new NSView();// { Orientation = NSUserInterfaceLayoutOrientation.Vertical };
-                                       // _optionView.WantsLayer = true;
+            _optionView = new NSView();
+                                     
             _optionView.TranslatesAutoresizingMaskIntoConstraints = false;
 
             _tableView = new NSTableView()

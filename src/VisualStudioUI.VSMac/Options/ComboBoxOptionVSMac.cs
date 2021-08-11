@@ -94,9 +94,13 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         void UpdatePropertyFromUI(object sender, EventArgs e)
         {
-            TItem? match = DisplayableItemsUtil.FindMatch(ComboBoxOption.ItemsProperty.Value,
-                _popUpButton!.TitleOfSelectedItem,
-                ComboBoxOption.ItemDisplayStringFunc);
+            //when the item titles are equal value,it won't find the right match,so replaced with itemindex to find the right match.
+            //
+            //TItem? match = DisplayableItemsUtil.FindMatch(ComboBoxOption.ItemsProperty.Value,
+            //    _popUpButton!.TitleOfSelectedItem,
+            //    ComboBoxOption.ItemDisplayStringFunc);
+            int selectedIndex = (int)_popUpButton.IndexOfSelectedItem;
+            TItem? match = ComboBoxOption.ItemsProperty.Value[selectedIndex];
             ComboBoxOption.Property.Value = match;
         }
 
@@ -179,8 +183,10 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 _popUpButton!.SelectItem((NSMenuItem?)null);
             else
             {
-                string currenValueDisplayString = ComboBoxOption.ItemDisplayStringFunc(currentValue);
-                _popUpButton!.SelectItem(currenValueDisplayString);
+                //string currenValueDisplayString = ComboBoxOption.ItemDisplayStringFunc(currentValue);
+                //_popUpButton!.SelectItem(currenValueDisplayString);
+                int itemIndex = ComboBoxOption.ItemsProperty.Value.IndexOf(currentValue);
+                _popUpButton.SelectItem(itemIndex);
             }
         }
 

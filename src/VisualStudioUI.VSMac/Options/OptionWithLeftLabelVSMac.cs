@@ -42,6 +42,10 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
             _optionView.AddSubview(_control);
 
+            if (Option.ValidationMessage != null)
+            {
+                Option.ValidationMessage.PropertyChanged += delegate { UpdateHintButton(); };
+            }
             UpdateHintButton();
 
             _label = CreateLabelView();
@@ -57,10 +61,9 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             if (descriptionView != null)
             {
                 _optionView.AddSubview(descriptionView);
-
-                descriptionView.LeadingAnchor.ConstraintEqualToAnchor(_control.LeadingAnchor, 0f).Active = true;
-                descriptionView.TopAnchor.ConstraintEqualToAnchor(_control.BottomAnchor, 0f).Active = true;
-                descriptionView.BottomAnchor.ConstraintEqualToAnchor(_optionView.BottomAnchor).Active = true;
+                descriptionView.LeadingAnchor.ConstraintEqualToAnchor(_control.LeadingAnchor,20).Active = true;
+                descriptionView.TopAnchor.ConstraintEqualToAnchor(_control.BottomAnchor, 5f).Active = true;
+                descriptionView.BottomAnchor.ConstraintEqualToAnchor(_optionView.BottomAnchor,-5).Active = true;
             }
             else
             {
@@ -86,7 +89,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             if (_hintButton != null)
             {
                 _hintButton.RemoveFromSuperview();
-                _hintButton.Dispose(); // TODO: Is this needed?
                 _hintButton = null;
             }
 
