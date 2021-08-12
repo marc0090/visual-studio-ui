@@ -250,7 +250,15 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             card.AddOption(alltype);
             card.AddOption(subtype);
             card.AddOption(testCheckBoxList);
-            
+
+            RowMovableTableOption movableTable = new RowMovableTableOption(new ViewModelProperty<ImmutableArray<CheckBoxlistItem>>("", CheckBoxList))
+            {
+                VisibilityDependsOn = walletSwitchableOption,
+                Label = "Movable Table",
+                UpToolTip = "move up",
+                DownToolTip = "move down",
+            };
+            card.AddOption(movableTable);
 
             return card;
         }

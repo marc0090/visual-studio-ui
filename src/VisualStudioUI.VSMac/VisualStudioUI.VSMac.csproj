@@ -84,6 +84,7 @@
     <Compile Include="Options\ProgressIndicatorOptionVSMac.cs" />
     <Compile Include="Options\DirectoryOptionVSMac.cs" />
     <Compile Include="Options\ProjectFileOptionVSMac.cs" />
+    <Compile Include="Options\RowMovableTableOptionVSMac.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\VisualStudioUI\VisualStudioUI.csproj">

@@ -67,5 +67,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         public override OptionPlatform CreateCreateProjectFileOptionlatform(ProjectFileOption projectFileOption) =>
             new ProjectFileOptionVSMac(projectFileOption);
 
+        public override OptionPlatform CreateRowMovableTableOptionPlatform(RowMovableTableOption rowMovableTableOption) =>
+            new RowMovableTableOptionVSMac(rowMovableTableOption);
     }
 }
