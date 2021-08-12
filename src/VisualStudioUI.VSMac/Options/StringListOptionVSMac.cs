@@ -51,8 +51,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         public StringListOption StringListOption => ((StringListOption)Option);
 
-        public IntPtr Handle => throw new NotImplementedException();
-
         public void CreateView()
         {
             _optionView = new NSView();

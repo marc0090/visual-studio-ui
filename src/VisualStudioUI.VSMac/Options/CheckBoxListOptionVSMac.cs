@@ -30,8 +30,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         public CheckBoxListOption CheckBoxListOption => ((CheckBoxListOption)Option);
 
-        public IntPtr Handle => throw new NotImplementedException();
-
         public void CreateView()
         {
             _optionView = new NSView();
