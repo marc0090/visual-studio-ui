@@ -47,7 +47,7 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             card.AddOption(new ProjectFileOption(StringProp("")) { Label = "Choose File", Hint = "hint" , DisablebilityDependsOn = dependOn });
             TextOption fileEntry = new TextOption(StringProp(""))
             {
-                Label = "FileEntry",
+                Label = "Uncompressed resource extensions",
                 DisablebilityDependsOn = dependOn
             };
             fileEntry.MacroMenuItems = ImmutableArray.CreateRange(
@@ -142,16 +142,16 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             card.AddOption(autoSigningOption2);
 
             var btn1 = new ButtonOption() { Name = "Hide" };
-            var btn2 = new ButtonOption() { Name = "2", Hidden = new ViewModelProperty<bool>("", false) };
+            var btn2 = new ButtonOption() { Name = "2", Visible = new ViewModelProperty<bool>("", false) };
             var btn3 = new ButtonOption() { Name = "show" };
-            btn2.Hidden.Bind();
+            btn2.Visible.Bind();
             btn1.Clicked += (sender, e) =>
             {
-                btn2.Hidden.Value = true;
+                btn2.Visible.Value = true;
             };
             btn3.Clicked += (sender, e) =>
             {
-                btn2.Hidden.Value = false;
+                btn2.Visible.Value = false;
             };
             card.AddOption(btn1);
             card.AddOption(btn2);
