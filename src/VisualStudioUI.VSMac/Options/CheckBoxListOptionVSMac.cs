@@ -213,55 +213,45 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         private void OnMoveUpClicked(object sender, EventArgs e)
         {
-            try
+            if (CheckBoxListOption.Property.Value.Any())
             {
-                if (CheckBoxListOption.Property.Value.Any())
-                {
-                    int selectedIndex = (int)_tableView.SelectedRow;
-                    if (selectedIndex <= 0) return;// selected the first one
+                int selectedIndex = (int)_tableView.SelectedRow;
+                if (selectedIndex <= 0) return;// selected the first one
 
-                    List<CheckBoxlistItem> list = new List<CheckBoxlistItem>(CheckBoxListOption.Property.Value);
+                List<CheckBoxlistItem> list = new List<CheckBoxlistItem>(CheckBoxListOption.Property.Value);
 
-                    var old = list.ElementAt(selectedIndex - 1);
-                    list[selectedIndex - 1] = list.ElementAt(selectedIndex);
-                    list[selectedIndex] = old;
+                var old = list.ElementAt(selectedIndex - 1);
+                list[selectedIndex - 1] = list.ElementAt(selectedIndex);
+                list[selectedIndex] = old;
 
-                    CheckBoxListOption.Property.Value = CheckBoxListOption.Property.Value.Clear();
-                    CheckBoxListOption.Property.Value = ImmutableArray.CreateRange(list);
+                CheckBoxListOption.Property.Value = CheckBoxListOption.Property.Value.Clear();
+                CheckBoxListOption.Property.Value = ImmutableArray.CreateRange(list);
 
-                    RefreshList(selectedIndex - 1);
+                RefreshList(selectedIndex - 1);
 
-                    CheckBoxListOption.ListChangedInvoke(sender, e);
-                }
+                CheckBoxListOption.ListChangedInvoke(sender, e);
             }
-            catch
-            { }
         }
 
         private void OnMoveDownClicked(object sender, EventArgs e)
         {
-            try
+            if (CheckBoxListOption.Property.Value.Any())
             {
-                if (CheckBoxListOption.Property.Value.Any())
-                {
-                    int selectedIndex = (int)_tableView.SelectedRow;
-                    List<CheckBoxlistItem> list = new List<CheckBoxlistItem>(CheckBoxListOption.Property.Value);
-                    if (selectedIndex >= list.Count - 1) return; // selected the last one
+                int selectedIndex = (int)_tableView.SelectedRow;
+                List<CheckBoxlistItem> list = new List<CheckBoxlistItem>(CheckBoxListOption.Property.Value);
+                if (selectedIndex >= list.Count - 1) return; // selected the last one
 
-                    var old = list.ElementAt(selectedIndex + 1);
-                    list[selectedIndex + 1] = list.ElementAt(selectedIndex);
-                    list[selectedIndex] = old;
+                var old = list.ElementAt(selectedIndex + 1);
+                list[selectedIndex + 1] = list.ElementAt(selectedIndex);
+                list[selectedIndex] = old;
 
-                    CheckBoxListOption.Property.Value = CheckBoxListOption.Property.Value.Clear();
-                    CheckBoxListOption.Property.Value = ImmutableArray.CreateRange(list);
+                CheckBoxListOption.Property.Value = CheckBoxListOption.Property.Value.Clear();
+                CheckBoxListOption.Property.Value = ImmutableArray.CreateRange(list);
 
-                    RefreshList(selectedIndex + 1);
+                RefreshList(selectedIndex + 1);
 
-                    CheckBoxListOption.ListChangedInvoke(sender, e);
-                }
+                CheckBoxListOption.ListChangedInvoke(sender, e);
             }
-            catch
-            { }
         }
     }
 
