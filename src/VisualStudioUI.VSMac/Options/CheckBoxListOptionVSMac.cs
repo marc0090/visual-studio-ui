@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
 using AppKit;
 
 using Microsoft.VisualStudioUI.Options;
+using Microsoft.VisualStudioUI.Options.Models;
 
 namespace Microsoft.VisualStudioUI.VSMac.Options
 {
@@ -10,6 +14,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
     {
         private NSView _optionView;
         private NSTableView _tableView;
+        private NSButton _upButton, _downButton;
 
         public CheckBoxListOptionVSMac(CheckBoxListOption option) : base(option)
         {
@@ -41,12 +46,15 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             _tableView = new NSTableView()
             {
                 HeaderView = null,
-                SelectionHighlightStyle = NSTableViewSelectionHighlightStyle.None,
                 Source = new CheckBoxSource(this),
                 TranslatesAutoresizingMaskIntoConstraints = false
             };
             _tableView.GridStyleMask = NSTableViewGridStyle.DashedHorizontalGridLine;
             _tableView.AddColumn(new NSTableColumn());
+            if (CheckBoxListOption.AllowReordering)
+                _tableView.Activated += OnSelectionChanged;
+            else
+                _tableView.SelectionHighlightStyle = NSTableViewSelectionHighlightStyle.None;
 
             var scrolledView = new NSScrollView()
             {
@@ -59,6 +67,38 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             };
 
             _optionView.AddSubview(scrolledView);
+
+            if (CheckBoxListOption.AllowReordering)
+            {
+                _upButton = new NSButton
+                {
+                    BezelStyle = NSBezelStyle.RoundRect,
+                    ControlSize = NSControlSize.Regular,
+                    Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize),
+                    Title = "Move up",
+                    TranslatesAutoresizingMaskIntoConstraints = false,
+                    ToolTip = CheckBoxListOption.UpToolTip,
+                    Enabled = false,
+                };
+                _upButton.Activated += OnMoveUpClicked;
+                _upButton.SizeToFit();
+
+                _downButton = new NSButton
+                {
+                    BezelStyle = NSBezelStyle.RoundRect,
+                    ControlSize = NSControlSize.Regular,
+                    Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize),
+                    Title = "Move down",
+                    TranslatesAutoresizingMaskIntoConstraints = false,
+                    ToolTip = CheckBoxListOption.DownToolTip,
+                    Enabled = false,
+                };
+                _downButton.Activated += OnMoveDownClicked;
+                _downButton.SizeToFit();
+
+                _optionView.AddSubview(_upButton);
+                _optionView.AddSubview(_downButton);
+            }
 
             if (!string.IsNullOrEmpty(Option.Label))
             {
@@ -78,19 +118,38 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 left.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor).Active = true;
             }
 
+            if (CheckBoxListOption.AllowReordering)
+            {
+                if (_upButton.Title.Length > _downButton.Title.Length)
+                    _downButton.WidthAnchor.ConstraintEqualToAnchor(_upButton.WidthAnchor).Active = true;
+                else
+                    _upButton.WidthAnchor.ConstraintEqualToAnchor(_downButton.WidthAnchor).Active = true;
+            }
+
             _optionView.WidthAnchor.ConstraintEqualToConstant(640f - IndentValue()).Active = true;
 
             scrolledView.HeightAnchor.ConstraintEqualToConstant(CheckBoxListOption.Height).Active = true;
             scrolledView.WidthAnchor.ConstraintEqualToConstant(CheckBoxListOption.Width).Active = true;
 
+            if (CheckBoxListOption.AllowReordering)
+            {
+                _upButton.TopAnchor.ConstraintEqualToAnchor(scrolledView.BottomAnchor, 10).Active = true;
+                _upButton.LeadingAnchor.ConstraintEqualToAnchor(scrolledView.LeadingAnchor).Active = true;
+                _downButton.TopAnchor.ConstraintEqualToAnchor(_upButton.TopAnchor).Active = true;
+                _downButton.LeadingAnchor.ConstraintEqualToAnchor(_upButton.TrailingAnchor, 10).Active = true;
+                _optionView.BottomAnchor.ConstraintEqualToAnchor(_upButton.BottomAnchor, 2).Active = true;
+            }
+
             scrolledView.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor).Active = true;
 
             float leftSpace = Option.AllowSpaceForLabel ? 222f:20f;
             scrolledView.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, leftSpace + IndentValue()).Active = true;
-            scrolledView.BottomAnchor.ConstraintEqualToAnchor(_optionView.BottomAnchor).Active = true;
+            if (!CheckBoxListOption.AllowReordering)
+            {
+                scrolledView.BottomAnchor.ConstraintEqualToAnchor(_optionView.BottomAnchor).Active = true;
+            }
 
             CheckBoxListOption.Property.PropertyChanged += OnCheckBoxListChanged;
-
         }
 
         public bool ShowDescriptions
@@ -102,7 +161,23 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         {
             base.OnEnableChanged(enabled);
 
+            if (CheckBoxListOption.AllowReordering)
+            {
+                _upButton.Enabled = enabled;
+                _downButton.Enabled = enabled;
+            }
             _tableView.Enabled = enabled;
+        }
+
+        private void OnSelectionChanged(object sender, EventArgs e)
+        {
+            UpdateButtonsStatus();
+        }
+
+        private void UpdateButtonsStatus()
+        {
+            _upButton.Enabled = (_tableView.SelectedRow > 0);
+            _downButton.Enabled = (_tableView.SelectedRow < CheckBoxListOption.Property.Value.Length - 1);
         }
 
         private void OnCheckBoxListChanged(object sender, EventArgs e)
@@ -121,9 +196,62 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             CheckBoxListOption.ListChangedInvoke(sender, e);
         }
 
-        private void RefreshList()
+        private void RefreshList(int selectIndex = -1)
         {
             _tableView.ReloadData();
+
+            if (CheckBoxListOption.AllowReordering)
+            {
+                if (selectIndex > -1)
+                {
+                    _tableView.SelectRow(selectIndex, false);
+                }
+
+                UpdateButtonsStatus();
+            }
+        }
+
+        private void OnMoveUpClicked(object sender, EventArgs e)
+        {
+            if (CheckBoxListOption.Property.Value.Any())
+            {
+                int selectedIndex = (int)_tableView.SelectedRow;
+                if (selectedIndex <= 0) return;// selected the first one
+
+                List<CheckBoxlistItem> list = new List<CheckBoxlistItem>(CheckBoxListOption.Property.Value);
+
+                var old = list.ElementAt(selectedIndex - 1);
+                list[selectedIndex - 1] = list.ElementAt(selectedIndex);
+                list[selectedIndex] = old;
+
+                CheckBoxListOption.Property.Value = CheckBoxListOption.Property.Value.Clear();
+                CheckBoxListOption.Property.Value = ImmutableArray.CreateRange(list);
+
+                RefreshList(selectedIndex - 1);
+
+                CheckBoxListOption.ListChangedInvoke(sender, e);
+            }
+        }
+
+        private void OnMoveDownClicked(object sender, EventArgs e)
+        {
+            if (CheckBoxListOption.Property.Value.Any())
+            {
+                int selectedIndex = (int)_tableView.SelectedRow;
+                List<CheckBoxlistItem> list = new List<CheckBoxlistItem>(CheckBoxListOption.Property.Value);
+                if (selectedIndex >= list.Count - 1) return; // selected the last one
+
+                var old = list.ElementAt(selectedIndex + 1);
+                list[selectedIndex + 1] = list.ElementAt(selectedIndex);
+                list[selectedIndex] = old;
+
+                CheckBoxListOption.Property.Value = CheckBoxListOption.Property.Value.Clear();
+                CheckBoxListOption.Property.Value = ImmutableArray.CreateRange(list);
+
+                RefreshList(selectedIndex + 1);
+
+                CheckBoxListOption.ListChangedInvoke(sender, e);
+            }
         }
     }
 
