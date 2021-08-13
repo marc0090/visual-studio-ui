@@ -237,7 +237,8 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
                 new CheckBoxlistItem("Pass types3", false)
             );
 
-            var testCheckBoxList = new CheckBoxListOption(new ViewModelProperty<ImmutableArray<CheckBoxlistItem>>("", CheckBoxList)) { VisibilityDependsOn = walletSwitchableOption };
+            bool allowReording = true;
+            var testCheckBoxList = new CheckBoxListOption(new ViewModelProperty<ImmutableArray<CheckBoxlistItem>>("", CheckBoxList), allowReording) { VisibilityDependsOn = walletSwitchableOption };
             card.AddOption(walletSwitchableOption);
             card.AddOption(alltype);
             card.AddOption(subtype);
