@@ -102,7 +102,10 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 else
                 {
                     NSMenuItem menuItem = new NSMenuItem();
-                    menuItem.Title = item.Label;
+                    string title = item.Label;
+                    //for some unknow reason to remove all "_" in titles,to be consistent with old code
+                    title = title.Replace("_","");
+                    menuItem.Title = title;
                     menuItem.Activated += (sender, e) =>
                     {
                         _textField.StringValue = item?.MacroName + _textField.StringValue; // New value insert to head
