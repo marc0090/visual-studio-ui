@@ -24,6 +24,12 @@ namespace Microsoft.VisualStudioUI.Options
             ListChanged?.Invoke(sender, e);
         }
 
+        /// <summary>
+        /// A CheckBoxListOption is a list of checkboxes, which are closely related.
+        /// It's used, for instance, for a list of app capabilities, all of which can be enabled/disabled.
+        /// </summary>
+        /// <param name="items">items to show</param>
+        /// <param name="allowReording">if true, order is significant and the UI allows reordering the items (e.g. with move up/down buttons)</param>
         public CheckBoxListOption(ViewModelProperty<ImmutableArray<CheckBoxlistItem>> items, bool allowReording = false)
         {
             Property = items;
