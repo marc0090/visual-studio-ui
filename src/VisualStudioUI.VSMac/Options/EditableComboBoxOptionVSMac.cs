@@ -43,18 +43,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             }
         }
 
-        /*
-        public override void Dispose ()
-        {
-            entryComBox.SelectionChanged -= UpdatePropertyValue;
-            Property.PropertyChanged -= UpdateUIFromProperty;
-            ItemsProperty.PropertyChanged -= LoadComBoxDataModel;
-            entryComBox.Changed -= UpdatePropertyValue;
-
-            base.Dispose ();
-        }
-        */
-
         public override void OnEnableChanged(bool enabled)
         {
             base.OnEnableChanged(enabled);
@@ -108,7 +96,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             }
 
             string? value = EditableComboBoxOption.Property.Value;
-            if (!string.IsNullOrWhiteSpace(value) && items.IndexOf(value) != -1)
+            if (!string.IsNullOrWhiteSpace(value))
             {
                 _comboBox.StringValue = value!;
             }
