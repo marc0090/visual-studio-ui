@@ -142,17 +142,9 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             card.AddOption(autoSigningOption2);
 
             var btn1 = new ButtonOption() { Name = "Hide" };
-            var btn2 = new ButtonOption() { Name = "2", Hidden = new ViewModelProperty<bool>("", false) };
+            var btn2 = new ButtonOption() { Name = "2"};
             var btn3 = new ButtonOption() { Name = "show" };
-            btn2.Hidden.Bind();
-            btn1.Clicked += (sender, e) =>
-            {
-                btn2.Hidden.Value = true;
-            };
-            btn3.Clicked += (sender, e) =>
-            {
-                btn2.Hidden.Value = false;
-            };
+            
             card.AddOption(btn1);
             card.AddOption(btn2);
             card.AddOption(btn3);
