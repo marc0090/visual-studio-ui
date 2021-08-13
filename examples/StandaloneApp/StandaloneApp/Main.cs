@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using Microsoft.VisualStudioUI.Options;
 
@@ -142,17 +142,9 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             card.AddOption(autoSigningOption2);
 
             var btn1 = new ButtonOption() { Name = "Hide" };
-            var btn2 = new ButtonOption() { Name = "2", Visible = new ViewModelProperty<bool>("", false) };
+            var btn2 = new ButtonOption() { Name = "2"};
             var btn3 = new ButtonOption() { Name = "show" };
-            btn2.Visible.Bind();
-            btn1.Clicked += (sender, e) =>
-            {
-                btn2.Visible.Value = true;
-            };
-            btn3.Clicked += (sender, e) =>
-            {
-                btn2.Visible.Value = false;
-            };
+            
             card.AddOption(btn1);
             card.AddOption(btn2);
             card.AddOption(btn3);
@@ -245,7 +237,8 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
                 new CheckBoxlistItem("Pass types3", false)
             );
 
-            var testCheckBoxList = new CheckBoxListOption(new ViewModelProperty<ImmutableArray<CheckBoxlistItem>>("", CheckBoxList)) { VisibilityDependsOn = walletSwitchableOption };
+            bool allowReording = true;
+            var testCheckBoxList = new CheckBoxListOption(new ViewModelProperty<ImmutableArray<CheckBoxlistItem>>("", CheckBoxList), allowReording) { VisibilityDependsOn = walletSwitchableOption };
             card.AddOption(walletSwitchableOption);
             card.AddOption(alltype);
             card.AddOption(subtype);
