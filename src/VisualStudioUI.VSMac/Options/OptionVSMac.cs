@@ -32,8 +32,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
             // View:     label
             var label = new NSTextField();
-            label.WantsLayer = true;
-            label.Layer.BackgroundColor = NSColor.Green.CGColor;
             label.Editable = false;
             label.Bordered = false;
             label.DrawsBackground = false;
