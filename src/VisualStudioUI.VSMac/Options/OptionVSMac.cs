@@ -132,6 +132,10 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         private void ShowHintPopover(string message, NSButton button)
         {
+            if (string.IsNullOrEmpty(message))
+            {
+                return;
+            }
             _hintPopover?.Close();
             _hintPopover?.Dispose();
             _hintPopover = new HintPopover(message, null);
