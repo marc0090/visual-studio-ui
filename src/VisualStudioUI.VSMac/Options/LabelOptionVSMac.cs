@@ -31,8 +31,9 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     _textField.Editable = false;
                     _textField.Bordered = false;
                     _textField.DrawsBackground = false;
-
-                    _textField.WidthAnchor.ConstraintEqualToConstant(470f).Active = true;
+                    _textField.SizeToFit();
+                    _textField.WidthAnchor.ConstraintLessThanOrEqualToConstant(420f).Active = true;
+                    _textField.HeightAnchor.ConstraintEqualToConstant(18f).Active = true;
 
                     if (LabelOption.Hidden != null)
                     {

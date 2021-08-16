@@ -6,7 +6,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
     public abstract class OptionWithLeftLabelVSMac : OptionVSMac
     {
         private NSView? _optionView;
-        private NSButton? _hintButton;
+        protected NSButton? _hintButton;
         private NSView _control;
         private NSTextField? _label;
 
@@ -61,7 +61,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             if (descriptionView != null)
             {
                 _optionView.AddSubview(descriptionView);
-                descriptionView.LeadingAnchor.ConstraintEqualToAnchor(_control.LeadingAnchor,20).Active = true;
+                descriptionView.LeadingAnchor.ConstraintEqualToAnchor(_control.LeadingAnchor).Active = true;
                 descriptionView.TopAnchor.ConstraintEqualToAnchor(_control.BottomAnchor, 5f).Active = true;
                 descriptionView.BottomAnchor.ConstraintEqualToAnchor(_optionView.BottomAnchor,-5).Active = true;
             }
@@ -99,7 +99,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
             _optionView!.AddSubview(_hintButton);
 
-            _hintButton.LeadingAnchor.ConstraintEqualToAnchor(_control.TrailingAnchor, 11f).Active = true;
+            _hintButton.LeadingAnchor.ConstraintEqualToAnchor(_control.TrailingAnchor, 10f).Active = true;
             _hintButton.CenterYAnchor.ConstraintEqualToAnchor(_control.CenterYAnchor).Active = true;
         }
     }

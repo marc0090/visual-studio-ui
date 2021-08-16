@@ -90,7 +90,9 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             {
                 Label = ("Apple ID"),
                 Name = "Sign in and select a team to enable Automatic Provisioning",
-                IsBold = true
+                IsBold = true,
+                AllowSpaceForLabel = false,
+                ValidationMessage = new ViewModelProperty<Message>("", new Message(null, MessageSeverity.Warning))
             };
             card.AddOption(signInLabel);
             return card;
