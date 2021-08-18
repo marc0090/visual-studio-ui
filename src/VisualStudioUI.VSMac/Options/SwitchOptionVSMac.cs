@@ -162,10 +162,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         }
 
-        private void _switchButton_Activated(object sender, System.EventArgs e)
-        {
-            throw new System.NotImplementedException();
-        }
 
         public override void OnEnableChanged(bool enabled)
         {

@@ -1,4 +1,6 @@
-﻿using AppKit;
+﻿// Licensed to the .NET Foundation under one or more agreements. The .NET Foundation licenses this file to you under the MIT license. See the LICENSE.md file in the project root for more information.
+
+using AppKit;
 using Microsoft.VisualStudioUI.Options;
 
 namespace Microsoft.VisualStudioUI.VSMac.Options
@@ -6,8 +8,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
     public abstract class OptionWithLeftLabelVSMac : OptionVSMac
     {
         private NSView? _optionView;
-        protected NSButton? _hintButton;
-        private NSView _control;
+        private NSView? _control;
+        private NSButton? _hintButton;
         private NSTextField? _label;
 
         public OptionWithLeftLabelVSMac(Option option) : base(option)
@@ -32,7 +34,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         private void CreateView()
         {
             // View:     optionView
-            _optionView = new AppKit.NSView();
+            _optionView = new NSView();
             _optionView.WidthAnchor.ConstraintEqualToConstant(600f - IndentValue()).Active = true;
 
             _control = ControlView;

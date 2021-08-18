@@ -1,3 +1,5 @@
+// Licensed to the .NET Foundation under one or more agreements. The .NET Foundation licenses this file to you under the MIT license. See the LICENSE.md file in the project root for more information.
+
 using AppKit;
 using Microsoft.VisualStudioUI.Options;
 using Microsoft.VisualStudioUI.Options.Models;
@@ -25,7 +27,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     _button = NSButton.CreateCheckbox(CheckBoxOption.ButtonLabel, CheckBoxSelected);
                     _button.SetButtonType(NSButtonType.Radio);
                     _button.ControlSize = NSControlSize.Regular;
-                    _button.Font = AppKit.NSFont.SystemFontOfSize(NSFont.SystemFontSize);
+                    _button.Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize);
                     _button.Title = CheckBoxOption.ButtonLabel;
                     _button.TranslatesAutoresizingMaskIntoConstraints = false;
                     _button.AccessibilityTitle = "Control";

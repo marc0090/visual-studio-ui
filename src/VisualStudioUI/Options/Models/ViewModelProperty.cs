@@ -17,12 +17,13 @@ namespace Microsoft.VisualStudioUI.Options.Models
     /// </summary>
     public abstract class ViewModelProperty : INotifyPropertyChanged
     {
-        object propertyValue;
-        event PropertyChangedEventHandler inpcPropertyChanged;
+        private object _propertyValue;
+
+        private event PropertyChangedEventHandler inpcPropertyChanged;
 
         protected ViewModelProperty(string name)
         {
-            this.Name = name;
+            Name = name;
         }
 
         /// <summary>
@@ -35,22 +36,22 @@ namespace Microsoft.VisualStudioUI.Options.Models
         /// </summary>
         public object Value
         {
-            get { return this.propertyValue; }
+            get { return _propertyValue; }
 
             set
             {
-                var oldValue = propertyValue;
-                this.propertyValue = value;
+                var oldValue = _propertyValue;
+                _propertyValue = value;
 
                 if (!SafeEquals(oldValue, value))
                 {
-                    if (this.IsBound)
+                    if (IsBound)
                     {
                         // only set this if we are bound for change notifications
-                        this.HasChanged = true;
+                        HasChanged = true;
                     }
 
-                    this.OnPropertyChanged(this, oldValue, value);
+                    OnPropertyChanged(this, oldValue, value);
                 }
             }
         }
@@ -72,12 +73,12 @@ namespace Microsoft.VisualStudioUI.Options.Models
         /// </summary>
         public void Bind()
         {
-            if (this.IsBound)
+            if (IsBound)
                 return;
 
-            this.IsBound = true;
-            this.OnBind();
-            this.OnPropertyChanged(this, this.propertyValue, this.propertyValue);
+            IsBound = true;
+            OnBind();
+            OnPropertyChanged(this, _propertyValue, _propertyValue);
         }
 
         /// <summary>
@@ -85,8 +86,8 @@ namespace Microsoft.VisualStudioUI.Options.Models
         /// </summary>
         public void Unbind()
         {
-            this.IsBound = false;
-            this.HasChanged = false;
+            IsBound = false;
+            HasChanged = false;
         }
 
         /// <summary>
@@ -108,20 +109,20 @@ namespace Microsoft.VisualStudioUI.Options.Models
 
         protected void OnPropertyChanged(ViewModelProperty property, object oldValue, object newValue)
         {
-            var handler = this.PropertyChanged;
-            if (this.IsBound && handler != null)
+            var handler = PropertyChanged;
+            if (IsBound && handler != null)
             {
                 handler(this, new ViewModelPropertyChangedEventArgs(property, oldValue, newValue));
             }
 
-            var h2 = this.inpcPropertyChanged;
-            if (this.IsBound && h2 != null)
+            var h2 = inpcPropertyChanged;
+            if (IsBound && h2 != null)
             {
                 h2(this, new PropertyChangedEventArgs(property.Name));
             }
         }
 
-        static bool SafeEquals(object obj1, object obj2)
+        private static bool SafeEquals(object obj1, object obj2)
         {
             if (obj1 == null && obj2 == null)
             {
@@ -141,19 +142,19 @@ namespace Microsoft.VisualStudioUI.Options.Models
             return obj1.Equals(obj2);
         }
 
-        class Unbinder : IDisposable
+        private class Unbinder : IDisposable
         {
-            readonly ViewModelProperty property;
+            private readonly ViewModelProperty _property;
 
             public Unbinder(ViewModelProperty property)
             {
-                this.property = property;
-                this.property.Unbind();
+                _property = property;
+                property.Unbind();
             }
 
             public void Dispose()
             {
-                this.property.Bind();
+                _property.Bind();
             }
         }
     }

@@ -64,14 +64,14 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             if (descriptionString.Length == 0)
                 return null;
 
-            var description = new AppKit.NSTextField();
+            var description = new NSTextField();
             description.Editable = false;
             description.Bordered = false;
             description.DrawsBackground = false;
             description.PreferredMaxLayoutWidth = 354f;
             description.StringValue = descriptionString;
             description.Alignment = NSTextAlignment.Left;
-            description.Font = AppKit.NSFont.SystemFontOfSize(AppKit.NSFont.SmallSystemFontSize);
+            description.Font = NSFont.SystemFontOfSize(NSFont.SmallSystemFontSize);
             description.TextColor = NSColor.SecondaryLabelColor;
             description.TranslatesAutoresizingMaskIntoConstraints = false;
 

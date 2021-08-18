@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements. The .NET Foundation licenses this file to you under the MIT license. See the LICENSE.md file in the project root for more information.
+
+using System;
 using Foundation;
 using AppKit;
 using CoreGraphics;
@@ -7,12 +9,11 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 {
     public class HintPopover : NSPopover
     {
-        const float DefaultMaxWidth = 330;
-        const float PopOverVerticalMargin = 13;
-        const float PopOverHorizontalMargin = 14;
-
-        readonly NSTextField textField;
-        readonly NSStackView container;
+        private const float DefaultMaxWidth = 330;
+        private const float PopOverVerticalMargin = 13;
+        private const float PopOverHorizontalMargin = 14;
+        private readonly NSTextField _textField;
+        private readonly NSStackView _container;
 
         public HintPopover(string text, WarningOrErrorSeverity? severity)
         {
@@ -20,7 +21,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             Animates = false;
             Behavior = NSPopoverBehavior.Transient;
 
-            container = new NSStackView()
+            _container = new NSStackView()
             {
                 Orientation = NSUserInterfaceLayoutOrientation.Horizontal,
                 Alignment = NSLayoutAttribute.CenterY,
@@ -28,9 +29,9 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 Distribution = NSStackViewDistribution.Fill,
                 EdgeInsets = new NSEdgeInsets(0, PopOverHorizontalMargin, 0, PopOverHorizontalMargin)
             };
-            ContentViewController.View = container;
+            ContentViewController.View = _container;
 
-            textField = new NSTextField
+            _textField = new NSTextField
             {
                 DrawsBackground = false,
                 Bezeled = true,
@@ -38,7 +39,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 Cell = new VerticallyCenteredTextFieldCell(yOffset: -1),
                 LineBreakMode = NSLineBreakMode.ByWordWrapping
             };
-            container.AddArrangedSubview(textField);
+            _container.AddArrangedSubview(_textField);
 
             var fontColor = GetFontColor(severity);
             var attrString = new NSAttributedString(text, new NSStringAttributes
@@ -47,27 +48,27 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize - 1),
             });
 
-            textField.AttributedStringValue = attrString;
+            _textField.AttributedStringValue = attrString;
             MaxWidth = DefaultMaxWidth;
         }
 
         public nfloat MaxWidth
         {
-            get { return textField.PreferredMaxLayoutWidth; }
+            get { return _textField.PreferredMaxLayoutWidth; }
             set
             {
-                textField.PreferredMaxLayoutWidth = value;
+                _textField.PreferredMaxLayoutWidth = value;
 
-                var expectedHeight = textField.IntrinsicContentSize.Height;
+                var expectedHeight = _textField.IntrinsicContentSize.Height;
 
                 var expectedSize = new CGSize(0, expectedHeight);
                 expectedSize.Width += PopOverHorizontalMargin * 2;
                 expectedSize.Height += PopOverVerticalMargin * 2;
-                container.SetFrameSize(expectedSize);
+                _container.SetFrameSize(expectedSize);
             }
         }
 
-        NSColor GetFontColor(WarningOrErrorSeverity? severity)
+        private NSColor GetFontColor(WarningOrErrorSeverity? severity)
         {
             //TODO: Handle this
             /*
@@ -87,13 +88,13 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
     /// <summary>
     /// Due to it protection level, below class copy form vsmac repo = > namespace MonoDevelop.Components.Mac
     /// </summary>
-    class VerticallyCenteredTextFieldCell : NSTextFieldCell
+    internal class VerticallyCenteredTextFieldCell : NSTextFieldCell
     {
-        nfloat offset;
+        private nfloat _offset;
 
         public VerticallyCenteredTextFieldCell(nfloat yOffset)
         {
-            offset = yOffset;
+            _offset = yOffset;
         }
 
         // This is invoked from the `Copy (NSZone)` method. ObjC sometimes clones the native NSTextFieldCell so we need to be able
@@ -115,7 +116,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         {
             // Don't remove this override because the comment on this explains why we need this!
             var newCell = (VerticallyCenteredTextFieldCell) base.Copy(zone);
-            newCell.offset = offset;
+            newCell._offset = _offset;
             return newCell;
         }
 
@@ -132,7 +133,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             if (heightDelta > 0)
             {
                 newRect.Size = new CGSize(newRect.Width, newRect.Height - heightDelta);
-                newRect.Location = new CGPoint(newRect.X, newRect.Y + heightDelta / 2 + offset);
+                newRect.Location = new CGPoint(newRect.X, newRect.Y + heightDelta / 2 + _offset);
             }
 
             return newRect;

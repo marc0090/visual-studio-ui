@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.VisualStudioUI.Options.Models;
 
 namespace Microsoft.VisualStudioUI.Options
 {

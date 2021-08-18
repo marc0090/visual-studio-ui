@@ -7,8 +7,6 @@
 // Copyright (c) 2015 Xamarin Inc
 //
 
-using System;
-
 namespace Microsoft.VisualStudioUI.Options.Models
 {
     /// <summary>

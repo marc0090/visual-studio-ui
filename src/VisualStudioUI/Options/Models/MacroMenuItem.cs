@@ -1,5 +1,4 @@
-﻿using System;
-namespace Microsoft.VisualStudioUI.Options.Models
+﻿namespace Microsoft.VisualStudioUI.Options.Models
 {
     public class MacroMenuItem
     {

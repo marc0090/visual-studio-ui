@@ -1,5 +1,5 @@
-﻿using System;
-using System.Drawing;
+﻿// Licensed to the .NET Foundation under one or more agreements. The .NET Foundation licenses this file to you under the MIT license. See the LICENSE.md file in the project root for more information.
+
 using AppKit;
 using Microsoft.VisualStudioUI.Options;
 using Microsoft.VisualStudioUI.Options.Models;
@@ -8,9 +8,9 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 {
     public class TextOptionVSMac : OptionWithLeftLabelVSMac
     {
-        NSView _controlView;
+        private NSView? _controlView;
         private NSTextField? _textField;
-        private NSButton _menuBtn;
+        private NSButton? _menuBtn;
 
         public TextOptionVSMac(TextOption option) : base(option)
         {
@@ -24,19 +24,23 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             {
                 if (_controlView == null)
                 {
-                    _controlView = new NSView();
-                    _controlView.WantsLayer = true;
-                    _controlView.TranslatesAutoresizingMaskIntoConstraints = false;
+                    _controlView = new NSView
+                    {
+                        WantsLayer = true,
+                        TranslatesAutoresizingMaskIntoConstraints = false
+                    };
 
                     ViewModelProperty<string> property = TextOption.Property;
 
-                    _textField = new AppKit.NSTextField();
-                    _textField.Font = AppKit.NSFont.SystemFontOfSize(AppKit.NSFont.SystemFontSize);
-                    _textField.StringValue = property.Value ?? string.Empty;
-                    _textField.TranslatesAutoresizingMaskIntoConstraints = false;
-                    _textField.Editable = TextOption.Editable;
-                    _textField.Bordered = TextOption.Bordered;
-                    _textField.DrawsBackground = TextOption.DrawsBackground;
+                    _textField = new NSTextField
+                    {
+                        Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize),
+                        StringValue = property.Value ?? string.Empty,
+                        TranslatesAutoresizingMaskIntoConstraints = false,
+                        Editable = TextOption.Editable,
+                        Bordered = TextOption.Bordered,
+                        DrawsBackground = TextOption.DrawsBackground
+                    };
 
                     _controlView.AddSubview(_textField);
 
@@ -88,28 +92,35 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         private NSMenu CreateMenu()
         {
-            NSMenu groupMenu = new NSMenu();
-            groupMenu.AutoEnablesItems = false;
+            NSMenu groupMenu = new NSMenu
+            {
+                AutoEnablesItems = false
+            };
 
             foreach (var item in TextOption.MacroMenuItems)
             {
                 if (string.IsNullOrWhiteSpace(item.Label)) continue;
 
-                if (item.Label.Equals("-"))
+                if ("-".Equals(item.Label))
                 {
-                    groupMenu.AddItem(NSMenuItem.SeparatorItem);
-                }
-                else
-                {
-                    NSMenuItem menuItem = new NSMenuItem();
-                    menuItem.Title = item.Label;
+                    NSMenuItem menuItem = new NSMenuItem
+                    {
+                        Title = item.Label
+                    };
                     menuItem.Activated += (sender, e) =>
                     {
-                        _textField.StringValue = item?.MacroName + _textField.StringValue; // New value insert to head
-                        TextOption.Property.Value = _textField.StringValue;
+                        if (_textField != null)
+                        {
+                            _textField.StringValue = item?.MacroName + _textField.StringValue; // New value insert to head
+                            TextOption.Property.Value = _textField.StringValue;
+                        }
                     };
 
                     groupMenu.AddItem(menuItem);
+                }
+                else
+                {
+                    groupMenu.AddItem(NSMenuItem.SeparatorItem);
                 }
             }
 
@@ -126,14 +137,5 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 _menuBtn.Enabled = enabled;
         }
 
-        /*
-        public override void Dispose ()
-        {
-            Property.PropertyChanged -= UpdatePopUpBtnValue;
-            textField.Changed -= UpdatePropertyValue;
-
-            base.Dispose ();
-        }
-        */
     }
 }

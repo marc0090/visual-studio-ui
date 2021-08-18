@@ -1,5 +1,4 @@
-﻿using System;
-using AppKit;
+﻿using AppKit;
 using Foundation;
 using Microsoft.VisualStudioUI.Options;
 using Microsoft.VisualStudioUI.Options.Models;
@@ -8,7 +7,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 {
     public class DocButtonOptionVSMac : OptionWithLeftLabelVSMac
     {
-        NSButton _button;
+        private NSButton _button;
 
         public DocButtonOptionVSMac(DocButtonOption option) : base(option)
         {
@@ -24,12 +23,14 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 {
                     ViewModelProperty<string> property = DocButtonOption.UrlProperty;
 
-                    _button = new AppKit.NSButton();
-                    _button.BezelStyle = NSBezelStyle.RoundRect;
-                    _button.Title = DocButtonOption.ButtonLabel;
-                    _button.ControlSize = NSControlSize.Regular;
-                    _button.Font = AppKit.NSFont.SystemFontOfSize(AppKit.NSFont.SystemFontSize);
-                    _button.TranslatesAutoresizingMaskIntoConstraints = false;
+                    _button = new NSButton
+                    {
+                        BezelStyle = NSBezelStyle.RoundRect,
+                        Title = DocButtonOption.ButtonLabel,
+                        ControlSize = NSControlSize.Regular,
+                        Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize),
+                        TranslatesAutoresizingMaskIntoConstraints = false
+                    };
                     _button.SizeToFit();
                     string url = DocButtonOption.UrlProperty.Value;
                     _button.Activated += (o, args) => NSWorkspace.SharedWorkspace.OpenUrl(new NSUrl(url));
@@ -46,12 +47,5 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             _button.Enabled = enabled;
         }
 
-        /*
-        public override void Dispose ()
-        {
-            linkButton.Activated -= LinkButton_Activated;
-            base.Dispose ();
-        }
-        */
     }
 }

@@ -23,7 +23,7 @@ namespace Microsoft.VisualStudioUI.Options
                 _updatingSelection = true;
                 foreach (RadioButtonOption currRadioButton in _radioButtons)
                 {
-                    bool currIsSelected = object.ReferenceEquals(currRadioButton, radioButton);
+                    bool currIsSelected = ReferenceEquals(currRadioButton, radioButton);
                     currRadioButton.Property.Value = currIsSelected;
                 }
             }
@@ -40,7 +40,7 @@ namespace Microsoft.VisualStudioUI.Options
             int index = -1;
             for (int i = 0; i < count; ++i)
             {
-                if (object.ReferenceEquals(_radioButtons[i], radioButton))
+                if (ReferenceEquals(_radioButtons[i], radioButton))
                 {
                     index = i;
                     break;

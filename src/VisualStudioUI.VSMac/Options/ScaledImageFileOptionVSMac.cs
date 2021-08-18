@@ -14,7 +14,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
     {
         private NSStackView _frameView;
         private NSStackView _view;
-        //private NSButton _imageView;
         private const float Space = 10f;
 
         public ScaledImageFileOptionVSMac(ScaledImageFileOption option) : base(option)
@@ -92,7 +91,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             imageView.HeightAnchor.ConstraintEqualToConstant(ImageOption.DrawSize).Active = true;
             if (!string.IsNullOrWhiteSpace(imageFile.Path) && File.Exists(imageFile.Path))
             {
-                var image = new NSImage(imageFile.Path);
+                var image = new NSImage(imageFile.Path ?? "");
                 image.Size = new CGSize(ImageOption.DrawSize, ImageOption.DrawSize);
                 imageView.Image = image;
                 border?.RemoveFromSuperLayer();
