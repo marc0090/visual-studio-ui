@@ -10,9 +10,9 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 {
     public class ProjectFileOptionVSMac : OptionWithLeftLabelVSMac
     {
-        private NSStackView _controlView;
-        private NSTextField _textField;
-        private NSButton _button;
+        private NSStackView? _controlView;
+        private NSTextField? _textField;
+        private NSButton? _button;
 
         public ProjectFileOptionVSMac(ProjectFileOption option) : base(option)
         {
@@ -105,9 +105,9 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         {
             base.OnEnableChanged(enabled);
 
-            _textField.Enabled = enabled;
+            _textField!.Enabled = enabled;
 
-            _button.Enabled = enabled;
+            _button!.Enabled = enabled;
         }
     }
 }

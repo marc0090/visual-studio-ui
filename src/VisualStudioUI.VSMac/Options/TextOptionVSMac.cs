@@ -101,7 +101,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             {
                 if (string.IsNullOrWhiteSpace(item.Label)) continue;
 
-                if ("-".Equals(item.Label))
+                if (!"-".Equals(item.Label))
                 {
                     NSMenuItem menuItem = new NSMenuItem
                     {

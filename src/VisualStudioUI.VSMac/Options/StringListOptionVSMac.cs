@@ -12,9 +12,9 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
     public class StringListOptionVSMac : OptionVSMac
     {
-        private NSView _optionView;
-        private NSTableView _tableView;
-        private NSButton _addButton, _removeButton;
+        private NSView? _optionView;
+        private NSTableView? _tableView;
+        private NSButton? _addButton, _removeButton;
 
         private readonly List<string> _stringList = new List<string>();
 
