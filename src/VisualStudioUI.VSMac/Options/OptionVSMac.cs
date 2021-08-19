@@ -122,8 +122,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 return null;
             }
 
-            hintButton.HeightAnchor.ConstraintEqualToConstant(19f).Active = true;
-            hintButton.WidthAnchor.ConstraintEqualToConstant(19f).Active = true;
+            hintButton.HeightAnchor.ConstraintEqualToConstant(20f).Active = true;
+            hintButton.WidthAnchor.ConstraintEqualToConstant(20f).Active = true;
 
             hintButton.Activated += (o, args) => ShowHintPopover(messageText!, hintButton);
 

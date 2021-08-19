@@ -92,7 +92,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     _textField.BottomAnchor.ConstraintEqualToAnchor(_controlView.BottomAnchor).Active = true;
                     _stepper.CenterYAnchor.ConstraintEqualToAnchor(_textField.CenterYAnchor).Active = true;
                     _stepper.LeadingAnchor.ConstraintEqualToAnchor(_textField.TrailingAnchor, 10).Active = true;
-                    _controlView.TrailingAnchor.ConstraintEqualToAnchor(_stepper.TrailingAnchor).Active = true;
+                    _controlView.TrailingAnchor.ConstraintEqualToAnchor(_stepper.TrailingAnchor,2).Active = true;
                 }
                 return _controlView;
             }
