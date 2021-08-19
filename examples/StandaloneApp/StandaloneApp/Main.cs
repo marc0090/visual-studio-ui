@@ -79,10 +79,7 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             
             var image = new ScaledImageFileOption(imageArray, "Unset");
             image.ImageArray.Bind();
-            image.RedrawImage += (snder, e) => {
-
-                return "3333/Users/vstester/Projects/iOS/iOS/Assets.xcassets/AppIcon.appiconset/Icon1024.png ";
-            };
+           
             image.UnsetImage += (sender, e) =>
             {
                 int a = 0;
