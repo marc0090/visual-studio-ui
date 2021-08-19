@@ -14,19 +14,13 @@ namespace Microsoft.VisualStudioUI.Options
 
         public ViewModelProperty<ImmutableArray<ScaledImageFile>> ImageArray { get; }
 
-        public Func<object, EventArgs, string> RedrawImage;
-        public Action<object, EventArgs> UnsetImage;
+        public Action<object, EventArgs>? UnsetImage;
 
         public ScaledImageFileOption(ViewModelProperty<ImmutableArray<ScaledImageFile>> imageArray, string menuLabel = "")
         {
             ImageArray = imageArray;
             MenuLabel = menuLabel;
             Platform = OptionFactoryPlatform.Instance.CreateImageViewOptionPlatform(this);
-        }
-
-        public string RedrawImageViewer(object sender, EventArgs e)
-        {
-            return RedrawImage?.Invoke(sender, e);
         }
 
         public void UnsetImageViewer(object sender, EventArgs e)

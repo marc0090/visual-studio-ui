@@ -116,7 +116,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         private void OnImageViewerClicked(object sender, EventArgs e)
         {
             NSButton imageViewer = (NSButton)sender;
-            string path = ImageOption.RedrawImageViewer(sender, e).Trim();
+            string path = RedrawImage(imageViewer).Trim();
             if (!string.IsNullOrWhiteSpace(path))
             {
                 NSImage imageNew = new NSImage(path);
@@ -220,6 +220,59 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             imageView.AttributedTitle = attr;
 
             return border;
+        }
+
+        string RedrawImage(NSButton imageViewer)
+        {
+            var openPanel = new NSOpenPanel();
+            openPanel.CanChooseFiles = true;
+            openPanel.ExtensionHidden = true;
+            openPanel.AllowedFileTypes = new[] { "png" };
+            var response = openPanel.RunModal();
+            if (response == 1 && openPanel.Url != null)
+            {
+                if (File.Exists(openPanel.Url.Path))
+                {
+                    ScaledImageFile imageFileOld = ImageOption.GetImageFile(imageViewer.Title) ?? ImageOption.ImageArray.Value.ElementAt((int)imageViewer.Tag);
+
+                    NSImage imageNew = new NSImage(openPanel.Url.Path);
+
+                    if (imageNew.CGImage.Width != imageFileOld.Width || imageNew.CGImage.Height != imageFileOld.Height)
+                    {
+                        NSAlert alert = new NSAlert();
+                        alert.AlertStyle = NSAlertStyle.Critical;
+                        alert.MessageText = "Incorrect image dimensions";
+                        alert.InformativeText = string.Format("Only images with size {0}x{1} are allowed. Picture was {2}x{3}.", imageFileOld.Width, imageFileOld.Height, imageNew.CGImage.Width, imageNew.CGImage.Height);
+                        alert.RunSheetModal(null);
+
+                        return string.Empty;
+                    }
+                }
+                else
+                {
+                    return string.Empty;
+                }
+
+                if (imageViewer.Image != null)
+                {
+                    NSAlert alert = new NSAlert();
+                    alert.AlertStyle = NSAlertStyle.Informational;
+                    alert.AddButton("No");
+                    alert.AddButton("Yes");
+                    alert.Icon = NSImage.GetSystemSymbol("info.circle", null);
+                    alert.MessageText = "Image already exists";
+                    alert.InformativeText = string.Format("Should {0} be overwritten?", imageViewer.Title);
+                    var result = alert.RunSheetModal(null);
+                    if (result == (int)NSAlertButtonReturn.First)
+                    {
+                        return string.Empty;
+                    }
+                }
+
+                return openPanel.Url.Path;
+            }
+
+            return string.Empty;
         }
     }
 }
