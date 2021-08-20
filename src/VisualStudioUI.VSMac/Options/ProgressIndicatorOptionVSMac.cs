@@ -1,4 +1,6 @@
-﻿using AppKit;
+﻿// Licensed to the .NET Foundation under one or more agreements. The .NET Foundation licenses this file to you under the MIT license. See the LICENSE.md file in the project root for more information.
+
+using AppKit;
 using Microsoft.VisualStudioUI.Options;
 using Microsoft.VisualStudioUI.Options.Models;
 
@@ -41,18 +43,20 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             if (!string.IsNullOrEmpty(Option.Label))
             {
                 // View:     label
-                var label = new NSTextField();
-                label.Editable = false;
-                label.Bordered = false;
-                label.DrawsBackground = false;
-                label.PreferredMaxLayoutWidth = 1;
-                // TODO: Make the colon be localization friendly
-                label.StringValue = Option.Label + ":";
+                var label = new NSTextField
+                {
+                    Editable = false,
+                    Bordered = false,
+                    DrawsBackground = false,
+                    PreferredMaxLayoutWidth = 1,
+                    // TODO: Make the colon be localization friendly
+                    StringValue = Option.Label + ":",
 
-                label.Alignment = NSTextAlignment.Right;
-                label.Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize);
-                label.TextColor = NSColor.LabelColor;
-                label.TranslatesAutoresizingMaskIntoConstraints = false;
+                    Alignment = NSTextAlignment.Right,
+                    Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize),
+                    TextColor = NSColor.LabelColor,
+                    TranslatesAutoresizingMaskIntoConstraints = false
+                };
 
                 _optionView.AddSubview(label);
                 label.WidthAnchor.ConstraintEqualToConstant(205f).Active = true;

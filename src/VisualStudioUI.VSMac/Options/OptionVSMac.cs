@@ -38,14 +38,22 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             label.PreferredMaxLayoutWidth = 1;
             // TODO: Make the colon be localization friendly
             label.StringValue = labelString + ":";
+            label.HeightAnchor.ConstraintEqualToConstant(16f).Active = true;
 
             label.Alignment = NSTextAlignment.Right;
-            label.Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize);
             label.TextColor = NSColor.LabelColor;
             label.TranslatesAutoresizingMaskIntoConstraints = false;
 
-            label.WidthAnchor.ConstraintEqualToConstant(205f).Active = true;
-            label.HeightAnchor.ConstraintEqualToConstant(16f).Active = true;
+            if(labelString.Length < 26)
+            {
+                label.Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize);
+            }
+            else
+            {
+                label.Font = NSFont.SystemFontOfSize(11f);
+            }
+
+            label.WidthAnchor.ConstraintGreaterThanOrEqualToConstant(205f).Active = true;
 
             return label;
         }
@@ -56,14 +64,14 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             if (descriptionString.Length == 0)
                 return null;
 
-            var description = new AppKit.NSTextField();
+            var description = new NSTextField();
             description.Editable = false;
             description.Bordered = false;
             description.DrawsBackground = false;
             description.PreferredMaxLayoutWidth = 354f;
             description.StringValue = descriptionString;
             description.Alignment = NSTextAlignment.Left;
-            description.Font = AppKit.NSFont.SystemFontOfSize(AppKit.NSFont.SmallSystemFontSize);
+            description.Font = NSFont.SystemFontOfSize(NSFont.SmallSystemFontSize);
             description.TextColor = NSColor.SecondaryLabelColor;
             description.TranslatesAutoresizingMaskIntoConstraints = false;
 
@@ -114,8 +122,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 return null;
             }
 
-            hintButton.HeightAnchor.ConstraintEqualToConstant(19f).Active = true;
-            hintButton.WidthAnchor.ConstraintEqualToConstant(19f).Active = true;
+            hintButton.HeightAnchor.ConstraintEqualToConstant(20f).Active = true;
+            hintButton.WidthAnchor.ConstraintEqualToConstant(20f).Active = true;
 
             hintButton.Activated += (o, args) => ShowHintPopover(messageText!, hintButton);
 
@@ -124,6 +132,10 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         private void ShowHintPopover(string message, NSButton button)
         {
+            if (string.IsNullOrEmpty(message))
+            {
+                return;
+            }
             _hintPopover?.Close();
             _hintPopover?.Dispose();
             _hintPopover = new HintPopover(message, null);

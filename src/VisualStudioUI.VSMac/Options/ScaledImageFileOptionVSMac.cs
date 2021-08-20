@@ -77,7 +77,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             imageView.HeightAnchor.ConstraintEqualToConstant(ImageOption.DrawSize).Active = true;
             if (!string.IsNullOrWhiteSpace(imageFile.Path) && File.Exists(imageFile.Path))
             {
-                var image = new NSImage(imageFile.Path);
+                var image = new NSImage(imageFile.Path ?? "");
                 image.Size = new CGSize(ImageOption.DrawSize, ImageOption.DrawSize);
                 imageView.Image = image;
                 border?.RemoveFromSuperLayer();

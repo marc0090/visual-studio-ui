@@ -1,4 +1,6 @@
-﻿using AppKit;
+﻿// Licensed to the .NET Foundation under one or more agreements. The .NET Foundation licenses this file to you under the MIT license. See the LICENSE.md file in the project root for more information.
+
+using AppKit;
 using Microsoft.VisualStudioUI.Options;
 using Microsoft.VisualStudioUI.Options.Models;
 
@@ -22,9 +24,11 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             {
                 if (_controlView == null)
                 {
-                    _controlView = new NSStackView();
-                    _controlView.Orientation = NSUserInterfaceLayoutOrientation.Horizontal;
-                    _controlView.TranslatesAutoresizingMaskIntoConstraints = false;
+                    _controlView = new NSStackView
+                    {
+                        Orientation = NSUserInterfaceLayoutOrientation.Horizontal,
+                        TranslatesAutoresizingMaskIntoConstraints = false
+                    };
 
                     ViewModelProperty<string> property = DirectoryOption.Property;
 
@@ -58,9 +62,11 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                     _button.Activated += (s, e) =>
                     {
-                        var openPanel = new NSOpenPanel();
-                        openPanel.CanChooseDirectories = true;
-                        openPanel.CanChooseFiles = true;
+                        var openPanel = new NSOpenPanel
+                        {
+                            CanChooseDirectories = true,
+                            CanChooseFiles = true
+                        };
                         var response = openPanel.RunModal();
                         if (response == 1 && openPanel.Url != null)
                         {

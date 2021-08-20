@@ -1,13 +1,13 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements. The .NET Foundation licenses this file to you under the MIT license. See the LICENSE.md file in the project root for more information.
+
 using AppKit;
 using Microsoft.VisualStudioUI.Options;
-using Microsoft.VisualStudioUI.Options.Models;
 
 namespace Microsoft.VisualStudioUI.VSMac.Options
 {
     public class SeparatorOptionVSMac : OptionVSMac
     {
-        NSView? _separatorView;
+        private NSView? _separatorView;
 
         public SeparatorOptionVSMac(SeparatorOption option) : base(option)
         {
@@ -48,7 +48,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
             separatorView.AddSubview(boxView);
             var boxViewWidthConstraint = boxView.WidthAnchor.ConstraintEqualToConstant(600f);
-            boxViewWidthConstraint.Priority = (System.Int32) AppKit.NSLayoutPriority.DefaultLow;
+            boxViewWidthConstraint.Priority = (int) NSLayoutPriority.DefaultLow;
             boxViewWidthConstraint.Active = true;
             var boxViewHeightConstraint = boxView.HeightAnchor.ConstraintEqualToConstant(1f);
             boxViewHeightConstraint.Active = true;

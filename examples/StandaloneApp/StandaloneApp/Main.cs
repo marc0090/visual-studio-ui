@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using Microsoft.VisualStudioUI.Options;
 
@@ -47,7 +47,7 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             card.AddOption(new ProjectFileOption(StringProp("")) { Label = "Choose File", Hint = "hint" , DisablebilityDependsOn = dependOn });
             TextOption fileEntry = new TextOption(StringProp(""))
             {
-                Label = "FileEntry",
+                Label = "Uncompressed resource extensions",
                 DisablebilityDependsOn = dependOn
             };
             fileEntry.MacroMenuItems = ImmutableArray.CreateRange(
@@ -92,7 +92,9 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             {
                 Label = ("Apple ID"),
                 Name = "Sign in and select a team to enable Automatic Provisioning",
-                IsBold = true
+                IsBold = true,
+                AllowSpaceForLabel = false,
+                ValidationMessage = new ViewModelProperty<Message>("", new Message(null, MessageSeverity.Warning))
             };
             card.AddOption(signInLabel);
             return card;

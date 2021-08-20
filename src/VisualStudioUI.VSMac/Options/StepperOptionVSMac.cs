@@ -1,4 +1,6 @@
-﻿using AppKit;
+﻿// Licensed to the .NET Foundation under one or more agreements. The .NET Foundation licenses this file to you under the MIT license. See the LICENSE.md file in the project root for more information.
+
+using AppKit;
 using Foundation;
 using Microsoft.VisualStudioUI.Options;
 
@@ -6,9 +8,9 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 {
     public class StepperOptionVSMac : OptionWithLeftLabelVSMac
     {
-        private NSView _controlView;
-        private NSTextField _textField;
-        private NSStepper _stepper;
+        private NSView? _controlView;
+        private NSTextField? _textField;
+        private NSStepper? _stepper;
         private NSTextField? _leftLabel;
 
 
@@ -43,7 +45,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                     _stepper.Activated += (s, e) =>
                     {
-                        _textField.StringValue = _stepper.IntValue.ToString();
+                        _textField!.StringValue = _stepper.IntValue.ToString();
                         StepperOption.Property.Value = _stepper.IntValue;
                     };
 
@@ -54,8 +56,10 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                         Alignment = NSTextAlignment.Right,
                         TranslatesAutoresizingMaskIntoConstraints = false
                     };
-                    var format = new NSNumberFormatter();
-                    format.NumberStyle = NSNumberFormatterStyle.None;
+                    var format = new NSNumberFormatter
+                    {
+                        NumberStyle = NSNumberFormatterStyle.None
+                    };
                     _textField.Formatter = format;
 
                     _textField.Changed += (s, e) =>
@@ -88,7 +92,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     _textField.BottomAnchor.ConstraintEqualToAnchor(_controlView.BottomAnchor).Active = true;
                     _stepper.CenterYAnchor.ConstraintEqualToAnchor(_textField.CenterYAnchor).Active = true;
                     _stepper.LeadingAnchor.ConstraintEqualToAnchor(_textField.TrailingAnchor, 10).Active = true;
-                    _controlView.TrailingAnchor.ConstraintEqualToAnchor(_stepper.TrailingAnchor).Active = true;
+                    _controlView.TrailingAnchor.ConstraintEqualToAnchor(_stepper.TrailingAnchor,2).Active = true;
                 }
                 return _controlView;
             }
@@ -104,7 +108,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             if (_textField != null)
                 _textField.Enabled = enabled;
 
-            _stepper.Enabled = enabled;
+            _stepper!.Enabled = enabled;
         }
 
     }

@@ -9,7 +9,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 {
     public class EditableComboBoxOptionVSMac : OptionWithLeftLabelVSMac
     {
-        NSComboBox _comboBox;
+        private NSComboBox _comboBox;
 
         public EditableComboBoxOptionVSMac(EditableComboBoxOption option) : base(option)
         {
@@ -23,10 +23,12 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             {
                 if (_comboBox == null)
                 {
-                    _comboBox = new AppKit.NSComboBox();
-                    _comboBox.ControlSize = NSControlSize.Regular;
-                    _comboBox.Font = AppKit.NSFont.SystemFontOfSize(AppKit.NSFont.SystemFontSize);
-                    _comboBox.TranslatesAutoresizingMaskIntoConstraints = false;
+                    _comboBox = new NSComboBox
+                    {
+                        ControlSize = NSControlSize.Regular,
+                        Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize),
+                        TranslatesAutoresizingMaskIntoConstraints = false
+                    };
 
                     _comboBox.WidthAnchor.ConstraintEqualToConstant(198f).Active = true;
 
@@ -50,13 +52,13 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             _comboBox.Enabled = enabled;
         }
 
-        void UpdatePropertyFromSelection(object sender, EventArgs e)
+        private void UpdatePropertyFromSelection(object sender, EventArgs e)
         {
             string? match = DisplayableItemsUtil.FindMatch(EditableComboBoxOption.ItemsProperty.Value, _comboBox.SelectedValue.ToString());
             EditableComboBoxOption.Property.Value = match!;
         }
 
-        void UpdatePropertyFromUIEdit(object sender, EventArgs e)
+        private void UpdatePropertyFromUIEdit(object sender, EventArgs e)
         {
             string newValue = _comboBox.StringValue;
 
@@ -71,7 +73,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             EditableComboBoxOption.Property.Value = newPropertyValue;
         }
 
-        void UpdateUIFromProperty(object sender, ViewModelPropertyChangedEventArgs e)
+        private void UpdateUIFromProperty(object sender, ViewModelPropertyChangedEventArgs e)
         {
             string value = EditableComboBoxOption.Property.Value;
             if (string.IsNullOrWhiteSpace(value))
@@ -79,7 +81,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             else _comboBox.StringValue = value!;
         }
 
-        void UpdateItemChoices()
+        private void UpdateItemChoices()
         {
             _comboBox.RemoveAll();
 

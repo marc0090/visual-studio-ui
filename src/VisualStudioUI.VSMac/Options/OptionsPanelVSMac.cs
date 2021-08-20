@@ -1,16 +1,15 @@
 using AppKit;
-using CoreGraphics;
 using Microsoft.VisualStudioUI.Options;
 
 namespace Microsoft.VisualStudioUI.VSMac.Options
 {
     public class OptionsPanelVSMac
     {
-        NSScrollView _scrollView;
+        private readonly NSScrollView _scrollView;
 
         public OptionsPanelVSMac(OptionCards optionCards)
         {
-            _scrollView = new AppKit.NSScrollView();
+            _scrollView = new NSScrollView();
             _scrollView.TranslatesAutoresizingMaskIntoConstraints = false;
 
             _scrollView.DrawsBackground = false;

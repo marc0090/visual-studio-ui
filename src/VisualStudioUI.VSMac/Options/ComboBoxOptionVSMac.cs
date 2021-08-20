@@ -8,9 +8,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 {
     public class ComboBoxOptionVSMac<TItem> : OptionWithLeftLabelVSMac where TItem : class
     {
-        private NSPopUpButton? _popUpButton;
+        private NSPopUpButton _popUpButton;
 
-        public ViewModelProperty<string> SdkWarning { get; set; } = null;
         public bool NullIsDefault { get; set; } = false;
 
         public ComboBoxOptionVSMac(ComboBoxOption<TItem> option) : base(option)
@@ -28,13 +27,13 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     ViewModelProperty<TItem?> property = ComboBoxOption.Property;
                     ViewModelProperty<ImmutableArray<TItem>> itemsProperty = ComboBoxOption.ItemsProperty;
 
-                    // View:     popUpButton
-                    _popUpButton = new AppKit.NSPopUpButton();
-                    _popUpButton.BezelStyle = NSBezelStyle.Rounded;
-                    _popUpButton.ControlSize = NSControlSize.Regular;
-                    _popUpButton.Font = AppKit.NSFont.SystemFontOfSize(AppKit.NSFont.SystemFontSize);
-                    //_popUpButton.AddItem ("Default");
-                    _popUpButton.TranslatesAutoresizingMaskIntoConstraints = false;
+                    _popUpButton = new NSPopUpButton
+                    {
+                        BezelStyle = NSBezelStyle.Rounded,
+                        ControlSize = NSControlSize.Regular,
+                        Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize),
+                        TranslatesAutoresizingMaskIntoConstraints = false
+                    };
 
                     _popUpButton.WidthAnchor.ConstraintEqualToConstant(198f).Active = true;
 
@@ -58,31 +57,12 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                         UpdateItemChoices();
                     }
-
-
-                    // TODO: Handle this
-                    /*
-                    if (SdkWarning != null) {
-                        SdkWarning.PropertyChanged += UpdateSdkWarning;
-                    }
-                    */
                 }
 
                 return _popUpButton;
             }
         }
 
-        /*
-        public override void Dispose ()
-        {
-            _popUpButton.Activated -= UpdatePropertyValue;
-            Property.PropertyChanged -= UpdatePopUpBtnValue;
-            ItemsProperty.PropertyChanged -= LoadPopUpBtnDataModel;
-            tipButton.Activated -= TipButtonActivated;
-
-            base.Dispose ();
-        }
-        */
 
         public override void OnEnableChanged(bool enabled)
         {
@@ -92,28 +72,17 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 _popUpButton.Enabled = enabled;
         }
 
-        void UpdatePropertyFromUI(object sender, EventArgs e)
+        private void UpdatePropertyFromUI(object sender, EventArgs e)
         {
-            //when the item titles are equal value,it won't find the right match,so replaced with itemindex to find the right match.
-            //
-            //TItem? match = DisplayableItemsUtil.FindMatch(ComboBoxOption.ItemsProperty.Value,
-            //    _popUpButton!.TitleOfSelectedItem,
-            //    ComboBoxOption.ItemDisplayStringFunc);
+
             int selectedIndex = (int)_popUpButton.IndexOfSelectedItem;
             TItem? match = ComboBoxOption.ItemsProperty.Value[selectedIndex];
             ComboBoxOption.Property.Value = match;
         }
 
-        void UpdateItemChoices()
+        private void UpdateItemChoices()
         {
             _popUpButton!.RemoveAllItems();
-
-            /*
-            if (NullIsDefault)
-            {
-                _popUpButton.AddItem (TranslationCatalog.GetString("Default"));
-            }
-            */
 
             ImmutableArray<TItem> items = ComboBoxOption.ItemsProperty.Value;
 
@@ -132,7 +101,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         }
 
-        void UpdateMultipleLevelMenuItemChoices()
+        private void UpdateMultipleLevelMenuItemChoices()
         {
             _popUpButton!.RemoveAllItems();
 
@@ -176,7 +145,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             UpdateSelectedItemUIFromProperty();
         }
 
-        void UpdateSelectedItemUIFromProperty()
+        private void UpdateSelectedItemUIFromProperty()
         {
             TItem? currentValue = ComboBoxOption.Property.Value;
             if (currentValue == null)
@@ -194,25 +163,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         {
             _popUpButton.Hidden = ComboBoxOption.Hidden.Value;
         }
-        // TODO: Handle this    
-        /*
-        void UpdateSdkWarning (object sender, ViewModelPropertyChangedEventArgs e)
-        {
-            if (e.NewValue != null) {
-                // update error icon
-                UpdateHintIcon (NSBezelStyle.Circular);
-            }
-            else {
-                // update image hit icon
-                UpdateHintIcon (NSBezelStyle.HelpButton);
 
-            }
-        }
-
-        void UpdateHintIcon (NSBezelStyle styple )
-        {
-            tipButton.BezelStyle = styple;
-        }
-        */
     }
 }

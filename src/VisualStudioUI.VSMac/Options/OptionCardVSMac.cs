@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿// Licensed to the .NET Foundation under one or more agreements. The .NET Foundation licenses this file to you under the MIT license. See the LICENSE.md file in the project root for more information.
+
 using AppKit;
 using Microsoft.VisualStudioUI.Options;
 using Microsoft.VisualStudioUI.Options.Models;
@@ -7,7 +8,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 {
     public class OptionCardVSMac : OptionCardPlatform
     {
-        private NSView _cardView;
+        private NSView? _cardView;
 
         public OptionCardVSMac(OptionCard optionCard) : base(optionCard)
         {
@@ -23,12 +24,14 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             }
         }
 
-        NSView CreateView()
+        private NSView CreateView()
         {
             // View:     card
-            var cardView = new AppKit.NSView();
-            cardView.WantsLayer = true;
-            cardView.TranslatesAutoresizingMaskIntoConstraints = false;
+            var cardView = new NSView
+            {
+                WantsLayer = true,
+                TranslatesAutoresizingMaskIntoConstraints = false
+            };
 
             var cardWidthConstraint = cardView.WidthAnchor.ConstraintEqualToConstant(640f);
             cardWidthConstraint.Active = true;
@@ -43,7 +46,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             */
 
             // View:     background
-            var background = new AppKit.NSBox();
+            var background = new NSBox();
             background.BoxType = NSBoxType.NSBoxCustom;
             background.FillColor = NSColor.AlternatingContentBackgroundColors[1];
             background.BorderColor = NSColor.SeparatorColor;
@@ -55,10 +58,10 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             cardView.AddSubview(background);
             /*
             var backgroundWidthConstraint = background.WidthAnchor.ConstraintEqualToConstant (640f);
-            backgroundWidthConstraint.Priority = (System.Int32)AppKit.NSLayoutPriority.DefaultLow;
+            backgroundWidthConstraint.Priority = (System.Int32)NSLayoutPriority.DefaultLow;
             backgroundWidthConstraint.Active = true;
             var backgroundHeightConstraint = background.HeightAnchor.ConstraintEqualToConstant (367f);
-            backgroundHeightConstraint.Priority = (System.Int32)AppKit.NSLayoutPriority.DefaultLow;
+            backgroundHeightConstraint.Priority = (System.Int32)NSLayoutPriority.DefaultLow;
             backgroundHeightConstraint.Active = true;
             */
 
@@ -71,15 +74,15 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             var titleOffset = 0;
             if (!string.IsNullOrEmpty(OptionCard.Label))
             {
-                var titleLabel = new AppKit.NSTextField();
+                var titleLabel = new NSTextField();
                 titleLabel.Editable = false;
                 titleLabel.Bordered = false;
                 titleLabel.DrawsBackground = false;
                 titleLabel.PreferredMaxLayoutWidth = 1;
-                titleLabel.StringValue = OptionCard.Label;
+                titleLabel.StringValue = OptionCard.Label ?? "";
                 titleLabel.Alignment = NSTextAlignment.Left;
                 titleLabel.Font =
-                    AppKit.NSFont.SystemFontOfSize(AppKit.NSFont.SystemFontSize, AppKit.NSFontWeight.Bold);
+                    NSFont.SystemFontOfSize(NSFont.SystemFontSize, NSFontWeight.Bold);
                 titleLabel.TextColor = NSColor.LabelColor;
                 titleLabel.TranslatesAutoresizingMaskIntoConstraints = false;
 
@@ -97,12 +100,14 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             }
 
             // View:     optionsStackView
-            var optionsStackView = new AppKit.NSStackView();
-            optionsStackView.TranslatesAutoresizingMaskIntoConstraints = false;
-            optionsStackView.EdgeInsets = new AppKit.NSEdgeInsets(0, 0, 0, 0);
-            optionsStackView.Spacing = 0f;
-            optionsStackView.Orientation = NSUserInterfaceLayoutOrientation.Vertical;
-            optionsStackView.Distribution = NSStackViewDistribution.Fill;
+            var optionsStackView = new NSStackView
+            {
+                TranslatesAutoresizingMaskIntoConstraints = false,
+                EdgeInsets = new NSEdgeInsets(0, 0, 0, 0),
+                Spacing = 0f,
+                Orientation = NSUserInterfaceLayoutOrientation.Vertical,
+                Distribution = NSStackViewDistribution.Fill
+            };
 
             cardView.AddSubview(optionsStackView);
             optionsStackView.WidthAnchor.ConstraintEqualToConstant(600f).Active = true;
