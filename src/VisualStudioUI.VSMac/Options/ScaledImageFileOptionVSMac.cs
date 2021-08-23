@@ -62,6 +62,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 WantsLayer = true,
                 TranslatesAutoresizingMaskIntoConstraints = false
             };
+            SetAccessibilityTitleToLabel(imageView);
             imageView.Layer.BorderColor = NSColor.LightGray.CGColor;
             imageView.Layer.BorderWidth = 1f;
             imageView.Layer.CornerRadius = 4f;
