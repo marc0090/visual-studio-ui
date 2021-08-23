@@ -42,7 +42,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             _switchButton.ControlSize = NSControlSize.Regular;
             _switchButton.State = enable ? 1 : 0;
             _switchButton.TranslatesAutoresizingMaskIntoConstraints = false;
-            _switchButton.AccessibilityHelp = "Provides a control";
 
             _switchButton.Activated += (s, e) => {
                 ((SwitchOption)Option).Property.Value = (_switchButton.State == 1);
@@ -76,6 +75,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 buttonLabel = SwitchOption.Label;
             if (buttonLabel == null)
                 buttonLabel = "";
+
+            SetAccessibilityTitleToLabel(_switchButton, buttonLabel);
 
             var title = new NSTextField();
             title.Editable = false;

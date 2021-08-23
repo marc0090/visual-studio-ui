@@ -162,5 +162,12 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     return 0;
             }
         }
+
+        protected void SetAccessibilityTitleToLabel(NSView control, string? labelOverride = null)
+        {
+            string? label = labelOverride ?? Option.Label;
+            if (label != null && label.Length > 0)
+                control.AccessibilityTitle = label;
+        }
     }
 }

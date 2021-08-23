@@ -38,9 +38,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             _optionView.WidthAnchor.ConstraintEqualToConstant(600f - IndentValue()).Active = true;
 
             _control = ControlView;
-            // TODO: Set a11y info properly
-            _control.AccessibilityLabel = "Control";
-            _control.AccessibilityHelp = "Provides a control";
 
             _optionView.AddSubview(_control);
 
@@ -101,8 +98,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
             _optionView!.AddSubview(_hintButton);
 
-            _hintButton.LeadingAnchor.ConstraintEqualToAnchor(_control.TrailingAnchor, 10f).Active = true;
-            _hintButton.CenterYAnchor.ConstraintEqualToAnchor(_control.CenterYAnchor).Active = true;
+            _hintButton.LeadingAnchor.ConstraintEqualToAnchor(_control!.TrailingAnchor, 10f).Active = true;
+            _hintButton.CenterYAnchor.ConstraintEqualToAnchor(_control!.CenterYAnchor).Active = true;
         }
     }
 }

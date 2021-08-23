@@ -41,6 +41,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                         Bordered = true,
                         DrawsBackground = true,
                     };
+                    SetAccessibilityTitleToLabel(_textField);
 
                     _controlView.AddArrangedSubview(_textField);
 

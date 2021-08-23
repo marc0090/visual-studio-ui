@@ -34,6 +34,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                         Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize),
                         TranslatesAutoresizingMaskIntoConstraints = false
                     };
+                    SetAccessibilityTitleToLabel(_popUpButton);
 
                     _popUpButton.WidthAnchor.ConstraintEqualToConstant(198f).Active = true;
 

@@ -29,6 +29,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                         Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize),
                         TranslatesAutoresizingMaskIntoConstraints = false
                     };
+                    SetAccessibilityTitleToLabel(_comboBox);
 
                     _comboBox.WidthAnchor.ConstraintEqualToConstant(198f).Active = true;
 
