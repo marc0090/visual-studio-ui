@@ -27,7 +27,21 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                         _textField.Font = NSFont.BoldSystemFontOfSize(NSFont.SystemFontSize);
                     else
                         _textField.Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize);
-                    _textField.StringValue = LabelOption.Name ?? string.Empty;
+                    if(LabelOption.Property == null)
+                    {
+                        _textField.StringValue = LabelOption.Name ?? string.Empty;
+                    }
+                    else
+                    {
+                        _textField.StringValue = LabelOption.Property.Value ?? string.Empty;
+                        LabelOption.Property.Bind();
+                        LabelOption.Property.PropertyChanged += delegate {
+                            _textField.Changed -= TextChanged;
+                            _textField.StringValue = LabelOption.Property.Value ?? string.Empty;
+                            _textField.Changed += TextChanged;
+
+                        };
+                    }
                     _textField.TranslatesAutoresizingMaskIntoConstraints = false;
                     _textField.Editable = false;
                     _textField.Bordered = false;
@@ -43,6 +57,14 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 }
 
                 return _textField;
+            }
+        }
+
+        private void TextChanged(object sender, System.EventArgs e)
+        {
+            if(LabelOption.Property != null)
+            {
+                LabelOption.Property.Value = _textField.StringValue;
             }
         }
 
