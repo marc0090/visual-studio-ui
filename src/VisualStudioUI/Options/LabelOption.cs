@@ -6,6 +6,7 @@ namespace Microsoft.VisualStudioUI.Options
     {
         public bool IsBold { get; set; } = true;
         public ViewModelProperty<bool> Hidden { get; set; }
+        public ViewModelProperty<string> Property { get; set; }
 
         public LabelOption()
         {
