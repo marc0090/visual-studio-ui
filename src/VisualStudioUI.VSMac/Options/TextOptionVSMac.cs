@@ -39,8 +39,10 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                         TranslatesAutoresizingMaskIntoConstraints = false,
                         Editable = TextOption.Editable,
                         Bordered = TextOption.Bordered,
-                        DrawsBackground = TextOption.DrawsBackground
+                        DrawsBackground = TextOption.DrawsBackground,
                     };
+                    _textField.LineBreakMode = NSLineBreakMode.TruncatingTail;
+                    SetAccessibilityTitleToLabel(_textField);
 
                     _controlView.AddSubview(_textField);
 
@@ -71,12 +73,10 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                         _menuBtn.TrailingAnchor.ConstraintEqualToAnchor(_controlView.TrailingAnchor).Active = true;
                         _menuBtn.CenterYAnchor.ConstraintEqualToAnchor(_controlView.CenterYAnchor).Active = true;
                         _controlView.WidthAnchor.ConstraintEqualToConstant(228f).Active = true;
-
                     }
                     else
                     {
                         _controlView.WidthAnchor.ConstraintEqualToConstant(196f).Active = true;
-
                     }
 
                     _controlView.HeightAnchor.ConstraintEqualToConstant(21).Active = true;

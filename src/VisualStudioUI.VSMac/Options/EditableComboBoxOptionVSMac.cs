@@ -29,6 +29,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                         Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize),
                         TranslatesAutoresizingMaskIntoConstraints = false
                     };
+                    SetAccessibilityTitleToLabel(_comboBox);
 
                     _comboBox.WidthAnchor.ConstraintEqualToConstant(198f).Active = true;
 
@@ -44,18 +45,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 return _comboBox;
             }
         }
-
-        /*
-        public override void Dispose ()
-        {
-            entryComBox.SelectionChanged -= UpdatePropertyValue;
-            Property.PropertyChanged -= UpdateUIFromProperty;
-            ItemsProperty.PropertyChanged -= LoadComBoxDataModel;
-            entryComBox.Changed -= UpdatePropertyValue;
-
-            base.Dispose ();
-        }
-        */
 
         public override void OnEnableChanged(bool enabled)
         {
@@ -110,7 +99,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             }
 
             string? value = EditableComboBoxOption.Property.Value;
-            if (!string.IsNullOrWhiteSpace(value) && items.IndexOf(value) != -1)
+            if (!string.IsNullOrWhiteSpace(value))
             {
                 _comboBox.StringValue = value!;
             }

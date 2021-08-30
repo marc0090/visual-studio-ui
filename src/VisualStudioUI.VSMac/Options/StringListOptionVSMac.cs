@@ -348,7 +348,5 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         {
             return _platform.StringListOption.Model.Value.Length;
         }
-
     }
-
 }

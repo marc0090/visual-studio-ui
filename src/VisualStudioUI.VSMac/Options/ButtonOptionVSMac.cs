@@ -27,8 +27,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     _button.Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize);
                     _button.Title = ButtonOption.ButtonLabel;
                     _button.TranslatesAutoresizingMaskIntoConstraints = false;
-                    _button.AccessibilityTitle = "Control";
-                    _button.AccessibilityHelp = "Provides a control";
                     _button.SizeToFit();
                 }
 

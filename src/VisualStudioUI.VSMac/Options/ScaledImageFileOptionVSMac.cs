@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using AppKit;
@@ -60,31 +62,16 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 WantsLayer = true,
                 TranslatesAutoresizingMaskIntoConstraints = false
             };
+            SetAccessibilityTitleToLabel(imageView);
             imageView.Layer.BorderColor = NSColor.LightGray.CGColor;
             imageView.Layer.BorderWidth = 1f;
             imageView.Layer.CornerRadius = 4f;
             imageView.Layer.BackgroundColor = NSColor.White.CGColor;
             imageView.Activated += OnImageViewerClicked;
+            imageView.Tag = -1;
 
-            // dashed border
-            CAShapeLayer border = new CAShapeLayer();
-            border.Position = new CGPoint(imageView.Bounds.X, imageView.Bounds.Y);
-            CGPath path = new CGPath();
-            float start = 10f;
-            float width = (ImageOption.DrawSize - start * 2);
-            CGRect pathRect = new CGRect(start, start, width, width);
-            path.AddRect(pathRect);
-            border.Path = path;
-            border.LineWidth = 2;
-            border.LineDashPattern = new NSNumber[] { 10, 3 };
-            border.FillColor = NSColor.Clear.CGColor;
-            border.StrokeColor = NSColor.LightGray.CGColor;
-            imageView.Layer.AddSublayer(border);
-
-            // center label
-            imageView.Title = ImageOption.GetImageTitle(imageFile);
-            NSAttributedString attr = new NSAttributedString(imageView.Title, foregroundColor: NSColor.Gray);
-            imageView.AttributedTitle = attr;
+            // dashed border & center label
+            var border= DrawEmptyLayer(imageView, imageFile);
 
             _frameView.AddArrangedSubview(imageView);
             imageView.WidthAnchor.ConstraintEqualToConstant(ImageOption.DrawSize).Active = true;
@@ -95,6 +82,14 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 image.Size = new CGSize(ImageOption.DrawSize, ImageOption.DrawSize);
                 imageView.Image = image;
                 border?.RemoveFromSuperLayer();
+
+                // right-menu
+                if (!string.IsNullOrWhiteSpace(ImageOption.MenuLabel))
+                {
+                    int tag = ImageOption.ImageArray.Value.IndexOf(imageFile);
+                    imageView.Tag = tag;
+                    imageView.Menu = CreateMenu(tag);
+                }
             }
 
             if (!string.IsNullOrWhiteSpace(imageFile.Hint))
@@ -112,6 +107,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             bottomLabel.Font = NSFont.SystemFontOfSize(NSFont.SmallSystemFontSize);
             bottomLabel.TextColor = NSColor.LabelColor;
             bottomLabel.TranslatesAutoresizingMaskIntoConstraints = false;
+            bottomLabel.Tag = -1;
 
             _frameView.AddArrangedSubview(bottomLabel);
             
@@ -121,14 +117,14 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         private void OnImageViewerClicked(object sender, EventArgs e)
         {
             NSButton imageViewer = (NSButton)sender;
-
-            string path = ImageOption.RedrawImageViewer(sender, e);
+            string path = RedrawImage(imageViewer).Trim();
             if (!string.IsNullOrWhiteSpace(path))
             {
                 NSImage imageNew = new NSImage(path);
                 imageNew.Size = new CGSize(ImageOption.DrawSize, ImageOption.DrawSize);
                 imageViewer.Image = imageNew;
 
+                // Remove border
                 var layer = imageViewer.Layer?.Sublayers;
                 if (layer != null && layer.Any())
                 {
@@ -136,99 +132,148 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 }
 
                 // Update property
-                ScaledImageFile imageInArrary = ImageOption.ImageArray.Value.Where(x => ImageOption.GetImageTitle(x).Equals(imageViewer?.Title)).First();
-                var arrayNew = ImageOption.ImageArray.Value.Remove(imageInArrary);
-                imageInArrary.Path = path;
-                arrayNew = arrayNew.Add(imageInArrary);
-                ImageOption.ImageArray.Value = arrayNew;
-            }
-            else
-            {
-                // use for Visual-Studio-ui repo test
-                var openPanel = new NSOpenPanel();
-                openPanel.CanChooseFiles = true;
-                openPanel.ExtensionHidden = true;
-                openPanel.AllowedFileTypes = new[] { "png" };
-                var response = openPanel.RunModal();
-                if (response == 1 && openPanel.Url != null)
+                List<ScaledImageFile> list = new List<ScaledImageFile>();
+                int index = -1;
+                for (int i = 0; i < ImageOption.ImageArray.Value.Length; i++)
                 {
-                    NSImage? imageNew = null;
-                    if (!string.IsNullOrWhiteSpace(imageViewer.Title))
+                    var item = ImageOption.ImageArray.Value[i];
+
+                    if ((string.IsNullOrWhiteSpace(imageViewer?.Title) && imageViewer?.Tag == i) ||
+                        (ImageOption.GetImageTitle(item).Equals(imageViewer?.Title)))
                     {
-                        var imageFileOld = ImageOption.GetImageFile(imageViewer.Title);
-
-                        imageNew = new NSImage(openPanel.Url.Path);
-
-                        if (imageNew.CGImage.Width != imageFileOld?.Width || imageNew.CGImage.Height != imageFileOld?.Height)
-                        {
-                            NSAlert alert = new NSAlert();
-                            alert.AlertStyle = NSAlertStyle.Critical;
-                            //alert.Icon = NSImage.GetSystemSymbol("xmark.circle", null);
-                            alert.MessageText = "Incorrect image dimensions";
-                            alert.InformativeText = string.Format("Only images with size {0}x{1} are allowed. Picture was {2}x{3}.", imageFileOld?.Width, imageFileOld?.Height, imageNew.CGImage.Width, imageNew.CGImage.Height);
-                            alert.RunSheetModal(null);
-
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        //TODO: throw exception/ write log
+                        item.Path = path;
+                        index = i;
                     }
 
-                    if (imageViewer.Image != null)
-                    {
-                        NSAlert alert = new NSAlert();
-                        alert.AlertStyle = NSAlertStyle.Informational;
-                        alert.AddButton("No");
-                        alert.AddButton("Yes");
-                        alert.Icon = NSImage.GetSystemSymbol("info.circle", null);
-                        alert.MessageText = "Image already exists";
-                        alert.InformativeText = string.Format("Should {0} be overwritten?", imageViewer.Title);
-                        var result = alert.RunSheetModal(null);
-                        if (result == (int)NSAlertButtonReturn.First)
-                        {
-                            // Don't need to overwrite
-                            return;
-                        }
-                    }
-
-                    if (imageNew != null && imageNew.IsValid)
-                    {
-                        imageNew.Size = new CGSize(ImageOption.DrawSize, ImageOption.DrawSize);
-                        imageViewer.Image = imageNew;
-
-                        var layer = imageViewer.Layer?.Sublayers;
-                        if (layer != null && layer.Any())
-                        {
-                            layer.First().RemoveFromSuperLayer();
-                        }
-
-                        // Update property
-                        ScaledImageFile imageInArrary = ImageOption.ImageArray.Value.Where(x => ImageOption.GetImageTitle(x).Equals(imageViewer?.Title)).First();
-                        var arrayNew = ImageOption.ImageArray.Value.Remove(imageInArrary);
-                        imageInArrary.Path = openPanel.Url.Path;
-                        arrayNew = arrayNew.Add(imageInArrary);
-                        ImageOption.ImageArray.Value = arrayNew;
-                    }
-                    else
-                    {
-                        //TODO: throw exception/ write log
-                    }
+                    list.Add(item);
                 }
+
+                ImageOption.ImageArray.Value.Clear();
+                ImageOption.ImageArray.Value = ImmutableArray.CreateRange(list);
+
+                // Create menu
+                if (!string.IsNullOrWhiteSpace(ImageOption.MenuLabel))
+                {
+                    imageViewer.Tag = index;
+                    imageViewer.Menu = CreateMenu(index);
+                }
+
+                // Remove title
+                imageViewer.Title = string.Empty;
             }
         }
 
-        
+        private NSMenu CreateMenu(int tag)
+        {
+            NSMenu groupMenu = new NSMenu();
+            groupMenu.AutoEnablesItems = false;
 
-        /*
-		public override void Dispose ()
-		{
-			Property.PropertyChanged -= UpdatePopUpBtnValue;
-			textField.Changed -= UpdatePropertyValue;
+            NSMenuItem menuItem = new NSMenuItem();
+            menuItem.Title = ImageOption.MenuLabel;
+            menuItem.Tag = tag;
+            menuItem.Activated += (sender, e) =>
+            {
+                ImageOption.UnsetImage(sender, e);
 
-			base.Dispose ();
-		}
-		*/
+                foreach (var item in _view.Subviews)
+                {
+                    foreach (var subItem in item.Subviews)
+                    {
+                        if (menuItem.Tag == subItem.Tag)
+                        {
+                            var imageView = ((NSButton)subItem);
+                            imageView.Image = null;
+                            imageView.Menu?.RemoveAllItems();
+
+                            // dashed border & center label
+                            DrawEmptyLayer(imageView, ImageOption.ImageArray.Value.ElementAt(tag));
+
+                            return;
+                        }
+                    }
+                }
+            };
+
+            groupMenu.AddItem(menuItem);
+
+            return groupMenu;
+        }
+
+        private CAShapeLayer DrawEmptyLayer(NSButton imageView, ScaledImageFile imageFile)
+        {
+            CAShapeLayer border = new CAShapeLayer();
+            border.Position = new CGPoint(imageView.Bounds.X, imageView.Bounds.Y);
+            CGPath path = new CGPath();
+            float start = 10f;
+            float width = (ImageOption.DrawSize - start * 2);
+            CGRect pathRect = new CGRect(start, start, width, width);
+            path.AddRect(pathRect);
+            border.Path = path;
+            border.LineWidth = 2;
+            border.LineDashPattern = new NSNumber[] { 10, 3 };
+            border.FillColor = NSColor.Clear.CGColor;
+            border.StrokeColor = NSColor.LightGray.CGColor;
+            imageView.Layer?.AddSublayer(border);
+
+            // center label
+            imageView.Title = ImageOption.GetImageTitle(imageFile);
+            NSAttributedString attr = new NSAttributedString(imageView.Title, foregroundColor: NSColor.Gray);
+            imageView.AttributedTitle = attr;
+
+            return border;
+        }
+
+        string RedrawImage(NSButton imageViewer)
+        {
+            var openPanel = new NSOpenPanel();
+            openPanel.CanChooseFiles = true;
+            openPanel.ExtensionHidden = true;
+            openPanel.AllowedFileTypes = new[] { "png" };
+            var response = openPanel.RunModal();
+            if (response == 1 && openPanel.Url != null)
+            {
+                if (File.Exists(openPanel.Url.Path))
+                {
+                    ScaledImageFile imageFileOld = ImageOption.GetImageFile(imageViewer.Title) ?? ImageOption.ImageArray.Value.ElementAt((int)imageViewer.Tag);
+
+                    NSImage imageNew = new NSImage(openPanel.Url.Path);
+
+                    if (imageNew.CGImage.Width != imageFileOld.Width || imageNew.CGImage.Height != imageFileOld.Height)
+                    {
+                        NSAlert alert = new NSAlert();
+                        alert.AlertStyle = NSAlertStyle.Critical;
+                        alert.MessageText = "Incorrect image dimensions";
+                        alert.InformativeText = string.Format("Only images with size {0}x{1} are allowed. Picture was {2}x{3}.", imageFileOld.Width, imageFileOld.Height, imageNew.CGImage.Width, imageNew.CGImage.Height);
+                        alert.RunSheetModal(null);
+
+                        return string.Empty;
+                    }
+                }
+                else
+                {
+                    return string.Empty;
+                }
+
+                if (imageViewer.Image != null)
+                {
+                    NSAlert alert = new NSAlert();
+                    alert.AlertStyle = NSAlertStyle.Informational;
+                    alert.AddButton("No");
+                    alert.AddButton("Yes");
+                    alert.Icon = NSImage.GetSystemSymbol("info.circle", null);
+                    alert.MessageText = "Image already exists";
+                    alert.InformativeText = string.Format("Should {0} be overwritten?", imageViewer.Title);
+                    var result = alert.RunSheetModal(null);
+                    if (result == (int)NSAlertButtonReturn.First)
+                    {
+                        return string.Empty;
+                    }
+                }
+
+                return openPanel.Url.Path;
+            }
+
+            return string.Empty;
+        }
     }
 }

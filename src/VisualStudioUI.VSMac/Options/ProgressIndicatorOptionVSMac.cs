@@ -71,6 +71,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             _progressIndicator.ControlSize = NSControlSize.Small;
             _progressIndicator.IsDisplayedWhenStopped = false;
             _progressIndicator.TranslatesAutoresizingMaskIntoConstraints = false;
+            SetAccessibilityTitleToLabel(_progressIndicator);
             _progressIndicator.SizeToFit();
             _optionView.AddSubview(_progressIndicator);
 
