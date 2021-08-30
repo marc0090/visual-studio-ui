@@ -44,7 +44,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             label.TextColor = NSColor.LabelColor;
             label.TranslatesAutoresizingMaskIntoConstraints = false;
 
-            if(labelString.Length < 26)
+            if(labelString.Length < 32)
             {
                 label.Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize);
             }
@@ -53,7 +53,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 label.Font = NSFont.SystemFontOfSize(11f);
             }
 
-            label.WidthAnchor.ConstraintGreaterThanOrEqualToConstant(205f).Active = true;
+            label.WidthAnchor.ConstraintGreaterThanOrEqualToConstant(213f).Active = true;
 
             return label;
         }
