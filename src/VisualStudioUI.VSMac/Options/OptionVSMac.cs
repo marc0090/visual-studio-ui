@@ -38,19 +38,21 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             label.PreferredMaxLayoutWidth = 1;
             // TODO: Make the colon be localization friendly
             label.StringValue = labelString + ":";
-            label.HeightAnchor.ConstraintEqualToConstant(16f).Active = true;
-
             label.Alignment = NSTextAlignment.Right;
             label.TextColor = NSColor.LabelColor;
             label.TranslatesAutoresizingMaskIntoConstraints = false;
-
-            if(labelString.Length < 32)
+            label.MaximumNumberOfLines = 2;
+            label.Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize);
+            label.AllowsDefaultTighteningForTruncation = true;
+            
+            if (label.StringValue.Length > 30)
             {
-                label.Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize);
+                var t = label.FittingSize.Width;
+                label.HeightAnchor.ConstraintEqualToConstant(30).Active = true;
             }
             else
             {
-                label.Font = NSFont.SystemFontOfSize(11f);
+                label.HeightAnchor.ConstraintEqualToConstant(16).Active = true;
             }
 
             label.WidthAnchor.ConstraintGreaterThanOrEqualToConstant(213f).Active = true;
