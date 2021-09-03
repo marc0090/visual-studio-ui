@@ -72,7 +72,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             float leftSpace = (Option.AllowSpaceForLabel||_label != null) ? 222f : 20f;
             _control.LeadingAnchor.ConstraintEqualToAnchor(_optionView.LeadingAnchor, leftSpace + IndentValue()).Active = true;
             _control.TopAnchor.ConstraintEqualToAnchor(_optionView.TopAnchor, 5f).Active = true;
-
+            _control.TrailingAnchor.ConstraintLessThanOrEqualToAnchor(_optionView.TrailingAnchor, -50f).Active = true;
         }
 
         public override void OnEnableChanged(bool enabled)

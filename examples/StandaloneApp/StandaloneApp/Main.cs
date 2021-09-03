@@ -31,7 +31,7 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
                 Label = "Test enable"
             };
 
-            var dependOn = new CheckBoxOption(BoolProp(false)) { ButtonLabel = "enable" };
+            var dependOn = new CheckBoxOption(BoolProp(false)) { ButtonLabel = "Выполнять все 32-разрядные операции с плавающей запятой как 64-разрядные" };
 
             var warning = new ViewModelProperty<Message?>("", new Message("warning", MessageSeverity.Warning));
             warning.Bind();
