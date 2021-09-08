@@ -10,6 +10,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
     public class CheckBoxOptionVSMac : OptionWithLeftLabelVSMac
     {
         private NSButton? _button;
+        private NSStackView _buttonView;
 
         public CheckBoxOptionVSMac(CheckBoxOption option) : base(option)
         {
@@ -21,48 +22,43 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         {
             get
             {
-                if (_button == null)
+                if (_buttonView == null)
                 {
+                    _buttonView = new NSStackView() {
+                        TranslatesAutoresizingMaskIntoConstraints = false,
+                        Orientation = NSUserInterfaceLayoutOrientation.Horizontal,
+                        Distribution = NSStackViewDistribution.Fill,
+                        Alignment = NSLayoutAttribute.Top,
+                    };
+
                     ViewModelProperty<bool> property = CheckBoxOption.Property;
 
-                    _button = NSButton.CreateCheckbox(CheckBoxOption.ButtonLabel, CheckBoxSelected);
+                    _button = NSButton.CreateCheckbox(string.Empty, CheckBoxSelected);
                     _button.SetButtonType(NSButtonType.Radio);
-                    _button.ControlSize = NSControlSize.Regular;
-                    _button.Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize);
-                    _button.Title = CheckBoxOption.ButtonLabel;
                     _button.TranslatesAutoresizingMaskIntoConstraints = false;
                     _button.State = CheckBoxOption.Property.Value ? NSCellStateValue.On : NSCellStateValue.Off;
 
-                    var maxLength = 77; 
-                    if (_button.Title.Length > (maxLength/2) && !_button.Title.Contains("\n"))
-                    {
-                        // Handle long strings of different language without inserted "\n"
-                        var charLength = Encoding.UTF8.GetByteCount(_button.Title);
-                        if (charLength > _button.Title.Length)
-                        {
-                            if ((charLength / _button.Title.Length) > 2)
-                                maxLength = maxLength / 2; // language is double-byte
-                            else
-                                maxLength = (int)(maxLength * 0.75); // the language is mixes with double-byte and single-byte
-                        }
+                    _buttonView.AddArrangedSubview(_button);
+                    _button.SetContentHuggingPriorityForOrientation((int)NSLayoutPriority.DefaultHigh, NSLayoutConstraintOrientation.Horizontal);
 
-                        if (_button.Title.Length > maxLength)
-                        {
-                            _button.Title = InsertNewLine(_button.Title, maxLength);
-                        }
-                    }
+                    var field = new NSTextField() { TranslatesAutoresizingMaskIntoConstraints = false};
+                    field.Bezeled = false;
+                    field.DrawsBackground = false;
+                    field.Editable = false;
+                    field.Selectable = false;
+                    field.StringValue = CheckBoxOption.ButtonLabel;
 
-                    _button.Cell.LineBreakMode = NSLineBreakMode.CharWrapping;
-                    _button.SizeToFit();
-                    _button.Cell.Alignment = NSTextAlignment.Left;
-                    
+                    _buttonView.AddArrangedSubview(field);
+                    field.LineBreakMode = NSLineBreakMode.ByWordWrapping;
+                    field.SetContentCompressionResistancePriority((int)NSLayoutPriority.DefaultLow, NSLayoutConstraintOrientation.Horizontal);
+
                     property.PropertyChanged += delegate
                     {
                         _button.State = CheckBoxOption.Property.Value ? NSCellStateValue.On : NSCellStateValue.Off;
                     };
                 }
 
-                return _button!;
+                return _buttonView!;
             }
         }
 
