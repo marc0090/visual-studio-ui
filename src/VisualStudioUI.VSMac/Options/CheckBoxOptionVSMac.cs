@@ -52,6 +52,8 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     field.LineBreakMode = NSLineBreakMode.ByWordWrapping;
                     field.SetContentCompressionResistancePriority((int)NSLayoutPriority.DefaultLow, NSLayoutConstraintOrientation.Horizontal);
 
+                    SetAccessibilityTitleToLabel(_button, CheckBoxOption.ButtonLabel);
+
                     property.PropertyChanged += delegate
                     {
                         _button.State = CheckBoxOption.Property.Value ? NSCellStateValue.On : NSCellStateValue.Off;
