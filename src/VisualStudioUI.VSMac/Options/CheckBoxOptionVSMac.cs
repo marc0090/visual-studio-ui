@@ -62,29 +62,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             }
         }
 
-        private string InsertNewLine(string str, int max, int searchStart = 0)
-        {
-            if (str.Length <= max) return str;
-
-            int removeFrom = searchStart > 0 ? searchStart : max;
-
-            var index = str.Remove(removeFrom, str.Length - removeFrom).LastIndexOf(" ");
-            if (index > 0)
-                str = str.Remove(index, 1).Insert(index, "\n");
-            else
-            {
-                index = removeFrom;
-                str = str.Insert(index, "\n");
-            }
-
-            if (str.Remove(0, index).Length > max)
-            {
-                return InsertNewLine(str, max, index + max);
-            }
-
-            return str;
-        }
-
         public override void OnEnableChanged(bool enabled)
         {
             base.OnEnableChanged(enabled);
