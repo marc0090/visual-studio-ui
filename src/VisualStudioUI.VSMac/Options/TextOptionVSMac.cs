@@ -37,9 +37,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                         Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize),
                         StringValue = property.Value ?? string.Empty,
                         TranslatesAutoresizingMaskIntoConstraints = false,
-                        Editable = TextOption.Editable,
-                        Bordered = TextOption.Bordered,
-                        DrawsBackground = TextOption.DrawsBackground,
+                        PlaceholderString = TextOption.PlaceholderText ?? string.Empty,
                     };
                     _textField.LineBreakMode = NSLineBreakMode.TruncatingTail;
                     SetAccessibilityTitleToLabel(_textField);
