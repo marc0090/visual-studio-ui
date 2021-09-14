@@ -129,7 +129,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 TranslatesAutoresizingMaskIntoConstraints = false
             };
             _editButton.SizeToFit();
-            _editButton.Activated += OnRemoveClicked;
+            _editButton.Activated += OnEditClicked;
 
             _optionView.AddSubview(_addButton);
             _optionView.AddSubview(_removeButton);
