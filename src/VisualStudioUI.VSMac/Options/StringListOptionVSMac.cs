@@ -217,7 +217,11 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
         private void OnAddClicked(object sender, EventArgs e)
         {
-            var defalutString = !string.IsNullOrEmpty(StringListOption.PrefixValue) ? StringListOption.PrefixValue + StringListOption.DefaultValue : StringListOption.DefaultValue;
+            var defalutString = string.Empty;
+            if (StringListOption.AddClicked != null)
+                defalutString = StringListOption.AddInvoke(sender, e);
+            else
+                defalutString = !string.IsNullOrEmpty(StringListOption.PrefixValue) ? StringListOption.PrefixValue + StringListOption.DefaultValue : StringListOption.DefaultValue;
 
             try
             {
@@ -323,6 +327,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                         Bordered = false,
                         DrawsBackground = false,
                         Highlighted = false,
+                        Editable = _platform.StringListOption.Editable,
                     },
                     Identifier = "cell"
                 };

@@ -237,8 +237,15 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
                 RemoveToolTip = "Click to remove the selected Keychain Access Group",
                 Label = "Keychain Groups",
                 DefaultValue = "BundleIdentifier",
-                PrefixValue = "AppIdentifierPrefix"
+                PrefixValue = "AppIdentifierPrefix",
+                Editable = false,
             };
+
+            keychainAccessGroupsList.AddClicked += (sender,e) => {
+                
+                return "hello";
+            };
+
 
             card.AddOption(keychainAccessGroupsList);
 
