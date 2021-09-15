@@ -96,7 +96,9 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
                 ValueColumnTitle = "Values",
                 TypeColumnTitle = "Type"
             };
-
+            
+            variablesTable1.Property.Value = ImmutableArray.Create(new KeyValueItem("aaa", "aa", "str"),new KeyValueItem("aaa", "aa", "str"),new KeyValueItem("aaa", "aa", "str"), new KeyValueItem("aaa", "aa", "str"));
+            variablesTable1.SelectedProperty.Bind();
             card.AddOption(variablesTable1);
             return card;
         }
