@@ -130,7 +130,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             return hintButton;
         }
 
-        private void ShowHintPopover(string message, NSButton button)
+        protected void ShowHintPopover(string message, NSButton button, int maxWidth = 256)
         {
             if (string.IsNullOrEmpty(message))
             {
@@ -139,7 +139,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             _hintPopover?.Close();
             _hintPopover?.Dispose();
             _hintPopover = new HintPopover(message, null);
-            _hintPopover.MaxWidth = 256;
+            _hintPopover.MaxWidth = maxWidth;
             //TODO:
             //popover.SetAppearance (Appearance);
 
