@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements. The .NET Foundation licenses this file to you under the MIT license. See the LICENSE.md file in the project root for more information.
 
 using AppKit;
+using Foundation;
 using Microsoft.VisualStudioUI.Options;
 using Microsoft.VisualStudioUI.Options.Models;
 
@@ -50,6 +51,16 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     };
 
                     _textField.Changed += delegate { property.Value = _textField.StringValue; };
+
+                    if (TextOption.IsAllowDigital)
+                    {
+                        var format = new NSNumberFormatter()
+                        {
+                            NumberStyle = NSNumberFormatterStyle.None,
+                        };
+
+                        _textField.Formatter = format;
+                    }
 
                     if (TextOption.MacroMenuItems != null)
                     {
