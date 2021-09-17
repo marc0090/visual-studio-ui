@@ -52,7 +52,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                     _textField.Changed += delegate { property.Value = _textField.StringValue; };
 
-                    if (TextOption.IsAllowDigital)
+                    if (TextOption.AllowOnlyNumbers)
                     {
                         var format = new NSNumberFormatter()
                         {
