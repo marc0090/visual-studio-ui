@@ -225,13 +225,15 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
             try
             {
-                _stringList.Add(defalutString);
+                if (!string.IsNullOrWhiteSpace(defalutString))
+                {
+                    _stringList.Add(defalutString);
 
-                UpdateModelFromStringList();
-                RefreshList();
+                    UpdateModelFromStringList();
+                    RefreshList();
+                }
 
                 StringListOption.ListChangedInvoke(sender, e);
-
             }
             catch
             {
