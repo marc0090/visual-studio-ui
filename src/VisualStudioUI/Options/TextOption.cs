@@ -9,7 +9,7 @@ namespace Microsoft.VisualStudioUI.Options
     public class TextOption : Option
     {
         public string? PlaceholderText { get; }
-        public bool IsAllowDigital { get; set; } = false;
+        public bool IsOnlyDigital { get; set; } = false;
 
         public ImmutableArray<MacroMenuItem> MacroMenuItems { get; set; }
 

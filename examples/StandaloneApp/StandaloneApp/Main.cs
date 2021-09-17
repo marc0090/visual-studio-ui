@@ -39,11 +39,15 @@ namespace Microsoft.VisualStudioUI.StandaloneApp
             var error = new ViewModelProperty<Message?>("", new Message("warning", MessageSeverity.Error));
 
             card.AddOption(dependOn);
-            card.AddOption(new ButtonOption() { Label = "Test Disable", ButtonLabel = "testing", PopoverMessage = "abc" });
+            var btn = new ButtonOption() { Label = "Test Disable", ButtonLabel = "testing"};
+            
+
+
+            card.AddOption(btn);
             card.AddOption(new SeparatorOption());
             card.AddOption(new CheckBoxOption(BoolProp(false)) { ButtonLabel = "test", DisablebilityDependsOn = dependOn });
             card.AddOption(new DocButtonOption(StringProp("test"), "test") { DisablebilityDependsOn = dependOn });
-            card.AddOption(new TextOption(StringProp("")) { Label = "test warning", ValidationMessage = warning, DisablebilityDependsOn = dependOn });
+            card.AddOption(new TextOption(StringProp("")) { Label = "test warning",IsOnlyDigital= true, ValidationMessage = warning, DisablebilityDependsOn = dependOn });
             card.AddOption(new TextOption(StringProp("")) { Label = "test error", ValidationMessage = error, DisablebilityDependsOn = dependOn });
             card.AddOption(new DirectoryOption(StringProp("")) { Label = "Choose Firectory", Hint = "hint", DisablebilityDependsOn = dependOn });
             card.AddOption(new ProjectFileOption(StringProp("")) { Label = "Choose File", Hint = "hint" , DisablebilityDependsOn = dependOn });

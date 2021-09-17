@@ -10,7 +10,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
     public class TextOptionVSMac : OptionWithLeftLabelVSMac
     {
         private NSView? _controlView;
-        private NSTextField? _textField;
+        private MacDebuggerTextField? _textField;
         private NSButton? _menuBtn;
 
         public TextOptionVSMac(TextOption option) : base(option)
@@ -33,7 +33,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                     ViewModelProperty<string> property = TextOption.Property;
 
-                    _textField = new NSTextField
+                    _textField = new MacDebuggerTextField
                     {
                         Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize),
                         StringValue = property.Value ?? string.Empty,
@@ -52,14 +52,22 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                     _textField.Changed += delegate { property.Value = _textField.StringValue; };
 
-                    if (TextOption.IsAllowDigital)
+                    if (TextOption.IsOnlyDigital)
                     {
-                        var format = new NSNumberFormatter()
+                        var format = new NumberFormatter()
                         {
                             NumberStyle = NSNumberFormatterStyle.None,
                         };
+                        format.RoundingMode = NSNumberFormatterRoundingMode.Up;//.PartialStringValidationEnabled = false;
+                        format.MaximumIntegerDigits = 256;
+                        //_textField.Cell.AllowedInputSourceLocales = NSAll new string[] { "0","1","2", "3", "4", "5", "6", "7", "8", "9" };
+                        //_textField.Formatter = format;
 
-                        _textField.Formatter = format;
+
+                        _textField.Changed += (s, e) => {
+
+
+                        };
                     }
 
                     if (TextOption.MacroMenuItems != null)
@@ -146,5 +154,95 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                 _menuBtn.Enabled = enabled;
         }
 
+    }
+
+    internal class NumberFormatter : NSNumberFormatter
+    {
+        public override bool IsPartialStringValid(ref string partialString, out NSRange proposedSelRange, string origString, NSRange origSelRange, out string error)
+        {
+            var newChar = partialString;
+            if (!string.IsNullOrWhiteSpace(partialString) &&
+                !string.IsNullOrWhiteSpace(origString) &&
+                partialString.Length > origString.Length)
+            {
+                newChar = newChar.Replace(origString, "");
+
+                if (!int.TryParse(newChar, out int n))
+                {
+                    partialString = origString;
+                    proposedSelRange = origSelRange;
+                    error = "";
+                    return false;
+                }
+            }
+            
+            return base.IsPartialStringValid(ref partialString, out proposedSelRange, origString, origSelRange, out error);
+        }
+    }
+
+    class MacDebuggerTextField : NSTextField
+    {
+        string oldValue, newValue;
+        bool editing;
+
+        public override bool BecomeFirstResponder()
+        {
+           //if (Superview is MacDebuggerObjectNameView nameView)
+            {
+             //   nameView.BeginEditing();
+              //  return true;
+            }
+
+            return base.BecomeFirstResponder();
+        }
+
+        public override void DidBeginEditing(NSNotification notification)
+        {
+            base.DidBeginEditing(notification);
+
+           // if (Superview is MacDebuggerObjectCellViewBase cellView)
+            {
+             //   cellView.TreeView.OnBeginEditing();
+                oldValue = newValue = StringValue.Trim();
+                editing = true;
+            }
+        }
+
+        public override void DidChange(NSNotification notification)
+        {
+            var str = StringValue.Trim()[StringValue.Length - 1];
+            newValue = StringValue.Trim();
+            base.DidChange(notification);
+        }
+
+        public override void DidEndEditing(NSNotification notification)
+        {
+            base.DidEndEditing(notification);
+
+            if (!editing)
+                return;
+
+            editing = false;
+
+            /*var cellView =Superview;
+            cellView.TreeView.OnEndEditing();
+
+            if (cellView is MacDebuggerObjectValueView)
+            {
+                var node = cellView.Node;
+
+                if (node != null && newValue != oldValue && cellView.TreeView.GetEditValue(node, newValue))
+                {
+                    var metadata = new Dictionary<string, object>();
+                    metadata["UIElementName"] = cellView.TreeView.UIElementName;
+                    metadata["ObjectValue.Type"] = node.TypeName;
+
+                    Counters.EditedValue.Inc(1, null, metadata);
+                    cellView.Refresh();
+                }
+            }*/
+
+            oldValue = newValue = null;
+        }
     }
 }
