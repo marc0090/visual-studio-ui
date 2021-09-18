@@ -10,7 +10,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
     public class TextOptionVSMac : OptionWithLeftLabelVSMac
     {
         private NSView? _controlView;
-        private NSTextField? _textField;
+        private CustomTextField? _textField;
         private NSButton? _menuBtn;
 
         public TextOptionVSMac(TextOption option) : base(option)
@@ -33,12 +33,13 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                     ViewModelProperty<string> property = TextOption.Property;
 
-                    _textField = new NSTextField
+                    _textField = new CustomTextField
                     {
                         Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize),
                         StringValue = property.Value ?? string.Empty,
                         TranslatesAutoresizingMaskIntoConstraints = false,
                         PlaceholderString = TextOption.PlaceholderText ?? string.Empty,
+                        AllowOnlyNumbers = TextOption.AllowOnlyNumbers,
                     };
                     _textField.LineBreakMode = NSLineBreakMode.TruncatingTail;
                     SetAccessibilityTitleToLabel(_textField);
@@ -51,16 +52,6 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                     };
 
                     _textField.Changed += delegate { property.Value = _textField.StringValue; };
-
-                    if (TextOption.AllowOnlyNumbers)
-                    {
-                        var format = new NSNumberFormatter()
-                        {
-                            NumberStyle = NSNumberFormatterStyle.None,
-                        };
-
-                        _textField.Formatter = format;
-                    }
 
                     if (TextOption.MacroMenuItems != null)
                     {
@@ -145,6 +136,28 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
             if (_menuBtn!= null)
                 _menuBtn.Enabled = enabled;
         }
+    }
 
+    internal class CustomTextField : NSTextField
+    {
+        public bool AllowOnlyNumbers { get; set; } = false;
+
+        public override void DidChange(NSNotification notification)
+        {
+            if (AllowOnlyNumbers)
+            {
+                StringValue = StringValue.Trim();
+                if (StringValue.Length > 0)
+                {
+                    var newInput = StringValue[StringValue.Length - 1];
+                    if (!int.TryParse(newInput.ToString(), out int n))
+                    {
+                        StringValue = StringValue.TrimEnd(newInput);
+                    }
+                }
+            }
+
+            base.DidChange(notification);
+        }
     }
 }
