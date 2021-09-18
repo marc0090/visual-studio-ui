@@ -10,7 +10,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
     public class TextOptionVSMac : OptionWithLeftLabelVSMac
     {
         private NSView? _controlView;
-        private MacDebuggerTextField? _textField;
+        private CustomTextField? _textField;
         private NSButton? _menuBtn;
 
         public TextOptionVSMac(TextOption option) : base(option)
@@ -33,7 +33,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
 
                     ViewModelProperty<string> property = TextOption.Property;
 
-                    _textField = new MacDebuggerTextField
+                    _textField = new CustomTextField
                     {
                         Font = NSFont.SystemFontOfSize(NSFont.SystemFontSize),
                         StringValue = property.Value ?? string.Empty,
@@ -138,7 +138,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
         }
     }
 
-    internal class MacDebuggerTextField : NSTextField
+    internal class CustomTextField : NSTextField
     {
         public bool AllowOnlyNumbers { get; set; } = false;
 
