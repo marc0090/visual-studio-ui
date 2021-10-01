@@ -42,6 +42,7 @@ namespace Microsoft.VisualStudioUI.VSMac.Options
                         DrawsBackground = true,
                         LineBreakMode = NSLineBreakMode.TruncatingTail
                     };
+
                     SetAccessibilityTitleToLabel(_textField);
 
                     _controlView.AddArrangedSubview(_textField);
