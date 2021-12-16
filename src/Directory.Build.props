@@ -1,0 +1,9 @@
+<Project>
+  <PropertyGroup>
+		<SystemCollectionsImmutableVersion>5.0.0</SystemCollectionsImmutableVersion>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<PackageVersionsImported>true</PackageVersionsImported>
+	</PropertyGroup>
+</Project>
